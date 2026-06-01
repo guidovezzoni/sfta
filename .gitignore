@@ -90,5 +90,8 @@ telecine/com.crashlytics.settings.json
 /captures
 .cxx
 
+# AI tools
+.superpowers
+
 # Others
 /docs/stark-mobile-assessment.pdf
