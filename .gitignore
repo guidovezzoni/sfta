@@ -89,3 +89,6 @@ telecine/com.crashlytics.settings.json
 /build
 /captures
 .cxx
+
+# Others
+/docs/stark-mobile-assessment.pdf
