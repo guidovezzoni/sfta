@@ -1,0 +1,1 @@
+/home/guido/dev/interviews/stark_future_test/AGENTS.md
