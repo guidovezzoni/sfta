@@ -113,6 +113,35 @@
       <li>Definition of Done checklist with 12 items</li>
     </ul>
   </section>
+  <section class="report-section" data-source="opsx:propose" data-timestamp="2026-06-01T00:00:00Z">
+    <header>
+      <h2>Change Proposed</h2>
+      <time datetime="2026-06-01T00:00:00Z">1 June 2026</time>
+    </header>
+    <p class="section-source">Source: opsx:propose</p>
+
+    <h3>Exploration Findings</h3>
+    <p>Explored a fresh Android Studio template project (AGP 9.2.1, Kotlin 2.2.10, Compose BOM 2026.02.01) with no custom code beyond the default <code>MainActivity</code> and theme. The mock JSON at <code>docs/mocks/bike_info_snapshot.json</code> is well-formed but missing <code>current_speed_kmh</code> in the motor object (to be added when copying to assets). No existing data/domain code — all files are new.</p>
+
+    <h3>Questions &amp; Clarifications</h3>
+    <p>The user story was exceptionally detailed with no ambiguities. No clarification questions were needed — all file paths, field names, types, enum values, and test strategies were fully specified.</p>
+
+    <h3>Artefacts Created</h3>
+    <table>
+      <thead>
+        <tr><th>Artefact</th><th>Path</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="badge badge-pass">proposal.md</span></td><td><code>openspec/changes/data-infrastructure/proposal.md</code></td><td>Why and what: data pipeline from JSON asset to domain model</td></tr>
+        <tr><td><span class="badge badge-pass">design.md</span></td><td><code>openspec/changes/data-infrastructure/design.md</code></td><td>Technical decisions: kotlinx-serialization, one-class-per-file, Result type, Dispatchers.IO, UNKNOWN enum fallback</td></tr>
+        <tr><td><span class="badge badge-pass">spec.md</span></td><td><code>openspec/changes/data-infrastructure/specs/bike-telemetry-data/spec.md</code></td><td>8 requirements with 12 testable scenarios covering DTOs, repository, mapper, use case, and orientation lock</td></tr>
+        <tr><td><span class="badge badge-pass">tasks.md</span></td><td><code>openspec/changes/data-infrastructure/tasks.md</code></td><td>30 tasks in 8 groups: infrastructure, DTOs, domain models, repository (BDD), mapper (BDD), use case (BDD), verification</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Task Structure</h3>
+    <p>Tasks follow BDD test-first ordering: prerequisites (Gradle, assets, manifest, DTOs, domain models, enums, repository interface) come first, then three BDD paired groups (repository, mapper, use case) where tests are written before implementation, followed by a final verification section.</p>
+  </section>
   </main>
 
 </body>
