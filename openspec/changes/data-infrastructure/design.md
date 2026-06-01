@@ -59,11 +59,11 @@ A static JSON file (`bike_info_snapshot.json`) represents a single telemetry sna
 
 **Rationale**: The JSON comes from firmware which may introduce new values. Crashing on unknown enum strings is unacceptable for a dashboard app. `UNKNOWN` allows the UI to handle gracefully (e.g., display a generic label).
 
-### 6. Diagnostics flattened at domain level
+### 6. Domain model mirrors DTO nesting, drops unused fields
 
-**Choice**: `BikeInfo` has `warnings: List<WarningInfo>` only — `faultCodes` is excluded.
+**Choice**: Domain models keep the same nested structure as DTOs. `BikeInfo` contains `bike: BikeDetails` and `diagnostics: DiagnosticsInfo` as nested objects. `DiagnosticsInfo` contains only `warnings` — `faultCodes` is excluded.
 
-**Rationale**: The user story explicitly says "diagnostics is flattened to just warnings at the domain level". Fault codes are raw diagnostic data not needed by the UI at this stage.
+**Rationale**: Keeping the domain model structure parallel to the DTO makes future expansion straightforward — new DTO fields are added to the corresponding nested domain model without changing the root. Flattening makes adding fields harder because it changes the shape. Unused fields (like `faultCodes`) are simply dropped from the domain counterpart.
 
 ## Risks / Trade-offs
 

@@ -37,14 +37,14 @@ The data layer SHALL provide 8 DTO classes (`BikeInfoSnapshotDto`, `BikeDto`, `B
 - **THEN** it returns `Result.failure` with a serialisation exception
 
 ### Requirement: Domain models represent clean business data
-The domain layer SHALL provide `BikeInfo`, `BatteryInfo`, `MotorInfo`, `RideSettingsInfo`, `SessionInfo`, and `WarningInfo` data classes, plus `ChargingState`, `PowerMap`, and `WarningSeverity` enums. Each enum SHALL include an `UNKNOWN` fallback value. Each class and enum SHALL be in its own file under `domain/model/`.
+The domain layer SHALL provide `BikeInfo`, `BikeDetails`, `BatteryInfo`, `MotorInfo`, `RideSettingsInfo`, `SessionInfo`, `DiagnosticsInfo`, and `WarningInfo` data classes, plus `ChargingState`, `PowerMap`, and `WarningSeverity` enums. The domain model structure SHALL mirror DTO nesting — `BikeInfo` contains nested `bike: BikeDetails` and `diagnostics: DiagnosticsInfo` objects. `DiagnosticsInfo` SHALL contain only `warnings` (excluding `faultCodes`). Each enum SHALL include an `UNKNOWN` fallback value. Each class and enum SHALL be in its own file under `domain/model/`.
 
 #### Scenario: Domain models have all required fields
 - **WHEN** a `BikeInfo` instance is constructed
-- **THEN** it contains `model`, `variant`, `firmwareVersion`, `imageUrl`, `timestamp`, `battery`, `motor`, `rideSettings`, `session`, and `warnings` fields with correct types
+- **THEN** it contains `bike` (BikeDetails), `timestamp`, `battery`, `motor`, `rideSettings`, `session`, and `diagnostics` (DiagnosticsInfo) fields with correct types
 
 ### Requirement: Mapper converts DTOs to domain models with safe enum handling
-`BikeInfoMapper` SHALL provide a `BikeInfoSnapshotDto.toDomain()` extension function that maps every DTO field to its domain counterpart. Enum conversion SHALL use case-insensitive lookup with `UNKNOWN` fallback. The `diagnostics` object SHALL be flattened to `warnings` only (excluding `faultCodes`).
+`BikeInfoMapper` SHALL provide a `BikeInfoSnapshotDto.toDomain()` extension function that maps every DTO field to its domain counterpart, preserving the nested structure. `BikeDto` SHALL map to `BikeDetails`, and `DiagnosticsDto` SHALL map to `DiagnosticsInfo` (excluding `faultCodes`). Enum conversion SHALL use case-insensitive lookup with `UNKNOWN` fallback.
 
 #### Scenario: Mapper converts a fully populated DTO completely
 - **WHEN** `toDomain()` is called on a fully populated `BikeInfoSnapshotDto`
@@ -56,7 +56,7 @@ The domain layer SHALL provide `BikeInfo`, `BatteryInfo`, `MotorInfo`, `RideSett
 
 #### Scenario: Mapper handles empty warnings list
 - **WHEN** `toDomain()` is called on a DTO with an empty warnings list
-- **THEN** the `BikeInfo.warnings` list is empty
+- **THEN** the `BikeInfo.diagnostics.warnings` list is empty
 
 ### Requirement: Use case chains repository and mapper
 `GetBikeInfoUseCase` SHALL call the repository's `getBikeInfoSnapshot()` and map the successful result using `toDomain()`. On failure, it SHALL propagate the `Result.failure` unchanged.
