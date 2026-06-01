@@ -28,4 +28,25 @@ Read the following file immediately as it's relevant to all workflows: @docs/gui
 
 ## Project Overview
 
-[TO BE COMPLETED]
+Stark Future Technical Assessment — an Android rider dashboard app for the Stark VARG electric motorbike. Displays real-time bike telemetry (battery, motor, ride settings, session stats, diagnostics) loaded from a bundled JSON snapshot.
+
+### Package Structure (`com.guidovezzoni.sfta`)
+
+```
+data/model/         — @Serializable DTO classes (8 files)
+data/repository/    — LocalBikeInfoRepository (reads JSON asset)
+domain/model/       — Domain data classes + enums (9 files)
+domain/repository/  — BikeInfoRepository interface
+domain/mapper/      — BikeInfoMapper (DTO → domain)
+domain/usecase/     — GetBikeInfoUseCase
+ui/                 — MainActivity, theme (Compose)
+```
+
+### Key Patterns
+
+- **Clean Architecture**: data → domain → ui layers
+- **MVI**: Model-View-Intent (UI layer, to be implemented in story 1.2)
+- **Manual DI**: Constructor injection, no Hilt yet
+- **kotlinx-serialization**: JSON parsing with `@Serializable` / `@SerialName`
+- **Enum safety**: All enums have `UNKNOWN` fallback for unrecognised values
+- **Error handling**: `Result` type throughout, no `!!` operator

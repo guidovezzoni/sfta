@@ -17,3 +17,27 @@ This section describes the process I followed to implement the project.
 
 
 ## LLM managed part of the README
+
+### Architecture
+
+The app follows **Clean Architecture** with an **MVI** pattern (to be wired in UI story 1.2):
+
+| Layer | Package | Contents |
+|-------|---------|----------|
+| Data | `data/model/` | 8 `@Serializable` DTO classes mapping the JSON schema |
+| Data | `data/repository/` | `LocalBikeInfoRepository` — reads and parses the bundled JSON asset |
+| Domain | `domain/model/` | 6 domain model data classes + 3 enums with `UNKNOWN` fallback |
+| Domain | `domain/repository/` | `BikeInfoRepository` interface |
+| Domain | `domain/mapper/` | `BikeInfoMapper` — `BikeInfoSnapshotDto.toDomain()` extension |
+| Domain | `domain/usecase/` | `GetBikeInfoUseCase` — chains repository and mapper |
+
+### Tech Stack
+
+- **Kotlin** 2.2.10, **Compose BOM** 2026.02.01, **AGP** 9.2.1
+- **kotlinx-serialization-json** 1.8.1 for JSON parsing
+- **MockK** 1.14.4 + **kotlinx-coroutines-test** 1.10.2 for unit testing
+- App locked to **landscape orientation** (`sensorLandscape`)
+
+### Data Flow
+
+`JSON asset` → `LocalBikeInfoRepository` (parses on `Dispatchers.IO`) → `GetBikeInfoUseCase` (maps DTO → domain) → `Result<BikeInfo>`

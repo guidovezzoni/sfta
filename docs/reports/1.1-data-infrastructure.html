@@ -142,6 +142,66 @@
     <h3>Task Structure</h3>
     <p>Tasks follow BDD test-first ordering: prerequisites (Gradle, assets, manifest, DTOs, domain models, enums, repository interface) come first, then three BDD paired groups (repository, mapper, use case) where tests are written before implementation, followed by a final verification section.</p>
   </section>
+  <section class="report-section" data-source="apply_changes" data-timestamp="2026-06-01T00:00:00Z">
+    <header>
+      <h2>Changes Applied</h2>
+      <time datetime="2026-06-01T00:00:00Z">1 June 2026</time>
+    </header>
+    <p class="section-source">Source: apply_changes</p>
+
+    <h3>Implementation Summary</h3>
+    <p>All 30 tasks across 8 sections implemented in a single iteration cycle using BDD Red/Green discipline for the repository, mapper, and use case layers.</p>
+
+    <h3>Sections Completed</h3>
+    <table>
+      <thead>
+        <tr><th>Section</th><th>Tasks</th><th>Type</th><th>Result</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1. Project Infrastructure</td><td>1.1–1.6</td><td>Prerequisites</td><td><span class="badge badge-pass">DONE</span></td></tr>
+        <tr><td>2. DTO Classes</td><td>2.1–2.8</td><td>Prerequisites</td><td><span class="badge badge-pass">DONE</span></td></tr>
+        <tr><td>3. Domain Models &amp; Enums</td><td>3.1–3.9</td><td>Prerequisites</td><td><span class="badge badge-pass">DONE</span></td></tr>
+        <tr><td>4. Repository Interface</td><td>4.1</td><td>Prerequisites</td><td><span class="badge badge-pass">DONE</span></td></tr>
+        <tr><td>5. Repository (BDD)</td><td>5.1–5.4</td><td>RED → GREEN</td><td><span class="badge badge-pass">DONE</span></td></tr>
+        <tr><td>6. Mapper (BDD)</td><td>6.1–6.4</td><td>RED → GREEN</td><td><span class="badge badge-pass">DONE</span></td></tr>
+        <tr><td>7. Use Case (BDD)</td><td>7.1–7.3</td><td>RED → GREEN</td><td><span class="badge badge-pass">DONE</span></td></tr>
+        <tr><td>8. Verification</td><td>8.1–8.4</td><td>Verification</td><td><span class="badge badge-pass">DONE</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3>BDD Cycles</h3>
+    <ul>
+      <li><strong>Repository</strong>: 3 tests written → RED confirmed (compilation error) → <code>LocalBikeInfoRepository</code> implemented → GREEN confirmed</li>
+      <li><strong>Mapper</strong>: 3 tests written → RED confirmed (compilation error) → <code>BikeInfoMapper</code> implemented → GREEN confirmed</li>
+      <li><strong>Use Case</strong>: 2 tests written → RED confirmed (compilation error) → <code>GetBikeInfoUseCase</code> implemented → GREEN confirmed</li>
+    </ul>
+
+    <h3>Verification Results</h3>
+    <ul>
+      <li><code>./gradlew testDebugUnitTest</code> — <span class="badge badge-pass">PASS</span> (8 unit tests)</li>
+      <li><code>./gradlew check</code> — <span class="badge badge-pass">PASS</span> (lint clean)</li>
+      <li><code>./gradlew assembleDebug</code> — <span class="badge badge-pass">PASS</span></li>
+      <li><code>./gradlew connectedDebugAndroidTest</code> — <span class="badge badge-pass">PASS</span> (1 instrumented test)</li>
+      <li>On-device: app launches in landscape only (ROTATION_90 confirmed via <code>adb</code>)</li>
+    </ul>
+
+    <h3>TODO Review</h3>
+    <p>No TODO comments found in <code>app/src/</code>. No RESOLVE NOW or ACKNOWLEDGED items.</p>
+
+    <h3>Security Review</h3>
+    <p><span class="badge badge-pass">PASS</span> — No findings. No hardcoded secrets, no network calls, no injection vectors, no PII. The <code>image_url</code> field is not loaded (deferred to UI story with HTTPS-only constraint).</p>
+
+    <h3>Documentation Updates</h3>
+    <ul>
+      <li><strong>README.md</strong>: Updated LLM-managed section with architecture table, tech stack, and data flow diagram</li>
+      <li><strong>AGENTS.md</strong>: Replaced <code>[TO BE COMPLETED]</code> placeholder with project overview, package structure, and key patterns</li>
+    </ul>
+
+    <h3>Iteration Cycles</h3>
+    <p><strong>1 cycle</strong> — all tasks completed in a single pass with no rework needed.</p>
+
+    <div class="outcome outcome-passed">All changes applied successfully. Ready for verification.</div>
+  </section>
   </main>
 
 </body>
