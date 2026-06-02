@@ -66,7 +66,7 @@ The app follows **Clean Architecture** with an **MVI** pattern (to be wired in U
 | Data | `data/repository/` | `LocalBikeInfoRepository` — reads and parses the bundled JSON asset |
 | Domain | `domain/model/` | 8 domain model data classes + 3 enums with `UNKNOWN` fallback |
 | Domain | `domain/repository/` | `BikeInfoRepository` interface |
-| Domain | `domain/mapper/` | `BikeInfoMapper` — `BikeInfoSnapshotDto.toDomain()` extension |
+| Data | `data/mapper/` | `BikeInfoMapper` — `BikeInfoSnapshotDto.toDomain()` extension |
 | Domain | `domain/usecase/` | `GetBikeInfoUseCase` — chains repository and mapper |
 
 ### Tech Stack
