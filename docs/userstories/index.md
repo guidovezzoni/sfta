@@ -13,7 +13,7 @@
 > Stories 2.1–2.3 should be completed before story 1.2.
 
 ### Feature 2.1: Clean Architecture Fix
-- [2.1 Fix Repository Clean Architecture](2.1-fix-repository-clean-architecture-WIP.md) -- Move DTO out of domain layer, relocate mapper, simplify use case
+- [2.1 Fix Repository Clean Architecture](2.1-fix-repository-clean-architecture-DONE.md) -- Move DTO out of domain layer, relocate mapper, simplify use case
 
 ### Feature 2.2: Domain Model Refinements
 - [2.2 Domain Model Refinements](2.2-domain-model-refinements.md) -- Parse timestamp to Instant, add faultCodes to DiagnosticsInfo

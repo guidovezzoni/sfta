@@ -140,6 +140,72 @@
       <tr><td><span class="badge badge-pass">tasks</span></td><td><code>openspec/changes/fix-repository-clean-architecture/tasks.md</code></td><td>15 tasks across 5 groups: prerequisites, repository BDD, use case BDD, docs, verification</td></tr>
     </table>
   </section>
+  <section class="report-section" data-source="sdlc:sdlc_verify_story" data-timestamp="2026-06-02T16:40:00Z">
+    <header>
+      <h2>Verification</h2>
+      <time datetime="2026-06-02T16:40:00Z">2 June 2026</time>
+    </header>
+    <p class="section-source">Source: sdlc:sdlc_verify_story</p>
+
+    <h3>OpenSpec Verify</h3>
+    <p><span class="badge badge-pass">PASS</span> All 15/15 tasks complete. Completeness, correctness, and coherence verified against design.md, specs, and tasks.</p>
+
+    <h3>TODO Scan</h3>
+    <p><span class="badge badge-pass">PASS</span> No TODO comments found in <code>app/src/</code>.</p>
+
+    <h3>Security Review</h3>
+    <p><span class="badge badge-pass">PASS</span> No critical or high-severity findings. The change is a pure architectural refactoring — no new data inputs, network calls, or sensitive data handling. All speculative findings from the initial scan were excluded as false positives (confidence below threshold).</p>
+
+    <h3>On-Device Tests</h3>
+    <p><span class="badge badge-pass">PASS</span> Device connected: Pixel 6a (Android 16). Method: automated via agent.</p>
+    <table>
+      <tr><th>Test Suite</th><th>Result</th><th>Notes</th></tr>
+      <tr><td>Unit tests (<code>./gradlew test</code>)</td><td><span class="badge badge-pass">PASS</span></td><td>All tasks UP-TO-DATE, BUILD SUCCESSFUL</td></tr>
+      <tr><td>Instrumented tests (<code>./gradlew connectedDebugAndroidTest</code>)</td><td><span class="badge badge-pass">PASS</span></td><td>1 test on Pixel 6a — BUILD SUCCESSFUL</td></tr>
+    </table>
+
+    <h3>Definition of Done</h3>
+    <table>
+      <tr><th>Acceptance Criterion</th><th>Status</th><th>Evidence</th></tr>
+      <tr>
+        <td>Repository interface has no data-layer imports</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td><code>BikeInfoRepository.kt</code>: only <code>domain.model.BikeInfo</code> imported; zero <code>data.*</code> imports</td>
+      </tr>
+      <tr>
+        <td>Repository returns domain model on success</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td><code>LocalBikeInfoRepository</code> calls <code>.toDomain()</code> inside <code>runCatching</code>; test asserts <code>BikeInfo</code> fields including <code>PowerMap.ENDURO</code> and <code>durationSeconds = 3742</code></td>
+      </tr>
+      <tr>
+        <td>Repository handles missing file gracefully</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td><code>LocalBikeInfoRepositoryTest</code>: missing file test asserts <code>Result.failure</code> with <code>FileNotFoundException</code></td>
+      </tr>
+      <tr>
+        <td>Repository handles malformed JSON gracefully</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td><code>LocalBikeInfoRepositoryTest</code>: invalid JSON test asserts <code>Result.failure</code></td>
+      </tr>
+      <tr>
+        <td>Mapper handles unknown enum values with UNKNOWN fallback</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td><code>BikeInfoMapperTest</code>: "unrecognised enum string values" test asserts <code>ChargingState.UNKNOWN</code>, <code>PowerMap.UNKNOWN</code>, <code>WarningSeverity.UNKNOWN</code></td>
+      </tr>
+      <tr>
+        <td>Use case delegates to repository</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td><code>GetBikeInfoUseCase</code> is a single-line pass-through; <code>GetBikeInfoUseCaseTest</code> asserts identity of returned <code>BikeInfo</code></td>
+      </tr>
+      <tr>
+        <td>Use case propagates failure from repository</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td><code>GetBikeInfoUseCaseTest</code>: failure propagation test asserts same exception returned unchanged</td>
+      </tr>
+    </table>
+
+    <div class="outcome outcome-passed">PASSED — Story closed: <code>2.1-fix-repository-clean-architecture-DONE.md</code></div>
+  </section>
   </main>
 
 </body>
