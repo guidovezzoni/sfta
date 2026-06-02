@@ -258,6 +258,69 @@
 
     <div class="outcome outcome-passed">All changes applied and verified. All 65 tasks complete. Ready for archival.</div>
   </section>
+  <section class="report-section" data-source="sdlc:sdlc_verify_story" data-timestamp="2026-06-02T10:50:00Z">
+    <header>
+      <h2>Verification</h2>
+      <time datetime="2026-06-02T10:50:00Z">2 Jun 2026</time>
+    </header>
+    <p class="section-source">Source: sdlc:sdlc_verify_story</p>
+
+    <h3>OpenSpec Verify</h3>
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Result</th><th>Detail</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Completeness</td><td><span class="badge badge-pass">PASS</span></td><td>41/41 tasks complete, 7/7 requirements covered</td></tr>
+        <tr><td>Correctness</td><td><span class="badge badge-pass">PASS</span></td><td>All 12 scenarios implemented and verified — DTOs, repository, mapper, use case, enums, asset</td></tr>
+        <tr><td>Coherence</td><td><span class="badge badge-pass">PASS</span></td><td>All design decisions followed: one-class-per-file, <code>ignoreUnknownKeys</code>, <code>Dispatchers.IO</code>, UNKNOWN fallback, nested domain model</td></tr>
+      </tbody>
+    </table>
+
+    <h3>TODO Scan</h3>
+    <p><strong>ACKNOWLEDGED (1):</strong> <code>app/src/main/res/xml/data_extraction_rules.xml</code> — default Android Studio generated backup config comment, unrelated to this story. No RESOLVE NOW items.</p>
+
+    <h3>Security Review</h3>
+    <p><span class="badge badge-pass">PASS</span> — No critical or high severity findings. The change is a purely local data layer: no network calls, no user input handling, no credential storage, no sensitive data logging.</p>
+
+    <h3>On-Device Tests</h3>
+    <table>
+      <thead>
+        <tr><th>Method</th><th>Result</th><th>Detail</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>connectedDebugAndroidTest</code></td><td><span class="badge badge-pass">PASS</span></td><td>1 instrumented test on Pixel 6a (Android 16)</td></tr>
+        <tr><td>Manual adb UI exercise</td><td><span class="badge badge-warn">N/A</span></td><td>Device screen locked — not feasible via adb</td></tr>
+        <tr><td>Landscape orientation</td><td><span class="badge badge-pass">PASS</span></td><td>User confirmed app displays in landscape on device</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Definition of Done</h3>
+    <table>
+      <thead>
+        <tr><th>#</th><th>Item</th><th>Status</th><th>Justification</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>All dependencies added, project compiles</td><td><span class="badge badge-pass">PASS</span></td><td><code>./gradlew assembleDebug</code> — BUILD SUCCESSFUL</td></tr>
+        <tr><td>2</td><td><code>bike_info_snapshot.json</code> with <code>current_speed_kmh: 47.3</code></td><td><span class="badge badge-pass">PASS</span></td><td>Confirmed in <code>app/src/main/assets/bike_info_snapshot.json</code> line 18</td></tr>
+        <tr><td>3</td><td>AndroidManifest <code>sensorLandscape</code></td><td><span class="badge badge-pass">PASS</span></td><td><code>android:screenOrientation="sensorLandscape"</code> at line 18 of manifest</td></tr>
+        <tr><td>4</td><td>8 DTO classes with <code>@Serializable</code>/<code>@SerialName</code></td><td><span class="badge badge-pass">PASS</span></td><td>All 8 files present in <code>data/model/</code> with correct annotations</td></tr>
+        <tr><td>5</td><td><code>BikeInfoRepository</code> interface defined</td><td><span class="badge badge-pass">PASS</span></td><td>Exists in <code>domain/repository/BikeInfoRepository.kt</code></td></tr>
+        <tr><td>6</td><td><code>LocalBikeInfoRepository</code> — assets, IO dispatcher, <code>Result</code>, <code>runCatching</code></td><td><span class="badge badge-pass">PASS</span></td><td>Implementation verified: <code>AssetManager</code>, <code>withContext(ioDispatcher)</code>, <code>runCatching</code>, <code>Json { ignoreUnknownKeys = true }</code></td></tr>
+        <tr><td>7</td><td>Domain models + enums with <code>UNKNOWN</code> fallback</td><td><span class="badge badge-pass">PASS</span></td><td>11 domain model files + 3 enums, all with <code>UNKNOWN</code> entry verified</td></tr>
+        <tr><td>8</td><td>Mapper with case-insensitive enum lookup</td><td><span class="badge badge-pass">PASS</span></td><td><code>BikeInfoMapper.kt</code>: <code>entries.find { it.name.equals(..., ignoreCase = true) } ?: UNKNOWN</code> for all 3 enums</td></tr>
+        <tr><td>9</td><td><code>GetBikeInfoUseCase</code> chains repo + mapper</td><td><span class="badge badge-pass">PASS</span></td><td><code>repository.getBikeInfoSnapshot().map { it.toDomain() }</code> confirmed</td></tr>
+        <tr><td>10</td><td>Unit tests pass (<code>./gradlew test</code>)</td><td><span class="badge badge-pass">PASS</span></td><td>BUILD SUCCESSFUL — all 8 unit tests pass</td></tr>
+        <tr><td>11</td><td>Code quality checks pass (<code>./gradlew check</code>)</td><td><span class="badge badge-pass">PASS</span></td><td>Confirmed during apply phase</td></tr>
+        <tr><td>12</td><td>App launches in landscape orientation on device</td><td><span class="badge badge-pass">PASS</span></td><td>User confirmed on Pixel 6a — displays only in landscape</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Story Closed</h3>
+    <p>Renamed <code>1.1-data-infrastructure-WIP.md</code> → <code>1.1-data-infrastructure-DONE.md</code>. Index updated.</p>
+
+    <div class="outcome outcome-passed">PASSED — All 12 Definition of Done items confirmed. Story closed.</div>
+  </section>
   </main>
 
 </body>
