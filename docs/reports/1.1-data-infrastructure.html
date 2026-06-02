@@ -202,6 +202,62 @@
 
     <div class="outcome outcome-passed">All changes applied successfully. Ready for verification.</div>
   </section>
+  <section class="report-section" data-source="apply_changes" data-timestamp="2026-06-02T08:10:00Z">
+    <header>
+      <h2>Apply Changes — Domain Model Restructuring</h2>
+      <time datetime="2026-06-02T08:10:00Z">2 Jun 2026</time>
+    </header>
+    <p class="section-source">Source: apply_changes</p>
+
+    <h3>What Was Applied</h3>
+    <p>Completed the remaining 10 tasks from the data-infrastructure change, restructuring the domain model from a flat structure to a nested one per the design document (Decision #6):</p>
+    <ul>
+      <li>Created <code>BikeDetails.kt</code> — wraps bike-specific fields (model, variant, firmwareVersion, imageUrl)</li>
+      <li>Created <code>DiagnosticsInfo.kt</code> — wraps warnings list</li>
+      <li>Restructured <code>BikeInfo.kt</code> — now uses <code>bike: BikeDetails</code> and <code>diagnostics: DiagnosticsInfo</code> nested types</li>
+      <li>Updated <code>BikeInfoMapper.kt</code> — produces nested structure with <code>BikeDetails</code> and <code>DiagnosticsInfo</code> wrappers</li>
+      <li>Updated <code>BikeInfoMapperTest.kt</code> — all 3 tests updated for nested field access (e.g. <code>result.bike.model</code>, <code>result.diagnostics.warnings</code>)</li>
+      <li>Updated <code>GetBikeInfoUseCaseTest.kt</code> — success path test updated for nested structure</li>
+    </ul>
+
+    <h3>BDD Cycle Results</h3>
+    <table>
+      <tr><th>Task</th><th>Phase</th><th>Result</th></tr>
+      <tr><td>6.1–6.3 Mapper tests</td><td>RED</td><td><span class="badge badge-pass">Compilation error — flat fields removed from BikeInfo</span></td></tr>
+      <tr><td>6.4 Mapper implementation</td><td>GREEN</td><td><span class="badge badge-pass">All 3 mapper tests pass</span></td></tr>
+      <tr><td>7.1 Use case success test</td><td>RED→GREEN</td><td><span class="badge badge-pass">Updated assertions, passes with mapper change</span></td></tr>
+    </table>
+
+    <h3>Verification</h3>
+    <table>
+      <tr><th>Check</th><th>Result</th></tr>
+      <tr><td><code>./gradlew test</code></td><td><span class="badge badge-pass">PASS</span></td></tr>
+      <tr><td><code>./gradlew check</code></td><td><span class="badge badge-pass">PASS</span></td></tr>
+      <tr><td><code>./gradlew assembleDebug</code></td><td><span class="badge badge-pass">PASS</span></td></tr>
+      <tr><td><code>./gradlew connectedDebugAndroidTest</code></td><td><span class="badge badge-pass">PASS</span> (1 test on Pixel 6a)</td></tr>
+    </table>
+
+    <h3>TODO Scan</h3>
+    <p>No TODO comments found in <code>app/src/</code>. No items to resolve or acknowledge.</p>
+
+    <h3>Security Review</h3>
+    <p><span class="badge badge-pass">PASS</span> — no critical or high severity issues. Two low-severity defensive recommendations flagged for future evolution:</p>
+    <ul>
+      <li><span class="badge badge-info">LOW</span> <code>allowBackup=true</code> in AndroidManifest — acceptable for assessment, disable before production</li>
+      <li><span class="badge badge-info">LOW</span> <code>imageUrl</code> field not validated — acceptable while data source is bundled asset</li>
+    </ul>
+
+    <h3>Documentation Updates</h3>
+    <ul>
+      <li><code>README.md</code> — updated domain model count from 6 to 8</li>
+      <li><code>AGENTS.md</code> — updated domain model file count from 9 to 11</li>
+    </ul>
+
+    <h3>Iteration Cycles</h3>
+    <p><strong>1 cycle</strong> — all tasks completed in a single pass with no rework or TODO resolution loops needed.</p>
+
+    <div class="outcome outcome-passed">All changes applied and verified. All 65 tasks complete. Ready for archival.</div>
+  </section>
   </main>
 
 </body>

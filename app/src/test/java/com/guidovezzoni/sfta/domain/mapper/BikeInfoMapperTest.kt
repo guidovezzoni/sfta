@@ -62,10 +62,10 @@ class BikeInfoMapperTest {
     fun `GIVEN a fully populated BikeInfoSnapshotDto WHEN toDomain is called THEN all fields are correctly mapped`() {
         val result = fullyPopulatedDto.toDomain()
 
-        assertEquals("Stark VARG MX 1.2", result.model)
-        assertEquals("Alpha", result.variant)
-        assertEquals("3.4.1", result.firmwareVersion)
-        assertEquals("https://example.com/image.webp", result.imageUrl)
+        assertEquals("Stark VARG MX 1.2", result.bike.model)
+        assertEquals("Alpha", result.bike.variant)
+        assertEquals("3.4.1", result.bike.firmwareVersion)
+        assertEquals("https://example.com/image.webp", result.bike.imageUrl)
         assertEquals("2025-05-19T10:32:45Z", result.timestamp)
         assertEquals(73, result.battery.stateOfChargePercent)
         assertEquals(38, result.battery.estimatedRangeKm)
@@ -81,10 +81,10 @@ class BikeInfoMapperTest {
         assertEquals(3742L, result.session.durationSeconds)
         assertEquals(24.7, result.session.distanceKm, 0.001)
         assertEquals(94.1, result.session.maxSpeedKmh, 0.001)
-        assertEquals(1, result.warnings.size)
-        assertEquals("W_MOT_TEMP_HIGH", result.warnings[0].code)
-        assertEquals("Motor temperature elevated", result.warnings[0].message)
-        assertEquals(WarningSeverity.WARNING, result.warnings[0].severity)
+        assertEquals(1, result.diagnostics.warnings.size)
+        assertEquals("W_MOT_TEMP_HIGH", result.diagnostics.warnings[0].code)
+        assertEquals("Motor temperature elevated", result.diagnostics.warnings[0].message)
+        assertEquals(WarningSeverity.WARNING, result.diagnostics.warnings[0].severity)
     }
 
     @Test
@@ -107,11 +107,11 @@ class BikeInfoMapperTest {
 
         assertEquals(ChargingState.UNKNOWN, result.battery.chargingState)
         assertEquals(PowerMap.UNKNOWN, result.rideSettings.powerMap)
-        assertEquals(WarningSeverity.UNKNOWN, result.warnings[0].severity)
+        assertEquals(WarningSeverity.UNKNOWN, result.diagnostics.warnings[0].severity)
     }
 
     @Test
-    fun `GIVEN a DTO with an empty warnings list WHEN toDomain is called THEN BikeInfo warnings is empty`() {
+    fun `GIVEN a DTO with an empty warnings list WHEN toDomain is called THEN BikeInfo diagnostics warnings is empty`() {
         val dtoWithEmptyWarnings = fullyPopulatedDto.copy(
             diagnostics = DiagnosticsDto(
                 faultCodes = emptyList(),
@@ -121,6 +121,6 @@ class BikeInfoMapperTest {
 
         val result = dtoWithEmptyWarnings.toDomain()
 
-        assertEquals(emptyList<Any>(), result.warnings)
+        assertEquals(emptyList<Any>(), result.diagnostics.warnings)
     }
 }

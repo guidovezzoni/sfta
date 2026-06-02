@@ -28,9 +28,9 @@
 - [x] 3.6 Create `RideSettingsInfo.kt` in `domain/model/` — fields: `powerMap: PowerMap`, `maxPowerHp`, `engineBrakingPercent`, `regenPercent`
 - [x] 3.7 Create `SessionInfo.kt` in `domain/model/` — fields: `durationSeconds`, `distanceKm`, `maxSpeedKmh`
 - [x] 3.8 Create `WarningInfo.kt` in `domain/model/` — fields: `code`, `message`, `severity: WarningSeverity`
-- [ ] 3.9 Create `BikeDetails.kt` in `domain/model/` — fields: `model`, `variant`, `firmwareVersion`, `imageUrl`
-- [ ] 3.10 Create `DiagnosticsInfo.kt` in `domain/model/` — fields: `warnings: List<WarningInfo>`
-- [ ] 3.11 Modify `BikeInfo.kt` in `domain/model/` — fields: `bike: BikeDetails`, `timestamp`, `battery`, `motor`, `rideSettings`, `session`, `diagnostics: DiagnosticsInfo`
+- [x] 3.9 Create `BikeDetails.kt` in `domain/model/` — fields: `model`, `variant`, `firmwareVersion`, `imageUrl`
+- [x] 3.10 Create `DiagnosticsInfo.kt` in `domain/model/` — fields: `warnings: List<WarningInfo>`
+- [x] 3.11 Modify `BikeInfo.kt` in `domain/model/` — fields: `bike: BikeDetails`, `timestamp`, `battery`, `motor`, `rideSettings`, `session`, `diagnostics: DiagnosticsInfo`
 
 ## 4. Repository Interface (Prerequisites)
 
@@ -45,20 +45,20 @@
 
 ## 6. Mapper (BDD)
 
-- [ ] 6.1 Write test: GIVEN a fully populated `BikeInfoSnapshotDto` WHEN `toDomain()` is called THEN all fields are correctly mapped — in `BikeInfoMapperTest`
-- [ ] 6.2 Write test: GIVEN a DTO with unrecognised enum string values WHEN `toDomain()` is called THEN enums fall back to `UNKNOWN` — in `BikeInfoMapperTest`
-- [ ] 6.3 Write test: GIVEN a DTO with an empty warnings list WHEN `toDomain()` is called THEN `BikeInfo.diagnostics.warnings` is empty — in `BikeInfoMapperTest`
-- [ ] 6.4 Implement `BikeInfoMapper.kt` in `domain/mapper/` — `BikeInfoSnapshotDto.toDomain()` extension preserving nested structure, with case-insensitive enum lookup and UNKNOWN fallback
+- [x] 6.1 Write test: GIVEN a fully populated `BikeInfoSnapshotDto` WHEN `toDomain()` is called THEN all fields are correctly mapped — in `BikeInfoMapperTest`
+- [x] 6.2 Write test: GIVEN a DTO with unrecognised enum string values WHEN `toDomain()` is called THEN enums fall back to `UNKNOWN` — in `BikeInfoMapperTest`
+- [x] 6.3 Write test: GIVEN a DTO with an empty warnings list WHEN `toDomain()` is called THEN `BikeInfo.diagnostics.warnings` is empty — in `BikeInfoMapperTest`
+- [x] 6.4 Implement `BikeInfoMapper.kt` in `domain/mapper/` — `BikeInfoSnapshotDto.toDomain()` extension preserving nested structure, with case-insensitive enum lookup and UNKNOWN fallback
 
 ## 7. Use Case (BDD)
 
-- [ ] 7.1 Write test: GIVEN the repository returns a successful `Result` WHEN `GetBikeInfoUseCase` is invoked THEN it returns `Result.success` with mapped `BikeInfo` — in `GetBikeInfoUseCaseTest`
+- [x] 7.1 Write test: GIVEN the repository returns a successful `Result` WHEN `GetBikeInfoUseCase` is invoked THEN it returns `Result.success` with mapped `BikeInfo` — in `GetBikeInfoUseCaseTest`
 - [x] 7.2 Write test: GIVEN the repository returns a failure `Result` WHEN `GetBikeInfoUseCase` is invoked THEN it returns the same `Result.failure` — in `GetBikeInfoUseCaseTest`
 - [x] 7.3 Implement `GetBikeInfoUseCase.kt` in `domain/usecase/` — calls repository, maps result with `toDomain()`
 
 ## 8. Verification
 
-- [ ] 8.1 Run `./gradlew test` — all unit tests pass
-- [ ] 8.2 Run `./gradlew check` — code quality checks pass
-- [ ] 8.3 Run `./gradlew assembleDebug` — full build succeeds
+- [x] 8.1 Run `./gradlew test` — all unit tests pass
+- [x] 8.2 Run `./gradlew check` — code quality checks pass
+- [x] 8.3 Run `./gradlew assembleDebug` — full build succeeds
 - [x] 8.4 On-device verification: app launches in landscape orientation only

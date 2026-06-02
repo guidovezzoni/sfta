@@ -35,7 +35,7 @@ Stark Future Technical Assessment — an Android rider dashboard app for the Sta
 ```
 data/model/         — @Serializable DTO classes (8 files)
 data/repository/    — LocalBikeInfoRepository (reads JSON asset)
-domain/model/       — Domain data classes + enums (9 files)
+domain/model/       — Domain data classes + enums (11 files)
 domain/repository/  — BikeInfoRepository interface
 domain/mapper/      — BikeInfoMapper (DTO → domain)
 domain/usecase/     — GetBikeInfoUseCase

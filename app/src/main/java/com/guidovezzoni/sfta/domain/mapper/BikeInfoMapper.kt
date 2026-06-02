@@ -2,8 +2,10 @@ package com.guidovezzoni.sfta.domain.mapper
 
 import com.guidovezzoni.sfta.data.model.BikeInfoSnapshotDto
 import com.guidovezzoni.sfta.domain.model.BatteryInfo
+import com.guidovezzoni.sfta.domain.model.BikeDetails
 import com.guidovezzoni.sfta.domain.model.BikeInfo
 import com.guidovezzoni.sfta.domain.model.ChargingState
+import com.guidovezzoni.sfta.domain.model.DiagnosticsInfo
 import com.guidovezzoni.sfta.domain.model.MotorInfo
 import com.guidovezzoni.sfta.domain.model.PowerMap
 import com.guidovezzoni.sfta.domain.model.RideSettingsInfo
@@ -12,10 +14,12 @@ import com.guidovezzoni.sfta.domain.model.WarningInfo
 import com.guidovezzoni.sfta.domain.model.WarningSeverity
 
 fun BikeInfoSnapshotDto.toDomain(): BikeInfo = BikeInfo(
-    model = bike.model,
-    variant = bike.variant,
-    firmwareVersion = bike.firmwareVersion,
-    imageUrl = bike.imageUrl,
+    bike = BikeDetails(
+        model = bike.model,
+        variant = bike.variant,
+        firmwareVersion = bike.firmwareVersion,
+        imageUrl = bike.imageUrl,
+    ),
     timestamp = timestamp,
     battery = BatteryInfo(
         stateOfChargePercent = battery.stateOfChargePct,
@@ -43,13 +47,15 @@ fun BikeInfoSnapshotDto.toDomain(): BikeInfo = BikeInfo(
         distanceKm = session.distanceKm,
         maxSpeedKmh = session.maxSpeedKmh,
     ),
-    warnings = diagnostics.warnings.map { warningDto ->
-        WarningInfo(
-            code = warningDto.code,
-            message = warningDto.message,
-            severity = WarningSeverity.entries.find {
-                it.name.equals(warningDto.severity, ignoreCase = true)
-            } ?: WarningSeverity.UNKNOWN,
-        )
-    },
+    diagnostics = DiagnosticsInfo(
+        warnings = diagnostics.warnings.map { warningDto ->
+            WarningInfo(
+                code = warningDto.code,
+                message = warningDto.message,
+                severity = WarningSeverity.entries.find {
+                    it.name.equals(warningDto.severity, ignoreCase = true)
+                } ?: WarningSeverity.UNKNOWN,
+            )
+        },
+    ),
 )

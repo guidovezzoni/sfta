@@ -79,9 +79,9 @@ class GetBikeInfoUseCaseTest {
 
             assertTrue(result.isSuccess)
             val bikeInfo = result.getOrThrow()
-            assertEquals("Stark VARG MX 1.2", bikeInfo.model)
-            assertEquals("Alpha", bikeInfo.variant)
-            assertEquals("3.4.1", bikeInfo.firmwareVersion)
+            assertEquals("Stark VARG MX 1.2", bikeInfo.bike.model)
+            assertEquals("Alpha", bikeInfo.bike.variant)
+            assertEquals("3.4.1", bikeInfo.bike.firmwareVersion)
             assertEquals(73, bikeInfo.battery.stateOfChargePercent)
             assertEquals(47.3, bikeInfo.motor.currentSpeedKmh, 0.001)
         }
