@@ -20,9 +20,9 @@
 
 ## 3. Domain Models and Enums (Prerequisites)
 
-- [x] 3.1 Create `ChargingState.kt` enum in `domain/model/` — values: `CHARGING`, `DISCHARGING`, `FULL`, `UNKNOWN`
-- [x] 3.2 Create `PowerMap.kt` enum in `domain/model/` — values: `ENDURO`, `MX`, `ECO`, `UNKNOWN`
-- [x] 3.3 Create `WarningSeverity.kt` enum in `domain/model/` — values: `INFO`, `WARNING`, `CRITICAL`, `UNKNOWN`
+- [ ] 3.1 Create `ChargingState.kt` enum in `domain/model/` — values: `DISCHARGING`, `UNKNOWN` (only confirmed values; full API docs unavailable)
+- [ ] 3.2 Create `PowerMap.kt` enum in `domain/model/` — values: `ENDURO`, `UNKNOWN` (only confirmed values; full API docs unavailable)
+- [ ] 3.3 Create `WarningSeverity.kt` enum in `domain/model/` — values: `WARNING`, `UNKNOWN` (only confirmed values; full API docs unavailable)
 - [x] 3.4 Create `BatteryInfo.kt` in `domain/model/` — fields: `stateOfChargePercent`, `estimatedRangeKm`, `temperatureCelsius`, `chargingState: ChargingState`
 - [x] 3.5 Create `MotorInfo.kt` in `domain/model/` — fields: `powerHp`, `temperatureCelsius`, `currentSpeedKmh`
 - [x] 3.6 Create `RideSettingsInfo.kt` in `domain/model/` — fields: `powerMap: PowerMap`, `maxPowerHp`, `engineBrakingPercent`, `regenPercent`

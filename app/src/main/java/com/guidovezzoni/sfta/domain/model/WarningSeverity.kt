@@ -1,9 +1,8 @@
 package com.guidovezzoni.sfta.domain.model
 
-// The WARNING was present in the JSON sample. All the others have been guessed.
+// Only values confirmed in the JSON snapshot are listed. Full API documentation was not
+// available at the time of writing, so additional values may exist.
 enum class WarningSeverity {
-    INFO,
     WARNING,
-    CRITICAL,
     UNKNOWN,
 }

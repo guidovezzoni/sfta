@@ -1,9 +1,8 @@
 package com.guidovezzoni.sfta.domain.model
 
-// The ENDURO was present in the JSON sample. All the others have been guessed.
+// Only values confirmed in the JSON snapshot are listed. Full API documentation was not
+// available at the time of writing, so additional values may exist.
 enum class PowerMap {
     ENDURO,
-    MX,
-    ECO,
     UNKNOWN,
 }
