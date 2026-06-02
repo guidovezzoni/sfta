@@ -1,8 +1,25 @@
 # README
 
+As an agent please do NOT modify the below section [Human managed part of the README] and its subsections, this is only for manually added info.
+Any automatically added info can be added to the other specific section [## LLM managed part of the README].
+
 ## Human managed part of the README
-As an agent please do NOT modify this section and subsections, this is only for manually added info.
-Any automatic info can be added at the following section [## LLM managed part of the README]
+In implementing this test I used an AI supported SDD methodology (Spec-Driven Development) in which, the specification are fully defined before starting coding, to force the agent to follow the established plan.
+On top of the SDD library (OpenSpec) I used a library I am developing, that by using AI allows to automate the full lifecycle, from user story refinement, to enforcing BDD, to final verification of the user story, including definition of done, unit tests, UI test, security assessment, on-device testing, etc.
+
+I will quickly provide here the info requested, leaving more info in the sections above.
+
+Tha app has been treated as a production app, so technical and architectural decision have been taken thinking this app as the first step for a larger app.
+The App follows a Clean Architecture approach, with MVI at UI level based on the ViewModel implementation.
+Libraries used include:
+- Dagger Hilt
+- Flow & Coroutines
+- jetpack compose
+
+Things that should be tackled next:
+- Clarify the current speed issue - there isn't one in the JSON, only a max speed for the session. 
+- Having access to the complete API documentation would help to define correctly the missing enums values - ChargingState, PowerMap, and WarningSeverity.
+
 
 ### Process followed
 This section describes the process I followed to implement the project.
