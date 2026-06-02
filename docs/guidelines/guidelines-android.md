@@ -53,8 +53,16 @@ app/src/main/java/<package-name>/
     ├── repository/             # Repository implementations
     │   ├── Repository001Impl.kt
     │   └── Repository002Impl.kt
+    ├── mapper/                 # DTO → domain mappers
+    │   └── EntityMapper.kt
     └── database/
 ```
+
+- **Clean Architecture layer boundaries**: The domain layer must not import or reference any data-layer types (DTOs, database entities, network models). Violations include domain repository interfaces returning DTOs, or mappers living in `domain/mapper/`.
+  - **Repository interfaces** (in `domain/repository/`) must declare return types using only domain models.
+  - **Mappers** (DTO → domain) belong in `data/mapper/` — they operate on data-layer inputs and produce domain outputs.
+  - **Repository implementations** (in `data/repository/`) own the mapping step: parse/fetch the data-layer representation, apply the mapper, and return a domain model.
+  - **Use cases** receive domain models directly from the repository and must not perform DTO-to-domain mapping.
 
 - **MVI Contract**: Each feature exposes a clear contract between View and ViewModel:
   - `UiState`: a single immutable `data class` representing the full UI state. Default to a sensible initial state.

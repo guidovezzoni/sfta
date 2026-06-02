@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report: 2.1 — Fix Repository Clean Architecture Violation</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background: #fafafa;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    .report-header {
+      border-bottom: 3px solid #2563eb;
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
+    }
+    .report-header h1 { font-size: 1.75rem; color: #1e293b; }
+    .report-meta {
+      display: flex; gap: 2rem; flex-wrap: wrap;
+      margin-top: 0.5rem; font-size: 0.875rem; color: #64748b;
+    }
+    .report-meta span { display: inline-flex; align-items: center; gap: 0.25rem; }
+
+    .report-section {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .report-section header {
+      display: flex; justify-content: space-between; align-items: baseline;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 0.75rem; margin-bottom: 1rem;
+    }
+    .report-section header h2 { font-size: 1.25rem; color: #1e293b; }
+    .report-section header time { font-size: 0.8rem; color: #94a3b8; white-space: nowrap; }
+    .section-source { font-size: 0.75rem; color: #94a3b8; font-style: italic; margin-bottom: 0.75rem; }
+
+    h3 { font-size: 1.05rem; color: #334155; margin: 1rem 0 0.5rem; }
+    p { margin-bottom: 0.75rem; }
+    ul, ol { margin: 0.5rem 0 0.75rem 1.5rem; }
+    li { margin-bottom: 0.25rem; }
+    code {
+      background: #f1f5f9; padding: 0.15rem 0.35rem; border-radius: 3px;
+      font-size: 0.875em;
+      font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    }
+
+    table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 0.9rem; }
+    th, td { text-align: left; padding: 0.5rem 0.75rem; border: 1px solid #e2e8f0; }
+    th { background: #f8fafc; font-weight: 600; color: #475569; }
+
+    .badge {
+      display: inline-block; padding: 0.15rem 0.5rem;
+      border-radius: 4px; font-size: 0.8rem; font-weight: 600;
+    }
+    .badge-pass { background: #dcfce7; color: #166534; }
+    .badge-fail { background: #fee2e2; color: #991b1b; }
+    .badge-warn { background: #fef9c3; color: #854d0e; }
+    .badge-info { background: #dbeafe; color: #1e40af; }
+
+    .outcome { margin-top: 1rem; padding: 0.75rem 1rem; border-radius: 6px; font-weight: 600; }
+    .outcome-passed { background: #dcfce7; color: #166534; border-left: 4px solid #22c55e; }
+    .outcome-failed { background: #fee2e2; color: #991b1b; border-left: 4px solid #ef4444; }
+  </style>
+</head>
+<body>
+
+  <div class="report-header">
+    <h1>2.1 — Fix Repository Clean Architecture Violation</h1>
+    <div class="report-meta">
+      <span><strong>Story:</strong> 2.1</span>
+      <span><strong>Branch:</strong> feature/2.1-fix-repository-clean-architecture</span>
+      <span><strong>Created:</strong> 2026-06-02</span>
+    </div>
+  </div>
+
+  <main id="report-sections">
+  <section class="report-section" data-source="open_user_story" data-timestamp="2026-06-02T13:40:04Z">
+    <header>
+      <h2>Story Opened</h2>
+      <time datetime="2026-06-02T13:40:04Z">2 Jun 2026</time>
+    </header>
+    <p class="section-source">Source: open_user_story</p>
+
+    <h3>Story</h3>
+    <p><strong>2.1 — Fix Repository Clean Architecture Violation</strong></p>
+    <p>Remove the data-layer dependency from the domain layer by changing <code>BikeInfoRepository</code> to return <code>Result&lt;BikeInfo&gt;</code> instead of <code>Result&lt;BikeInfoSnapshotDto&gt;</code>, relocating the mapper from <code>domain/mapper/</code> to <code>data/mapper/</code>, and simplifying the use case to a pass-through.</p>
+
+    <h3>Branch</h3>
+    <p><code>feature/2.1-fix-repository-clean-architecture</code> (created from <code>main</code> at <code>b4913eb</code>)</p>
+
+    <h3>Refinement Summary</h3>
+    <ul>
+      <li>Added detailed current-state vs target-state descriptions for each file change</li>
+      <li>Added explicit verification criteria for the repository interface (zero <code>data.*</code> imports)</li>
+      <li>Clarified that mapper relocation uses <code>git mv</code> and requires package declaration update</li>
+      <li>Added detail on test changes: repository tests assert domain fields, use case tests use domain model construction</li>
+      <li>Added Security, Performance, GDPR, and Non-Functional analysis (no concerns — pure refactoring)</li>
+      <li>Added a completion checklist with 12 verifiable items</li>
+      <li>Original user story preserved at the bottom of the file for reference</li>
+    </ul>
+  </section>
+
+  <section class="report-section" data-source="opsx:propose" data-timestamp="2026-06-02T14:30:00Z">
+    <header>
+      <h2>Change Proposed</h2>
+      <time datetime="2026-06-02T14:30:00Z">2 Jun 2026</time>
+    </header>
+    <p class="section-source">Source: opsx:propose</p>
+
+    <h3>Exploration Findings</h3>
+    <p>Investigated all 6 source files and 3 test files affected by the architecture violation. Confirmed the dependency flow:</p>
+    <ul>
+      <li><code>BikeInfoRepository</code> (domain) imports <code>BikeInfoSnapshotDto</code> (data) — violates dependency rule</li>
+      <li><code>BikeInfoMapper</code> lives in <code>domain/mapper/</code> despite converting data-layer types</li>
+      <li><code>GetBikeInfoUseCase</code> performs DTO-to-domain mapping that should be the repository's responsibility</li>
+      <li><code>LocalBikeInfoRepository.runCatching</code> block already wraps JSON parsing — adding <code>.toDomain()</code> inside it will catch mapping errors too</li>
+      <li>The use case's public API (<code>suspend operator fun invoke(): Result&lt;BikeInfo&gt;</code>) remains unchanged — no downstream impact</li>
+    </ul>
+
+    <h3>Questions and Answers</h3>
+    <p>No ambiguities found — the user story is fully specified with detailed current-state vs target-state descriptions, file paths, and acceptance criteria. Proceeded directly to proposal.</p>
+
+    <h3>Artefacts Created</h3>
+    <table>
+      <tr><th>Artefact</th><th>Path</th><th>Description</th></tr>
+      <tr><td><span class="badge badge-pass">proposal</span></td><td><code>openspec/changes/fix-repository-clean-architecture/proposal.md</code></td><td>Why the change is needed, what changes, capabilities affected, impact</td></tr>
+      <tr><td><span class="badge badge-pass">design</span></td><td><code>openspec/changes/fix-repository-clean-architecture/design.md</code></td><td>Technical decisions: git mv for history, mapping inside runCatching, pass-through use case</td></tr>
+      <tr><td><span class="badge badge-pass">specs</span></td><td><code>openspec/changes/fix-repository-clean-architecture/specs/bike-telemetry-data/spec.md</code></td><td>Delta spec: modified repository, mapper, and use case requirements</td></tr>
+      <tr><td><span class="badge badge-pass">tasks</span></td><td><code>openspec/changes/fix-repository-clean-architecture/tasks.md</code></td><td>15 tasks across 5 groups: prerequisites, repository BDD, use case BDD, docs, verification</td></tr>
+    </table>
+  </section>
+  <section class="report-section" data-source="sdlc:sdlc_verify_story" data-timestamp="2026-06-02T16:40:00Z">
+    <header>
+      <h2>Verification</h2>
+      <time datetime="2026-06-02T16:40:00Z">2 June 2026</time>
+    </header>
+    <p class="section-source">Source: sdlc:sdlc_verify_story</p>
+
+    <h3>OpenSpec Verify</h3>
+    <p><span class="badge badge-pass">PASS</span> All 15/15 tasks complete. Completeness, correctness, and coherence verified against design.md, specs, and tasks.</p>
+
+    <h3>TODO Scan</h3>
+    <p><span class="badge badge-pass">PASS</span> No TODO comments found in <code>app/src/</code>.</p>
+
+    <h3>Security Review</h3>
+    <p><span class="badge badge-pass">PASS</span> No critical or high-severity findings. The change is a pure architectural refactoring — no new data inputs, network calls, or sensitive data handling. All speculative findings from the initial scan were excluded as false positives (confidence below threshold).</p>
+
+    <h3>On-Device Tests</h3>
+    <p><span class="badge badge-pass">PASS</span> Device connected: Pixel 6a (Android 16). Method: automated via agent.</p>
+    <table>
+      <tr><th>Test Suite</th><th>Result</th><th>Notes</th></tr>
+      <tr><td>Unit tests (<code>./gradlew test</code>)</td><td><span class="badge badge-pass">PASS</span></td><td>All tasks UP-TO-DATE, BUILD SUCCESSFUL</td></tr>
+      <tr><td>Instrumented tests (<code>./gradlew connectedDebugAndroidTest</code>)</td><td><span class="badge badge-pass">PASS</span></td><td>1 test on Pixel 6a — BUILD SUCCESSFUL</td></tr>
+    </table>
+
+    <h3>Definition of Done</h3>
+    <table>
+      <tr><th>Acceptance Criterion</th><th>Status</th><th>Evidence</th></tr>
+      <tr>
+        <td>Repository interface has no data-layer imports</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td><code>BikeInfoRepository.kt</code>: only <code>domain.model.BikeInfo</code> imported; zero <code>data.*</code> imports</td>
+      </tr>
+      <tr>
+        <td>Repository returns domain model on success</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td><code>LocalBikeInfoRepository</code> calls <code>.toDomain()</code> inside <code>runCatching</code>; test asserts <code>BikeInfo</code> fields including <code>PowerMap.ENDURO</code> and <code>durationSeconds = 3742</code></td>
+      </tr>
+      <tr>
+        <td>Repository handles missing file gracefully</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td><code>LocalBikeInfoRepositoryTest</code>: missing file test asserts <code>Result.failure</code> with <code>FileNotFoundException</code></td>
+      </tr>
+      <tr>
+        <td>Repository handles malformed JSON gracefully</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td><code>LocalBikeInfoRepositoryTest</code>: invalid JSON test asserts <code>Result.failure</code></td>
+      </tr>
+      <tr>
+        <td>Mapper handles unknown enum values with UNKNOWN fallback</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td><code>BikeInfoMapperTest</code>: "unrecognised enum string values" test asserts <code>ChargingState.UNKNOWN</code>, <code>PowerMap.UNKNOWN</code>, <code>WarningSeverity.UNKNOWN</code></td>
+      </tr>
+      <tr>
+        <td>Use case delegates to repository</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td><code>GetBikeInfoUseCase</code> is a single-line pass-through; <code>GetBikeInfoUseCaseTest</code> asserts identity of returned <code>BikeInfo</code></td>
+      </tr>
+      <tr>
+        <td>Use case propagates failure from repository</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td><code>GetBikeInfoUseCaseTest</code>: failure propagation test asserts same exception returned unchanged</td>
+      </tr>
+    </table>
+
+    <div class="outcome outcome-passed">PASSED — Story closed: <code>2.1-fix-repository-clean-architecture-DONE.md</code></div>
+  </section>
+  <section class="report-section" data-source="sdlc:sdlc_archive" data-timestamp="2026-06-02T14:30:00Z">
+    <header>
+      <h2>Archive</h2>
+      <time datetime="2026-06-02T14:30:00Z">2 June 2026</time>
+    </header>
+    <p class="section-source">Source: sdlc:sdlc_archive</p>
+    <table>
+      <tr><th>Field</th><th>Value</th></tr>
+      <tr><td>Change name</td><td>fix-repository-clean-architecture</td></tr>
+      <tr><td>Schema</td><td>spec-driven</td></tr>
+      <tr><td>Archive location</td><td><code>openspec/changes/archive/2026-06-02-fix-repository-clean-architecture/</code></td></tr>
+      <tr><td>Spec sync status</td><td><span class="badge badge-pass">Synced</span> — main spec already contained all delta spec content; sync confirmed no-op</td></tr>
+      <tr><td>AGENTS.md sync</td><td><span class="badge badge-pass">Updated</span> — corrected <code>domain/mapper/</code> → <code>data/mapper/</code></td></tr>
+      <tr><td>README.md sync</td><td><span class="badge badge-pass">Updated</span> — corrected mapper layer label and path in LLM-managed architecture table</td></tr>
+      <tr><td>Artifact completion</td><td><span class="badge badge-pass">All complete</span> — proposal, design, specs, tasks all done</td></tr>
+      <tr><td>Task completion</td><td><span class="badge badge-pass">15 / 15 tasks complete</span></td></tr>
+    </table>
+    <div class="outcome outcome-passed">Archive complete — no warnings.</div>
+  </section>
+
+  </main>
+
+</body>
+</html>

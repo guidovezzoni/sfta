@@ -1,31 +1,4 @@
-# Spec: Bike Telemetry Data
-
-## Purpose
-
-Defines the data infrastructure for loading and exposing bike telemetry data from a bundled JSON snapshot. Covers the full stack from raw JSON asset through DTOs, repository, domain models, mapper, and use case.
-
-## Requirements
-
-### Requirement: Project compiles with serialization and testing dependencies
-The project SHALL include `kotlinx-serialization-json`, `lifecycle-viewmodel-compose`, `mockk`, and `kotlinx-coroutines-test` as dependencies, and the `kotlin-serialization` Gradle plugin SHALL be applied.
-
-#### Scenario: Project compiles with new dependencies
-- **WHEN** `./gradlew assembleDebug` is executed
-- **THEN** the project compiles without errors
-
-### Requirement: Bike telemetry JSON asset is bundled and valid
-The app SHALL bundle `bike_info_snapshot.json` in `app/src/main/assets/`. The JSON SHALL be a copy of `docs/mocks/bike_info_snapshot.json` with `"current_speed_kmh": 47.3` added to the `motor` object.
-
-#### Scenario: JSON asset is present and parseable
-- **WHEN** the asset file is parsed with kotlinx-serialization
-- **THEN** it deserialises into `BikeInfoSnapshotDto` without errors and the motor object contains `currentSpeedKmh = 47.3`
-
-### Requirement: DTOs represent the JSON schema with serialization annotations
-The data layer SHALL provide 8 DTO classes (`BikeInfoSnapshotDto`, `BikeDto`, `BatteryDto`, `MotorDto`, `RideSettingsDto`, `SessionDto`, `DiagnosticsDto`, `WarningDto`) each annotated with `@Serializable` and using `@SerialName` for snake_case JSON key mapping. Each class SHALL be in its own file under `data/model/`.
-
-#### Scenario: DTOs match JSON structure
-- **WHEN** valid bike telemetry JSON is deserialised
-- **THEN** all fields are correctly populated in the DTO hierarchy
+## MODIFIED Requirements
 
 ### Requirement: Repository reads and parses JSON from assets
 `LocalBikeInfoRepository` SHALL implement `BikeInfoRepository` and read `bike_info_snapshot.json` via `AssetManager`. It SHALL use `Json { ignoreUnknownKeys = true }` for forward compatibility, wrap the operation in `runCatching`, execute on `Dispatchers.IO`, and map the parsed DTO to the domain model using `BikeInfoSnapshotDto.toDomain()` before returning. The repository SHALL return `Result<BikeInfo>`.
@@ -45,13 +18,6 @@ The data layer SHALL provide 8 DTO classes (`BikeInfoSnapshotDto`, `BikeDto`, `B
 #### Scenario: Repository handles mapping errors gracefully
 - **WHEN** `getBikeInfoSnapshot()` is called and the DTO-to-domain mapping fails
 - **THEN** it returns `Result.failure` with the mapping exception
-
-### Requirement: Domain models represent clean business data
-The domain layer SHALL provide `BikeInfo`, `BikeDetails`, `BatteryInfo`, `MotorInfo`, `RideSettingsInfo`, `SessionInfo`, `DiagnosticsInfo`, and `WarningInfo` data classes, plus `ChargingState`, `PowerMap`, and `WarningSeverity` enums. The domain model structure SHALL mirror DTO nesting — `BikeInfo` contains nested `bike: BikeDetails` and `diagnostics: DiagnosticsInfo` objects. `DiagnosticsInfo` SHALL contain only `warnings` (excluding `faultCodes`). Each enum SHALL include an `UNKNOWN` fallback value. Each class and enum SHALL be in its own file under `domain/model/`.
-
-#### Scenario: Domain models have all required fields
-- **WHEN** a `BikeInfo` instance is constructed
-- **THEN** it contains `bike` (BikeDetails), `timestamp`, `battery`, `motor`, `rideSettings`, `session`, and `diagnostics` (DiagnosticsInfo) fields with correct types
 
 ### Requirement: Mapper converts DTOs to domain models with safe enum handling
 `BikeInfoMapper` SHALL reside in the data layer (`data/mapper/`) and provide a `BikeInfoSnapshotDto.toDomain()` extension function that maps every DTO field to its domain counterpart, preserving the nested structure. `BikeDto` SHALL map to `BikeDetails`, and `DiagnosticsDto` SHALL map to `DiagnosticsInfo` (excluding `faultCodes`). Enum conversion SHALL use case-insensitive lookup with `UNKNOWN` fallback.
@@ -78,10 +44,3 @@ The domain layer SHALL provide `BikeInfo`, `BikeDetails`, `BatteryInfo`, `MotorI
 #### Scenario: Use case propagates failure from repository
 - **WHEN** the repository returns a failure `Result`
 - **THEN** `GetBikeInfoUseCase` returns the same `Result.failure`
-
-### Requirement: App is locked to landscape orientation
-The `<activity>` element in `AndroidManifest.xml` SHALL have `android:screenOrientation="sensorLandscape"` to lock the app to landscape orientation (allowing both left and right landscape).
-
-#### Scenario: App displays in landscape only
-- **WHEN** the app is launched on a device
-- **THEN** it displays only in landscape orientation
