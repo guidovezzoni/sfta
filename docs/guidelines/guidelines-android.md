@@ -157,6 +157,7 @@ private fun PreviewComponentName() {
 - **Ellipsis**: Always replace three dots with ellipsis
 
 ### Kotlin Best Practices
+- **One class per file**: Each Kotlin model (data class, sealed class, enum) must live in its own file. Do not group multiple models into a single file.
 - **Immutability**: Always prefer `val` over `var` for immutable properties
 - Never use the `!!` symbol as it could lead to unexpected crashes, cast or find a solution that guarantees non-nullability.
 - Use `Result` type for operations that can fail
