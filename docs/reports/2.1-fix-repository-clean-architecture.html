@@ -110,6 +110,36 @@
       <li>Original user story preserved at the bottom of the file for reference</li>
     </ul>
   </section>
+
+  <section class="report-section" data-source="opsx:propose" data-timestamp="2026-06-02T14:30:00Z">
+    <header>
+      <h2>Change Proposed</h2>
+      <time datetime="2026-06-02T14:30:00Z">2 Jun 2026</time>
+    </header>
+    <p class="section-source">Source: opsx:propose</p>
+
+    <h3>Exploration Findings</h3>
+    <p>Investigated all 6 source files and 3 test files affected by the architecture violation. Confirmed the dependency flow:</p>
+    <ul>
+      <li><code>BikeInfoRepository</code> (domain) imports <code>BikeInfoSnapshotDto</code> (data) — violates dependency rule</li>
+      <li><code>BikeInfoMapper</code> lives in <code>domain/mapper/</code> despite converting data-layer types</li>
+      <li><code>GetBikeInfoUseCase</code> performs DTO-to-domain mapping that should be the repository's responsibility</li>
+      <li><code>LocalBikeInfoRepository.runCatching</code> block already wraps JSON parsing — adding <code>.toDomain()</code> inside it will catch mapping errors too</li>
+      <li>The use case's public API (<code>suspend operator fun invoke(): Result&lt;BikeInfo&gt;</code>) remains unchanged — no downstream impact</li>
+    </ul>
+
+    <h3>Questions and Answers</h3>
+    <p>No ambiguities found — the user story is fully specified with detailed current-state vs target-state descriptions, file paths, and acceptance criteria. Proceeded directly to proposal.</p>
+
+    <h3>Artefacts Created</h3>
+    <table>
+      <tr><th>Artefact</th><th>Path</th><th>Description</th></tr>
+      <tr><td><span class="badge badge-pass">proposal</span></td><td><code>openspec/changes/fix-repository-clean-architecture/proposal.md</code></td><td>Why the change is needed, what changes, capabilities affected, impact</td></tr>
+      <tr><td><span class="badge badge-pass">design</span></td><td><code>openspec/changes/fix-repository-clean-architecture/design.md</code></td><td>Technical decisions: git mv for history, mapping inside runCatching, pass-through use case</td></tr>
+      <tr><td><span class="badge badge-pass">specs</span></td><td><code>openspec/changes/fix-repository-clean-architecture/specs/bike-telemetry-data/spec.md</code></td><td>Delta spec: modified repository, mapper, and use case requirements</td></tr>
+      <tr><td><span class="badge badge-pass">tasks</span></td><td><code>openspec/changes/fix-repository-clean-architecture/tasks.md</code></td><td>15 tasks across 5 groups: prerequisites, repository BDD, use case BDD, docs, verification</td></tr>
+    </table>
+  </section>
   </main>
 
 </body>
