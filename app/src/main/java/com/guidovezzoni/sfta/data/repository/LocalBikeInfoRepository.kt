@@ -1,7 +1,9 @@
 package com.guidovezzoni.sfta.data.repository
 
 import android.content.res.AssetManager
+import com.guidovezzoni.sfta.data.mapper.toDomain
 import com.guidovezzoni.sfta.data.model.BikeInfoSnapshotDto
+import com.guidovezzoni.sfta.domain.model.BikeInfo
 import com.guidovezzoni.sfta.domain.repository.BikeInfoRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -17,13 +19,13 @@ class LocalBikeInfoRepository(
 
     private val json = Json { ignoreUnknownKeys = true }
 
-    override suspend fun getBikeInfoSnapshot(): Result<BikeInfoSnapshotDto> =
+    override suspend fun getBikeInfoSnapshot(): Result<BikeInfo> =
         withContext(ioDispatcher) {
             runCatching {
                 val jsonString = assetManager.open(ASSET_FILE_NAME)
                     .bufferedReader()
                     .use { it.readText() }
-                json.decodeFromString<BikeInfoSnapshotDto>(jsonString)
+                json.decodeFromString<BikeInfoSnapshotDto>(jsonString).toDomain()
             }
         }
 }

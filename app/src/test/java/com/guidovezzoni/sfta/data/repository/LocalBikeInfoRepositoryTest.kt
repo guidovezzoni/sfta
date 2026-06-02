@@ -1,6 +1,7 @@
 package com.guidovezzoni.sfta.data.repository
 
 import android.content.res.AssetManager
+import com.guidovezzoni.sfta.domain.model.PowerMap
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
@@ -33,7 +34,7 @@ class LocalBikeInfoRepositoryTest {
     }
 
     @Test
-    fun `GIVEN a valid JSON asset WHEN getBikeInfoSnapshot is called THEN it returns Result success with parsed DTO`() =
+    fun `GIVEN a valid JSON asset WHEN getBikeInfoSnapshot is called THEN it returns Result success with BikeInfo domain model`() =
         runTest {
             val validJson = """
             {
@@ -79,15 +80,12 @@ class LocalBikeInfoRepositoryTest {
             val result = repository.getBikeInfoSnapshot()
 
             assertTrue(result.isSuccess)
-            val dto = result.getOrThrow()
-            assertEquals("Stark VARG MX 1.2", dto.bike.model)
-            assertEquals("Alpha", dto.bike.variant)
-            assertEquals("3.4.1", dto.bike.firmwareVersion)
-            assertEquals("2025-05-19T10:32:45Z", dto.timestamp)
-            assertEquals(73, dto.battery.stateOfChargePct)
-            assertEquals(47.3, dto.motor.currentSpeedKmh, 0.001)
-            assertEquals("enduro", dto.rideSettings.powerMap)
-            assertEquals(3742L, dto.session.durationS)
+            val bikeInfo = result.getOrThrow()
+            assertEquals("Stark VARG MX 1.2", bikeInfo.bike.model)
+            assertEquals(73, bikeInfo.battery.stateOfChargePercent)
+            assertEquals(47.3, bikeInfo.motor.currentSpeedKmh, 0.001)
+            assertEquals(PowerMap.ENDURO, bikeInfo.rideSettings.powerMap)
+            assertEquals(3742L, bikeInfo.session.durationSeconds)
         }
 
     @Test

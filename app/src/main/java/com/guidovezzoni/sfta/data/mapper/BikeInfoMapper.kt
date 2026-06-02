@@ -1,4 +1,4 @@
-package com.guidovezzoni.sfta.domain.mapper
+package com.guidovezzoni.sfta.data.mapper
 
 import com.guidovezzoni.sfta.data.model.BikeInfoSnapshotDto
 import com.guidovezzoni.sfta.domain.model.BatteryInfo

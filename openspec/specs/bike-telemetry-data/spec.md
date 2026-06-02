@@ -28,11 +28,11 @@ The data layer SHALL provide 8 DTO classes (`BikeInfoSnapshotDto`, `BikeDto`, `B
 - **THEN** all fields are correctly populated in the DTO hierarchy
 
 ### Requirement: Repository reads and parses JSON from assets
-`LocalBikeInfoRepository` SHALL implement `BikeInfoRepository` and read `bike_info_snapshot.json` via `AssetManager`. It SHALL use `Json { ignoreUnknownKeys = true }` for forward compatibility, wrap the operation in `runCatching`, and execute on `Dispatchers.IO`.
+`LocalBikeInfoRepository` SHALL implement `BikeInfoRepository` and read `bike_info_snapshot.json` via `AssetManager`. It SHALL use `Json { ignoreUnknownKeys = true }` for forward compatibility, wrap the operation in `runCatching`, execute on `Dispatchers.IO`, and map the parsed DTO to the domain model using `BikeInfoSnapshotDto.toDomain()` before returning. The repository SHALL return `Result<BikeInfo>`.
 
-#### Scenario: Repository reads valid JSON successfully
+#### Scenario: Repository returns domain model on success
 - **WHEN** `getBikeInfoSnapshot()` is called with a valid asset file available
-- **THEN** it returns `Result.success` containing the parsed `BikeInfoSnapshotDto`
+- **THEN** it returns `Result.success` containing a `BikeInfo` domain model with all fields correctly mapped
 
 #### Scenario: Repository handles missing file gracefully
 - **WHEN** `getBikeInfoSnapshot()` is called and the asset file does not exist
@@ -42,6 +42,10 @@ The data layer SHALL provide 8 DTO classes (`BikeInfoSnapshotDto`, `BikeDto`, `B
 - **WHEN** `getBikeInfoSnapshot()` is called and the asset file contains invalid JSON
 - **THEN** it returns `Result.failure` with a serialisation exception
 
+#### Scenario: Repository handles mapping errors gracefully
+- **WHEN** `getBikeInfoSnapshot()` is called and the DTO-to-domain mapping fails
+- **THEN** it returns `Result.failure` with the mapping exception
+
 ### Requirement: Domain models represent clean business data
 The domain layer SHALL provide `BikeInfo`, `BikeDetails`, `BatteryInfo`, `MotorInfo`, `RideSettingsInfo`, `SessionInfo`, `DiagnosticsInfo`, and `WarningInfo` data classes, plus `ChargingState`, `PowerMap`, and `WarningSeverity` enums. The domain model structure SHALL mirror DTO nesting — `BikeInfo` contains nested `bike: BikeDetails` and `diagnostics: DiagnosticsInfo` objects. `DiagnosticsInfo` SHALL contain only `warnings` (excluding `faultCodes`). Each enum SHALL include an `UNKNOWN` fallback value. Each class and enum SHALL be in its own file under `domain/model/`.
 
@@ -50,7 +54,7 @@ The domain layer SHALL provide `BikeInfo`, `BikeDetails`, `BatteryInfo`, `MotorI
 - **THEN** it contains `bike` (BikeDetails), `timestamp`, `battery`, `motor`, `rideSettings`, `session`, and `diagnostics` (DiagnosticsInfo) fields with correct types
 
 ### Requirement: Mapper converts DTOs to domain models with safe enum handling
-`BikeInfoMapper` SHALL provide a `BikeInfoSnapshotDto.toDomain()` extension function that maps every DTO field to its domain counterpart, preserving the nested structure. `BikeDto` SHALL map to `BikeDetails`, and `DiagnosticsDto` SHALL map to `DiagnosticsInfo` (excluding `faultCodes`). Enum conversion SHALL use case-insensitive lookup with `UNKNOWN` fallback.
+`BikeInfoMapper` SHALL reside in the data layer (`data/mapper/`) and provide a `BikeInfoSnapshotDto.toDomain()` extension function that maps every DTO field to its domain counterpart, preserving the nested structure. `BikeDto` SHALL map to `BikeDetails`, and `DiagnosticsDto` SHALL map to `DiagnosticsInfo` (excluding `faultCodes`). Enum conversion SHALL use case-insensitive lookup with `UNKNOWN` fallback.
 
 #### Scenario: Mapper converts a fully populated DTO completely
 - **WHEN** `toDomain()` is called on a fully populated `BikeInfoSnapshotDto`
@@ -64,12 +68,12 @@ The domain layer SHALL provide `BikeInfo`, `BikeDetails`, `BatteryInfo`, `MotorI
 - **WHEN** `toDomain()` is called on a DTO with an empty warnings list
 - **THEN** the `BikeInfo.diagnostics.warnings` list is empty
 
-### Requirement: Use case chains repository and mapper
-`GetBikeInfoUseCase` SHALL call the repository's `getBikeInfoSnapshot()` and map the successful result using `toDomain()`. On failure, it SHALL propagate the `Result.failure` unchanged.
+### Requirement: Use case delegates to repository
+`GetBikeInfoUseCase` SHALL call the repository's `getBikeInfoSnapshot()` and return the result directly. The repository already returns `Result<BikeInfo>`, so the use case SHALL NOT perform any mapping. On failure, it SHALL propagate the `Result.failure` unchanged.
 
-#### Scenario: Use case returns mapped domain model on success
-- **WHEN** the repository returns a successful `Result`
-- **THEN** `GetBikeInfoUseCase` returns `Result.success` containing the mapped `BikeInfo`
+#### Scenario: Use case returns domain model on success
+- **WHEN** the repository returns a successful `Result<BikeInfo>`
+- **THEN** `GetBikeInfoUseCase` returns the same `Result.success` unchanged
 
 #### Scenario: Use case propagates failure from repository
 - **WHEN** the repository returns a failure `Result`

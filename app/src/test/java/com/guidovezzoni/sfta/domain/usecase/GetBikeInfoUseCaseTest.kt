@@ -1,12 +1,14 @@
 package com.guidovezzoni.sfta.domain.usecase
 
-import com.guidovezzoni.sfta.data.model.BatteryDto
-import com.guidovezzoni.sfta.data.model.BikeDto
-import com.guidovezzoni.sfta.data.model.BikeInfoSnapshotDto
-import com.guidovezzoni.sfta.data.model.DiagnosticsDto
-import com.guidovezzoni.sfta.data.model.MotorDto
-import com.guidovezzoni.sfta.data.model.RideSettingsDto
-import com.guidovezzoni.sfta.data.model.SessionDto
+import com.guidovezzoni.sfta.domain.model.BatteryInfo
+import com.guidovezzoni.sfta.domain.model.BikeDetails
+import com.guidovezzoni.sfta.domain.model.BikeInfo
+import com.guidovezzoni.sfta.domain.model.ChargingState
+import com.guidovezzoni.sfta.domain.model.DiagnosticsInfo
+import com.guidovezzoni.sfta.domain.model.MotorInfo
+import com.guidovezzoni.sfta.domain.model.PowerMap
+import com.guidovezzoni.sfta.domain.model.RideSettingsInfo
+import com.guidovezzoni.sfta.domain.model.SessionInfo
 import com.guidovezzoni.sfta.domain.repository.BikeInfoRepository
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -34,56 +36,51 @@ class GetBikeInfoUseCaseTest {
         useCase = GetBikeInfoUseCase(repository)
     }
 
-    private val sampleDto = BikeInfoSnapshotDto(
-        bike = BikeDto(
+    private val sampleBikeInfo = BikeInfo(
+        bike = BikeDetails(
             model = "Stark VARG MX 1.2",
             variant = "Alpha",
             firmwareVersion = "3.4.1",
             imageUrl = "https://example.com/image.webp",
         ),
         timestamp = "2025-05-19T10:32:45Z",
-        battery = BatteryDto(
-            stateOfChargePct = 73,
+        battery = BatteryInfo(
+            stateOfChargePercent = 73,
             estimatedRangeKm = 38,
-            temperatureC = 34.7,
-            chargingState = "discharging",
+            temperatureCelsius = 34.7,
+            chargingState = ChargingState.DISCHARGING,
         ),
-        motor = MotorDto(
+        motor = MotorInfo(
             powerHp = 52.4,
-            temperatureC = 61.2,
+            temperatureCelsius = 61.2,
             currentSpeedKmh = 47.3,
         ),
-        rideSettings = RideSettingsDto(
-            powerMap = "enduro",
+        rideSettings = RideSettingsInfo(
+            powerMap = PowerMap.ENDURO,
             maxPowerHp = 80,
-            engineBrakingPct = 45,
-            regenPct = 60,
+            engineBrakingPercent = 45,
+            regenPercent = 60,
         ),
-        session = SessionDto(
-            durationS = 3742L,
+        session = SessionInfo(
+            durationSeconds = 3742L,
             distanceKm = 24.7,
             maxSpeedKmh = 94.1,
         ),
-        diagnostics = DiagnosticsDto(
-            faultCodes = emptyList(),
+        diagnostics = DiagnosticsInfo(
             warnings = emptyList(),
         ),
     )
 
     @Test
-    fun `GIVEN the repository returns a successful Result WHEN GetBikeInfoUseCase is invoked THEN it returns Result success with mapped BikeInfo`() =
+    fun `GIVEN the repository returns a successful Result WHEN GetBikeInfoUseCase is invoked THEN it returns the same Result unchanged`() =
         runTest {
-            coEvery { repository.getBikeInfoSnapshot() } returns Result.success(sampleDto)
+            coEvery { repository.getBikeInfoSnapshot() } returns Result.success(sampleBikeInfo)
 
             val result = useCase()
 
             assertTrue(result.isSuccess)
-            val bikeInfo = result.getOrThrow()
-            assertEquals("Stark VARG MX 1.2", bikeInfo.bike.model)
-            assertEquals("Alpha", bikeInfo.bike.variant)
-            assertEquals("3.4.1", bikeInfo.bike.firmwareVersion)
-            assertEquals(73, bikeInfo.battery.stateOfChargePercent)
-            assertEquals(47.3, bikeInfo.motor.currentSpeedKmh, 0.001)
+            val expectedBikeInfo = sampleBikeInfo
+            assertEquals(expectedBikeInfo, result.getOrThrow())
         }
 
     @Test
