@@ -14,8 +14,7 @@
   },
   "motor": {
     "power_hp": 52.4,
-    "temperature_c": 61.2,
-    "current_speed_kmh": 47.3
+    "temperature_c": 61.2
   },
   "ride_settings": {
     "power_map": "enduro",
