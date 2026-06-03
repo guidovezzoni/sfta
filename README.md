@@ -18,6 +18,9 @@ Libraries used include:
 - Flow & Coroutines
 - jetpack compose
 
+Some assumptions have been made during the implementation:
+- Although Android seems to be preventing in future to implement only landscape apps, it doesn't seem reasonable to have the dashboard of the bike switching orientation during the drive, so the app has been kept landscape only.
+
 Things that should be tackled next:
 - Implementation of release flavour
 - Implementation of proper CI/CD - depending on the repository and services used
