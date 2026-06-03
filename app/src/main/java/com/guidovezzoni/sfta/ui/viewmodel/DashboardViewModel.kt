@@ -40,6 +40,7 @@ class DashboardViewModel @Inject constructor(
     // This is currently not used, however I left it here because:
     // * in a fully fledged UI it's likely to be used
     // * it's part of the MVI contract
+    @Suppress("unused")
     val uiEffect: SharedFlow<DashboardUiEffect> = _uiEffect.asSharedFlow()
 
     fun onIntent(intent: DashboardUiIntent) {

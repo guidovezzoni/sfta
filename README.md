@@ -18,11 +18,15 @@ Libraries used include:
 Some assumptions have been made during the implementation:
 - Although Android seems to be preventing in future to implement only landscape apps, it doesn't seem reasonable to have the dashboard of the bike switching orientation during the drive, so the app has been kept landscape only. This will have to be investigated depending on how Android will enforce the "any orientation" requirement.
 
-Things that should be improved:
-- Updating the library versions - after a failed attempt due to Hilt, I left this task behind as it doesn't affect the functionality of the app
-- Handling the empty state as a "--" placeholder in the composable is not ideal, perhaps this logic should be addressed in the ViewModel  
+Things that I would have improved if I had more time:
+- Updating the library versions and targetSdk - after a failed attempt due to Hilt, I left this task behind as it doesn't affect the functionality of the app
+- Handling the empty state as a "--" placeholder in the composable is not ideal, perhaps this logic should be addressed in the ViewModel 
+- I would have re-worked teh UI:
+  - less information - less noise while driving
+  - some more visual elements, like a battery image for the SoC, a gauge for the power
+  - perhaps I would have used the bike image as a subtle alpha-background for the whole screen.
 
-Things that should be tackled next:
+Things that should be tackled next - if aiming for a proper MVP:
 - Implementation of release flavour
 - Implementation of proper CI/CD - depending on the repository and services used
 - Adding networking to get up-to-date real time status from the bike, it could be BLE or another solution. 
@@ -32,6 +36,10 @@ Things that should be tackled next:
   - Define correctly the missing enums values - ChargingState, PowerMap, and WarningSeverity - current values are those in the JSON, but there will be more.
 
 ## Additional info
+
+### Github / process
+The initial AI and project setup were committed directly on main, after that I created PR for each user story to simulate a way of working. PRs were merged and squashed on Github.
+Each PR contains the code for its user story but also the documentation: user story, SDD artifacts, LLM reports.
 
 ### AI Setup
 The AI setup in the project is layered across different levels, but all are included in git, so they can be shared across different members of the team.
