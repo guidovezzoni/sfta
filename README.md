@@ -21,8 +21,11 @@ Libraries used include:
 Some assumptions have been made during the implementation:
 - Although Android seems to be preventing in future to implement only landscape apps, it doesn't seem reasonable to have the dashboard of the bike switching orientation during the drive, so the app has been kept landscape only. This will have to be investigated depending on how Android will enforce the "any orientation" requirement.
 
-Things that should be tackled next:
+Things that should be improved:
 - Updating the library versions - after a failed attempt due to Hilt, I left this task behind as it doesn't affect the functionality of the app
+- Handling the empty state as a "--" placeholder in the composable is not ideal, perhaps this logic should be addressed in the ViewModel  
+
+Things that should be tackled next:
 - Implementation of release flavour
 - Implementation of proper CI/CD - depending on the repository and services used
 - Adding networking to get up-to-date real time status from the bike, it could be BLE or another solution. 
@@ -37,26 +40,13 @@ The AI setup in the project is layered across different levels, but all are incl
 - AGENTS.md provides a general overview of the project. Also, the first part instructs the agent how to selectively find specific instructions for Android, git, user stories, etc. These parts are located in `docs/guidelines` and will be loaded by the agent when required. 
 - OpenSpec (https://github.com/Fission-AI/OpenSpec/) is used for handling the SDD processes, the commands used are: explore, propose, apply, verify, archive
 - An additional library (SDLC), which I am currently developing, is handling the full lifecycle of user stories. More info at [SDLC-README.md](docs/sdlc/commands/SDLC-README.md). Commands are:
-  - **/sdlc_open_story** which analyses the next story to open, creates a branch, sets the story open and refines it adding a full and detailed analysis
-  - **/sdlc_propose** analyses the user story, asks for questions if something isn't clear, and finally generates the SDD artifacts: proposal, design, specs, and tasks. These are defined with a BDD approach, based on acceptance criteria and fail-first
-  - **/sdlc_apply_changes** implements the current OpenSpec change using BDD Red/Green cycle (test tasks verified RED before implementation, implementation tasks verified GREEN after). Then runs a security review and updates the documentation
+  - **/sdlc_open_story** analyses the next story to open, creates a branch, sets the story open and refines it adding a full and detailed product analysis
+  - **/sdlc_propose** analyses the user story, asks for questions if something isn't clear, and finally generates the SDD artifacts: proposal, design, specs, and tasks. Tasks are defined with a BDD approach, based on acceptance criteria and test-first.
+  - **/sdlc_apply_changes** implements the current OpenSpec change using BDD Red/Green cycle (test tasks verified RED before implementation, implementation tasks verified GREEN after). Then runs a security review and updates the documentation.
   - **/sdlc_verify_story** this is an end-to-end verification gate. Runs OpenSpec's verify, scans for unresolved TODOs, runs a security review on pending changes, checks every acceptance criterion in the story against the codebase, and finally closes the story.
-  - **/sdlc_archive** runs OpenSpec's archive to finalise and archive the completed change, then verifies that he documentation is in sync with the codebase and specs.
+  - **/sdlc_archive** runs OpenSpec's archive to finalise and archive the completed change, then verifies that the documentation is in sync with the codebase and specs.
 
-The SDLC library is still work in progress, I'm working on multi-agent orchestration, LLM independence, self-improvement and other features.
-However ultimately it will have to be tailored for each project/company, although I'm trying to abstract this by defining how each interaction happens, for instance Jira user story should be handled via the atlassian mcp.
-
-### Process followed
-This section describes the process I followed to implement the project.
-* Added the AI tooling: OpenSpec (SDD process), SDLC (user story creation and full life cycle - this is  a work in progress tool I'm working on), AGENTS.md and guidelines for Android, git, processes etc.
-* Created a basic app
-* Brainstorming with Claude about what we have and what we are trying to achieve, result in  [Rider Dashboard Plan](docs/brainstorming/rider-dashboard-plan.md)
-* Two user stories created in docs/userstories
-
-### Notes
-* There seems to be a comma missing in the JSON snapshot, I have assumed it's a copy-paste issue in the test and added it.
-* As for the speed, the JSON only has `session.max_speed_kmh` and there isn't a `current_speed_kmh`, I'm assuming it's missing for whichever reason, and adding it to the JSON.
-
+The SDLC library is still work in progress, and I'm improving it while I use it, and adding additional features like  multi-agent orchestration, LLM independence, self-improvement by adding learnt lessons.
 
 ## LLM managed part of the README
 

@@ -112,6 +112,53 @@
       <li>Definition of Done checklist (11 items)</li>
     </ul>
   </section>
+  <section class="report-section" data-source="opsx:propose" data-timestamp="2026-06-03T12:00:00Z">
+    <header>
+      <h2>Change Proposed</h2>
+      <time datetime="2026-06-03T12:00:00Z">3 June 2026</time>
+    </header>
+    <p class="section-source">Source: opsx:propose</p>
+
+    <h3>Exploration Findings</h3>
+    <ul>
+      <li>All prerequisites confirmed complete: Clean Architecture layers, Hilt DI, domain models with nullable fields, <code>GetBikeInfoUseCase</code></li>
+      <li>Identified two missing dependencies: <code>hilt-navigation-compose</code> (for <code>hiltViewModel()</code>) and <code>lifecycle-runtime-compose</code> (for <code>collectAsStateWithLifecycle()</code>)</li>
+      <li>App already locked to <code>sensorLandscape</code> in manifest</li>
+      <li>Current theme uses default Material purple/pink palette with dynamic colours and light/dark toggle — full replacement required</li>
+      <li>User story is highly detailed with exact field definitions, colour hex values, typography specs, composable signatures, strings.xml entries, and 15 BDD scenarios</li>
+    </ul>
+
+    <h3>Questions and Clarifications</h3>
+    <p>No ambiguities found — the user story serves as a complete technical specification. All design decisions were made during exploration:</p>
+    <ul>
+      <li>Theme function name <code>StarkFutureTechnicalAssessmentTheme</code> retained (internals changed to dark-only)</li>
+      <li>Flat <code>DashboardUiState</code> chosen over nested sub-states</li>
+      <li>Domain enum types (<code>ChargingState</code>, <code>PowerMap</code>) referenced directly in UiState</li>
+      <li>Battery colour thresholds as inline composable logic, not ViewModel mapping</li>
+    </ul>
+
+    <h3>Artefacts Created</h3>
+    <table>
+      <tr><th>Artefact</th><th>Path</th><th>Description</th></tr>
+      <tr><td>Proposal</td><td><code>openspec/changes/dashboard-ui/proposal.md</code></td><td>What &amp; why — 4 phases, 2 new dependencies, theme overhaul, MVI, composables, wiring</td></tr>
+      <tr><td>Design</td><td><code>openspec/changes/dashboard-ui/design.md</code></td><td>7 key decisions with rationale: flat UiState, domain types in state, theme name preserved, hiltViewModel(), collectAsStateWithLifecycle(), composable isolation, battery colour thresholds</td></tr>
+      <tr><td>Spec (new)</td><td><code>openspec/changes/dashboard-ui/specs/dashboard-ui/spec.md</code></td><td>15 requirements with 30+ scenarios covering theme, MVI contract, ViewModel, all composables, wiring, strings, cleanup</td></tr>
+      <tr><td>Spec (delta)</td><td><code>openspec/changes/dashboard-ui/specs/bike-telemetry-data/spec.md</code></td><td>Modified dependency requirement to include hilt-navigation-compose and lifecycle-runtime-compose</td></tr>
+      <tr><td>Tasks</td><td><code>openspec/changes/dashboard-ui/tasks.md</code></td><td>30 tasks across 7 groups: prerequisites, theme, MVI contract, ViewModel BDD (5 tests + impl), composables BDD (9 tests + 7 impl), wiring, verification</td></tr>
+    </table>
+
+    <h3>Task Structure</h3>
+    <p>Tasks follow BDD (test-first) ordering:</p>
+    <ul>
+      <li><strong>Prerequisites</strong> (3 tasks): dependencies, cleanup, strings</li>
+      <li><strong>Theme</strong> (3 tasks): Color.kt, Type.kt, Theme.kt</li>
+      <li><strong>MVI Contract</strong> (3 tasks): UiState, UiIntent, UiEffect</li>
+      <li><strong>ViewModel BDD</strong> (6 tasks): 5 unit tests first, then implementation</li>
+      <li><strong>Composables BDD</strong> (16 tasks): 9 Compose UI tests first, then 6 component implementations + previews</li>
+      <li><strong>Wiring</strong> (1 task): MainActivity</li>
+      <li><strong>Verification</strong> (4 tasks): build, unit tests, UI tests, on-device</li>
+    </ul>
+  </section>
   </main>
 
 </body>
