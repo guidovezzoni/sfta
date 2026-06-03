@@ -109,6 +109,46 @@
       <li>Scope covers 20 files: 17 production source files and 3 test files.</li>
     </ul>
   </section>
+  <section class="report-section" data-source="sdlc_propose" data-timestamp="2026-06-03T14:10:00Z">
+    <header>
+      <h2>Change Proposed</h2>
+      <time datetime="2026-06-03T14:10:00Z">3 Jun 2026, 14:10 UTC</time>
+    </header>
+    <p class="section-source">Source: sdlc_propose</p>
+
+    <h3>Exploration Findings</h3>
+    <ul>
+      <li><strong>Crash confirmed:</strong> JSON snapshot has no <code>current_speed_kmh</code> in the motor object, but <code>MotorDto</code> declares it as non-nullable — runtime <code>MissingFieldException</code>.</li>
+      <li><strong>All 8 DTO classes</strong> currently have non-nullable fields with no defaults.</li>
+      <li><strong>All 8 domain model classes</strong> currently have non-nullable fields.</li>
+      <li><strong>Mapper</strong> uses direct field assignment and <code>entries.find { ... } ?: UNKNOWN</code> for enums — no null handling.</li>
+      <li><strong>3 test files</strong> reference <code>currentSpeedKmh</code> in fixtures: <code>BikeInfoMapperTest</code>, <code>LocalBikeInfoRepositoryTest</code>, <code>GetBikeInfoUseCaseTest</code>.</li>
+      <li><strong>Existing main spec</strong> references <code>currentSpeedKmh</code> — delta spec updates this.</li>
+      <li><strong>No ambiguities found</strong> — the user story is comprehensive and self-consistent.</li>
+    </ul>
+
+    <h3>Questions &amp; Clarifications</h3>
+    <p>No questions were raised — the user story provided complete and unambiguous specifications for all 5 phases, including exact file paths, field lists, mapping rules, and BDD scenarios.</p>
+
+    <h3>Artefacts Created</h3>
+    <table>
+      <tr><th>Artefact</th><th>Path</th><th>Description</th></tr>
+      <tr><td><span class="badge badge-info">Proposal</span></td><td><code>openspec/changes/data-model-null-safety/proposal.md</code></td><td>Motivation and scope: remove <code>currentSpeedKmh</code>, make all fields nullable, update mapper and tests</td></tr>
+      <tr><td><span class="badge badge-info">Design</span></td><td><code>openspec/changes/data-model-null-safety/design.md</code></td><td>5 key decisions: nullable defaults in DTOs, nullable domain fields, null enum ≠ UNKNOWN, null sub-objects → null, null lists → null</td></tr>
+      <tr><td><span class="badge badge-info">Delta Spec</span></td><td><code>openspec/changes/data-model-null-safety/specs/bike-telemetry-data/spec.md</code></td><td>Modified 4 requirements in <code>bike-telemetry-data</code> spec; removed <code>currentSpeedKmh</code> requirement</td></tr>
+      <tr><td><span class="badge badge-info">Tasks</span></td><td><code>openspec/changes/data-model-null-safety/tasks.md</code></td><td>22 tasks in 6 groups: prerequisites (remove field, nullable DTOs, nullable domain), BDD mapper tests + implementation, fixture updates, verification</td></tr>
+    </table>
+
+    <h3>Task Structure Overview</h3>
+    <ul>
+      <li><strong>Group 1:</strong> Prerequisites — remove <code>currentSpeedKmh</code> (2 tasks)</li>
+      <li><strong>Group 2:</strong> Prerequisites — make all DTO fields nullable (8 tasks)</li>
+      <li><strong>Group 3:</strong> Prerequisites — make all domain fields nullable (8 tasks)</li>
+      <li><strong>Group 4 (BDD):</strong> Mapper null handling — 6 tests + 1 implementation task</li>
+      <li><strong>Group 5:</strong> Update existing test fixtures (2 tasks)</li>
+      <li><strong>Group 6:</strong> Verification — <code>./gradlew clean test</code> and <code>./gradlew check</code></li>
+    </ul>
+  </section>
   </main>
 
 </body>
