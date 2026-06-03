@@ -11,7 +11,7 @@ On top of the SDD library (OpenSpec) I used a library I am developing, which, by
 
 I will summarise here the info requested, leaving more info in the sections below.
 
-Tha app has been treated as a production app, so technical and architectural decision have been taken thinking this app as the first step for a larger app.
+Tha app has been treated as a production app, so technical and architectural decisions have been taken thinking this app as the first step for a larger app.
 The App follows a Clean Architecture approach, with MVI at UI level based on the google ViewModel pattern.
 Libraries used include:
 - Dagger Hilt
@@ -19,9 +19,10 @@ Libraries used include:
 - jetpack compose
 
 Some assumptions have been made during the implementation:
-- Although Android seems to be preventing in future to implement only landscape apps, it doesn't seem reasonable to have the dashboard of the bike switching orientation during the drive, so the app has been kept landscape only.
+- Although Android seems to be preventing in future to implement only landscape apps, it doesn't seem reasonable to have the dashboard of the bike switching orientation during the drive, so the app has been kept landscape only. This will have to be investigated depending on how Android will enforce the "any orientation" requirement.
 
 Things that should be tackled next:
+- Updating the library versions - after a failed attempt due to Hilt I left this task behind as it doesn't affect the functionality of the app
 - Implementation of release flavour
 - Implementation of proper CI/CD - depending on the repository and services used
 - Some UI elements should be reviewed in terms of usability: using the phone as a bike dashboard doesn't meet the same UI criteria for regular apps, f.i.: retry buttons
@@ -70,9 +71,9 @@ The app follows **Clean Architecture** with an **MVI** pattern (to be wired in U
 | Layer | Package | Contents |
 |-------|---------|----------|
 | DI | `di/` | `AppModule` — Hilt module (SingletonComponent), provides `BikeInfoRepository` as `@Singleton` |
-| Data | `data/model/` | 8 `@Serializable` DTO classes mapping the JSON schema |
+| Data | `data/model/` | 8 `@Serializable` DTO classes mapping the JSON schema; all fields nullable with `= null` defaults |
 | Data | `data/repository/` | `LocalBikeInfoRepository` — reads and parses the bundled JSON asset |
-| Domain | `domain/model/` | 8 domain model data classes + 3 enums with `UNKNOWN` fallback |
+| Domain | `domain/model/` | 8 domain model data classes (all fields nullable) + 3 enums with `UNKNOWN` fallback; `null` = no sensor data, `UNKNOWN` = unrecognised non-null value |
 | Domain | `domain/repository/` | `BikeInfoRepository` interface |
 | Data | `data/mapper/` | `BikeInfoMapper` — `BikeInfoSnapshotDto.toDomain()` extension |
 | Domain | `domain/usecase/` | `GetBikeInfoUseCase` — delegates to repository, `@Inject constructor` |

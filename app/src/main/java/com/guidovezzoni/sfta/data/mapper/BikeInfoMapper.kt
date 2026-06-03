@@ -1,8 +1,8 @@
 package com.guidovezzoni.sfta.data.mapper
 
 import com.guidovezzoni.sfta.data.model.BikeInfoSnapshotDto
+import com.guidovezzoni.sfta.data.model.WarningDto
 import com.guidovezzoni.sfta.domain.model.BatteryInfo
-import kotlinx.datetime.Instant
 import com.guidovezzoni.sfta.domain.model.BikeDetails
 import com.guidovezzoni.sfta.domain.model.BikeInfo
 import com.guidovezzoni.sfta.domain.model.ChargingState
@@ -13,51 +13,63 @@ import com.guidovezzoni.sfta.domain.model.RideSettingsInfo
 import com.guidovezzoni.sfta.domain.model.SessionInfo
 import com.guidovezzoni.sfta.domain.model.WarningInfo
 import com.guidovezzoni.sfta.domain.model.WarningSeverity
+import kotlinx.datetime.Instant
 
 fun BikeInfoSnapshotDto.toDomain(): BikeInfo = BikeInfo(
-    bike = BikeDetails(
-        model = bike.model,
-        variant = bike.variant,
-        firmwareVersion = bike.firmwareVersion,
-        imageUrl = bike.imageUrl,
-    ),
-    timestamp = Instant.parse(timestamp),
-    battery = BatteryInfo(
-        stateOfChargePercent = battery.stateOfChargePct,
-        estimatedRangeKm = battery.estimatedRangeKm,
-        temperatureCelsius = battery.temperatureC,
-        chargingState = ChargingState.entries.find {
-            it.name.equals(battery.chargingState, ignoreCase = true)
-        } ?: ChargingState.UNKNOWN,
-    ),
-    motor = MotorInfo(
-        powerHp = motor.powerHp,
-        temperatureCelsius = motor.temperatureC,
-        currentSpeedKmh = motor.currentSpeedKmh,
-    ),
-    rideSettings = RideSettingsInfo(
-        powerMap = PowerMap.entries.find {
-            it.name.equals(rideSettings.powerMap, ignoreCase = true)
-        } ?: PowerMap.UNKNOWN,
-        maxPowerHp = rideSettings.maxPowerHp,
-        engineBrakingPercent = rideSettings.engineBrakingPct,
-        regenPercent = rideSettings.regenPct,
-    ),
-    session = SessionInfo(
-        durationSeconds = session.durationS,
-        distanceKm = session.distanceKm,
-        maxSpeedKmh = session.maxSpeedKmh,
-    ),
-    diagnostics = DiagnosticsInfo(
-        faultCodes = diagnostics.faultCodes,
-        warnings = diagnostics.warnings.map { warningDto ->
-            WarningInfo(
-                code = warningDto.code,
-                message = warningDto.message,
-                severity = WarningSeverity.entries.find {
-                    it.name.equals(warningDto.severity, ignoreCase = true)
-                } ?: WarningSeverity.UNKNOWN,
-            )
-        },
-    ),
+    bike = bike?.let { bikeDto ->
+        BikeDetails(
+            model = bikeDto.model,
+            variant = bikeDto.variant,
+            firmwareVersion = bikeDto.firmwareVersion,
+            imageUrl = bikeDto.imageUrl,
+        )
+    },
+    timestamp = timestamp?.let { Instant.parse(it) },
+    battery = battery?.let { batteryDto ->
+        BatteryInfo(
+            stateOfChargePercent = batteryDto.stateOfChargePct,
+            estimatedRangeKm = batteryDto.estimatedRangeKm,
+            temperatureCelsius = batteryDto.temperatureC,
+            chargingState = batteryDto.chargingState?.let { str ->
+                ChargingState.entries.find { it.name.equals(str, ignoreCase = true) } ?: ChargingState.UNKNOWN
+            },
+        )
+    },
+    motor = motor?.let { motorDto ->
+        MotorInfo(
+            powerHp = motorDto.powerHp,
+            temperatureCelsius = motorDto.temperatureC,
+        )
+    },
+    rideSettings = rideSettings?.let { settingsDto ->
+        RideSettingsInfo(
+            powerMap = settingsDto.powerMap?.let { str ->
+                PowerMap.entries.find { it.name.equals(str, ignoreCase = true) } ?: PowerMap.UNKNOWN
+            },
+            maxPowerHp = settingsDto.maxPowerHp,
+            engineBrakingPercent = settingsDto.engineBrakingPct,
+            regenPercent = settingsDto.regenPct,
+        )
+    },
+    session = session?.let { sessionDto ->
+        SessionInfo(
+            durationSeconds = sessionDto.durationS,
+            distanceKm = sessionDto.distanceKm,
+            maxSpeedKmh = sessionDto.maxSpeedKmh,
+        )
+    },
+    diagnostics = diagnostics?.let { diagnosticsDto ->
+        DiagnosticsInfo(
+            faultCodes = diagnosticsDto.faultCodes,
+            warnings = diagnosticsDto.warnings?.map { warningDto -> warningDto.toDomain() },
+        )
+    },
+)
+
+private fun WarningDto.toDomain(): WarningInfo = WarningInfo(
+    code = code,
+    message = message,
+    severity = severity?.let { str ->
+        WarningSeverity.entries.find { it.name.equals(str, ignoreCase = true) } ?: WarningSeverity.UNKNOWN
+    },
 )

@@ -54,8 +54,7 @@ class LocalBikeInfoRepositoryTest {
               },
               "motor": {
                 "power_hp": 52.4,
-                "temperature_c": 61.2,
-                "current_speed_kmh": 47.3
+                "temperature_c": 61.2
               },
               "ride_settings": {
                 "power_map": "enduro",
@@ -82,11 +81,10 @@ class LocalBikeInfoRepositoryTest {
 
             assertTrue(result.isSuccess)
             val bikeInfo = result.getOrThrow()
-            assertEquals("Stark VARG MX 1.2", bikeInfo.bike.model)
-            assertEquals(73, bikeInfo.battery.stateOfChargePercent)
-            assertEquals(47.3, bikeInfo.motor.currentSpeedKmh, 0.001)
-            assertEquals(PowerMap.ENDURO, bikeInfo.rideSettings.powerMap)
-            assertEquals(3742L, bikeInfo.session.durationSeconds)
+            assertEquals("Stark VARG MX 1.2", bikeInfo.bike?.model)
+            assertEquals(73, bikeInfo.battery?.stateOfChargePercent)
+            assertEquals(PowerMap.ENDURO, bikeInfo.rideSettings?.powerMap)
+            assertEquals(3742L, bikeInfo.session?.durationSeconds)
             val expectedTimestamp = Instant.parse("2025-05-19T10:32:45Z")
             assertEquals(expectedTimestamp, bikeInfo.timestamp)
         }

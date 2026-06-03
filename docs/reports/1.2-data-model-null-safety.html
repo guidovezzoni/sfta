@@ -149,6 +149,49 @@
       <li><strong>Group 6:</strong> Verification — <code>./gradlew clean test</code> and <code>./gradlew check</code></li>
     </ul>
   </section>
+  <section class="report-section" data-source="sdlc_apply_changes" data-timestamp="2026-06-03T16:30:00Z">
+    <header>
+      <h2>Changes Applied</h2>
+      <time datetime="2026-06-03T16:30:00Z">3 Jun 2026, 16:30 UTC</time>
+    </header>
+    <p class="section-source">Source: sdlc_apply_changes</p>
+
+    <h3>What Was Applied</h3>
+    <p>All 29 tasks implemented across 6 groups in a single cycle. Changes span 17 production source files and 3 test files.</p>
+    <table>
+      <tr><th>Group</th><th>Tasks</th><th>Description</th></tr>
+      <tr><td>1 — Remove field</td><td>2</td><td>Removed <code>currentSpeedKmh</code> from <code>MotorDto</code> and <code>MotorInfo</code></td></tr>
+      <tr><td>2 — Nullable DTOs</td><td>8</td><td>All fields in 8 DTO classes made nullable with <code>= null</code> defaults</td></tr>
+      <tr><td>3 — Nullable domain</td><td>8</td><td>All fields in 8 domain model classes made nullable</td></tr>
+      <tr><td>4 — BDD mapper</td><td>7</td><td>6 new tests (RED confirmed) + mapper rewritten with <code>?.let {}</code> chains (GREEN confirmed)</td></tr>
+      <tr><td>5 — Fixture updates</td><td>2</td><td>Removed <code>currentSpeedKmh</code> from <code>LocalBikeInfoRepositoryTest</code> and <code>GetBikeInfoUseCaseTest</code> fixtures; fixed nullable access</td></tr>
+      <tr><td>6 — Verification</td><td>2</td><td><code>./gradlew clean test</code> and <code>./gradlew check</code> — both passed</td></tr>
+    </table>
+
+    <h3>BDD Cycle Summary</h3>
+    <ul>
+      <li><strong>1 BDD cycle</strong> — no rework needed</li>
+      <li>RED: 6 test tasks written; compilation errors confirmed before mapper implementation</li>
+      <li>GREEN: mapper rewritten with safe-call chains; all tests passed on first implementation attempt</li>
+    </ul>
+
+    <h3>TODOs</h3>
+    <p>No <code>TODO</code> comments found in <code>app/src/</code>. No RESOLVE NOW items.</p>
+
+    <h3>Instrumented Tests</h3>
+    <p>Ran <code>./gradlew connectedDebugAndroidTest</code> on physical device (Pixel 6a, Android 16). 1 instrumented test passed.</p>
+
+    <h3>Security Review</h3>
+    <p><span class="badge badge-pass">PASS</span> 0 findings. Changes are purely internal data model refactoring — nullable annotations, safe-call chains, and field removal. No new attack surface introduced.</p>
+
+    <h3>Documentation Updates</h3>
+    <ul>
+      <li><strong>README.md</strong> — Updated architecture table: DTOs described as "all fields nullable with <code>= null</code> defaults"; domain models described as "all fields nullable" with null/UNKNOWN semantics clarified</li>
+      <li><strong>AGENTS.md</strong> — Added <em>Null safety</em> key pattern; corrected MVI story reference; updated enum safety description with null/UNKNOWN distinction</li>
+    </ul>
+
+    <div class="outcome outcome-passed">Applied: PASSED — 29/29 tasks complete, all tests pass, security review clean</div>
+  </section>
   </main>
 
 </body>

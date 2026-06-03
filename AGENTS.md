@@ -46,8 +46,9 @@ ui/                 — MainActivity (@AndroidEntryPoint), theme (Compose)
 ### Key Patterns
 
 - **Clean Architecture**: data → domain → ui layers
-- **MVI**: Model-View-Intent (UI layer, to be implemented in story 1.2)
+- **MVI**: Model-View-Intent (UI layer, to be implemented in a future story)
 - **Hilt DI**: Hilt with `@HiltAndroidApp` / `@AndroidEntryPoint`; `AppModule` binds `BikeInfoRepository` as `@Singleton`
 - **kotlinx-serialization**: JSON parsing with `@Serializable` / `@SerialName`
-- **Enum safety**: All enums have `UNKNOWN` fallback for unrecognised values
+- **Null safety**: All DTO fields nullable with `= null` defaults; all domain model fields nullable; mapper uses `?.let {}` chains for null propagation
+- **Enum safety**: All enums have `UNKNOWN` fallback for unrecognised non-null values; `null` enum field means no sensor data (distinct from `UNKNOWN`)
 - **Error handling**: `Result` type throughout, no `!!` operator
