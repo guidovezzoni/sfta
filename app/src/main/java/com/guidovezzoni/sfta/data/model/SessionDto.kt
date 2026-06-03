@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SessionDto(
-    @SerialName("duration_s") val durationS: Long,
-    @SerialName("distance_km") val distanceKm: Double,
-    @SerialName("max_speed_kmh") val maxSpeedKmh: Double,
+    @SerialName("duration_s") val durationS: Long? = null,
+    @SerialName("distance_km") val distanceKm: Double? = null,
+    @SerialName("max_speed_kmh") val maxSpeedKmh: Double? = null,
 )

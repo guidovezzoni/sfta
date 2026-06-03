@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class BikeDto(
-    @SerialName("model") val model: String,
-    @SerialName("variant") val variant: String,
-    @SerialName("firmware_version") val firmwareVersion: String,
-    @SerialName("image_url") val imageUrl: String,
+    @SerialName("model") val model: String? = null,
+    @SerialName("variant") val variant: String? = null,
+    @SerialName("firmware_version") val firmwareVersion: String? = null,
+    @SerialName("image_url") val imageUrl: String? = null,
 )

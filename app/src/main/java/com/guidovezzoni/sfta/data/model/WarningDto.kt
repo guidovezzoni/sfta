@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class WarningDto(
-    @SerialName("code") val code: String,
-    @SerialName("message") val message: String,
-    @SerialName("severity") val severity: String,
+    @SerialName("code") val code: String? = null,
+    @SerialName("message") val message: String? = null,
+    @SerialName("severity") val severity: String? = null,
 )

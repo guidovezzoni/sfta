@@ -1,17 +1,4 @@
-# Spec: Bike Telemetry Data
-
-## Purpose
-
-Defines the data infrastructure for loading and exposing bike telemetry data from a bundled JSON snapshot. Covers the full stack from raw JSON asset through DTOs, repository, domain models, mapper, and use case.
-
-## Requirements
-
-### Requirement: Project compiles with serialization and testing dependencies
-The project SHALL include `kotlinx-serialization-json`, `lifecycle-viewmodel-compose`, `mockk`, and `kotlinx-coroutines-test` as dependencies, and the `kotlin-serialization` Gradle plugin SHALL be applied.
-
-#### Scenario: Project compiles with new dependencies
-- **WHEN** `./gradlew assembleDebug` is executed
-- **THEN** the project compiles without errors
+## MODIFIED Requirements
 
 ### Requirement: Bike telemetry JSON asset is bundled and valid
 The app SHALL bundle `bike_info_snapshot.json` in `app/src/main/assets/`. The JSON SHALL be a copy of `docs/mocks/bike_info_snapshot.json`. The motor object SHALL NOT contain a `current_speed_kmh` field.
@@ -34,25 +21,6 @@ The data layer SHALL provide 8 DTO classes (`BikeInfoSnapshotDto`, `BikeDto`, `B
 #### Scenario: Explicit null JSON values produce null in DTO
 - **WHEN** a JSON field has an explicit `null` value
 - **THEN** the corresponding DTO field is `null` and no exception is thrown
-
-### Requirement: Repository reads and parses JSON from assets
-`LocalBikeInfoRepository` SHALL implement `BikeInfoRepository` and read `bike_info_snapshot.json` via `AssetManager`. It SHALL use `Json { ignoreUnknownKeys = true }` for forward compatibility, wrap the operation in `runCatching`, execute on `Dispatchers.IO`, and map the parsed DTO to the domain model using `BikeInfoSnapshotDto.toDomain()` before returning. The repository SHALL return `Result<BikeInfo>`.
-
-#### Scenario: Repository returns domain model on success
-- **WHEN** `getBikeInfoSnapshot()` is called with a valid asset file available
-- **THEN** it returns `Result.success` containing a `BikeInfo` domain model with all fields correctly mapped
-
-#### Scenario: Repository handles missing file gracefully
-- **WHEN** `getBikeInfoSnapshot()` is called and the asset file does not exist
-- **THEN** it returns `Result.failure` with an appropriate exception
-
-#### Scenario: Repository handles malformed JSON gracefully
-- **WHEN** `getBikeInfoSnapshot()` is called and the asset file contains invalid JSON
-- **THEN** it returns `Result.failure` with a serialisation exception
-
-#### Scenario: Repository handles mapping errors gracefully
-- **WHEN** `getBikeInfoSnapshot()` is called and the DTO-to-domain mapping fails
-- **THEN** it returns `Result.failure` with the mapping exception
 
 ### Requirement: Domain models represent clean business data
 The domain layer SHALL provide `BikeInfo`, `BikeDetails`, `BatteryInfo`, `MotorInfo`, `RideSettingsInfo`, `SessionInfo`, `DiagnosticsInfo`, and `WarningInfo` data classes, plus `ChargingState`, `PowerMap`, and `WarningSeverity` enums. The domain model structure SHALL mirror DTO nesting — `BikeInfo` contains nested `bike: BikeDetails?` and `diagnostics: DiagnosticsInfo?` objects. `BikeInfo.timestamp` SHALL be of type `kotlinx.datetime.Instant?`. `DiagnosticsInfo` SHALL contain `faultCodes: List<String>?` and `warnings: List<WarningInfo>?`. All domain model fields SHALL be nullable. `MotorInfo` SHALL NOT contain a `currentSpeedKmh` field. Each enum SHALL include an `UNKNOWN` fallback value. Enum field nullability semantics: `null` means no data received from sensor (field absent or explicitly null in JSON); `UNKNOWN` means data received but value not recognised. Each class and enum SHALL be in its own file under `domain/model/`.
@@ -110,40 +78,8 @@ The domain layer SHALL provide `BikeInfo`, `BikeDetails`, `BatteryInfo`, `MotorI
 - **WHEN** `toDomain()` is called on a DTO with an empty warnings list
 - **THEN** the `BikeInfo.diagnostics.warnings` list is empty
 
-### Requirement: Repository and Use Case are provided via Hilt dependency injection
+## REMOVED Requirements
 
-The app SHALL use Hilt as its dependency injection framework. `BikeInfoRepository` SHALL be provided by a Hilt `@Module` installed in `SingletonComponent`, scoped as `@Singleton`, and bound to `LocalBikeInfoRepository`. `GetBikeInfoUseCase` SHALL declare an `@Inject constructor` so Hilt can auto-resolve its `BikeInfoRepository` dependency. The `Application` class SHALL be annotated with `@HiltAndroidApp` and `MainActivity` SHALL be annotated with `@AndroidEntryPoint`.
-
-#### Scenario: Hilt provides BikeInfoRepository as a singleton
-- **WHEN** a class requests `BikeInfoRepository` via `@Inject`
-- **THEN** Hilt provides a `LocalBikeInfoRepository` instance scoped as a singleton
-
-#### Scenario: Hilt auto-resolves GetBikeInfoUseCase
-- **WHEN** a ViewModel or other Hilt-managed class requests `GetBikeInfoUseCase` via `@Inject`
-- **THEN** Hilt constructs it with the module-provided `BikeInfoRepository`
-
-#### Scenario: Project compiles with Hilt annotation processing
-- **WHEN** `./gradlew assembleDebug` is executed
-- **THEN** KSP annotation processing completes and the project compiles without errors
-
-#### Scenario: Existing tests pass unchanged
-- **WHEN** `./gradlew test` is executed after Hilt integration
-- **THEN** all existing unit tests pass without modification
-
-### Requirement: Use case delegates to repository
-`GetBikeInfoUseCase` SHALL call the repository's `getBikeInfoSnapshot()` and return the result directly. The repository already returns `Result<BikeInfo>`, so the use case SHALL NOT perform any mapping. On failure, it SHALL propagate the `Result.failure` unchanged.
-
-#### Scenario: Use case returns domain model on success
-- **WHEN** the repository returns a successful `Result<BikeInfo>`
-- **THEN** `GetBikeInfoUseCase` returns the same `Result.success` unchanged
-
-#### Scenario: Use case propagates failure from repository
-- **WHEN** the repository returns a failure `Result`
-- **THEN** `GetBikeInfoUseCase` returns the same `Result.failure`
-
-### Requirement: App is locked to landscape orientation
-The `<activity>` element in `AndroidManifest.xml` SHALL have `android:screenOrientation="sensorLandscape"` to lock the app to landscape orientation (allowing both left and right landscape).
-
-#### Scenario: App displays in landscape only
-- **WHEN** the app is launched on a device
-- **THEN** it displays only in landscape orientation
+### Requirement: JSON asset contains current_speed_kmh in motor object
+**Reason**: The `current_speed_kmh` field has been removed from the JSON snapshot. The motor object now only contains `power_hp` and `temperature_c`.
+**Migration**: Remove `currentSpeedKmh` field from `MotorDto`, `MotorInfo`, and `BikeInfoMapper`. Remove from all test fixtures.

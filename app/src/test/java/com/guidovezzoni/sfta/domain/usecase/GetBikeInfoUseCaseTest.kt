@@ -54,7 +54,6 @@ class GetBikeInfoUseCaseTest {
         motor = MotorInfo(
             powerHp = 52.4,
             temperatureCelsius = 61.2,
-            currentSpeedKmh = 47.3,
         ),
         rideSettings = RideSettingsInfo(
             powerMap = PowerMap.ENDURO,

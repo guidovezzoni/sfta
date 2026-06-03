@@ -6,7 +6,7 @@
 - [1.1 Data Infrastructure](1.1-data-infrastructure-DONE.md) -- Project setup, data layer, domain layer, and associated unit tests
 
 ### Feature 1.2: Data Model Null Safety
-- [1.2 Data Model Null Safety](1.2-data-model-null-safety.md) -- Remove `currentSpeedKmh`, make all DTO and domain fields nullable for real data collection
+- [1.2 Data Model Null Safety](1.2-data-model-null-safety-DONE.md) -- Remove `currentSpeedKmh`, make all DTO and domain fields nullable for real data collection
 
 ### Feature 1.3: Dashboard UI
 - [1.3 Dashboard UI](1.3-dashboard-ui.md) -- Theme, MVI contract, composables, wiring, and associated tests (depends on 1.2)

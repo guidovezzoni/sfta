@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report: 1.2 — Data Model Null Safety</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background: #fafafa;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    .report-header {
+      border-bottom: 3px solid #2563eb;
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
+    }
+    .report-header h1 { font-size: 1.75rem; color: #1e293b; }
+    .report-meta {
+      display: flex; gap: 2rem; flex-wrap: wrap;
+      margin-top: 0.5rem; font-size: 0.875rem; color: #64748b;
+    }
+    .report-meta span { display: inline-flex; align-items: center; gap: 0.25rem; }
+
+    .report-section {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .report-section header {
+      display: flex; justify-content: space-between; align-items: baseline;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 0.75rem; margin-bottom: 1rem;
+    }
+    .report-section header h2 { font-size: 1.25rem; color: #1e293b; }
+    .report-section header time { font-size: 0.8rem; color: #94a3b8; white-space: nowrap; }
+    .section-source { font-size: 0.75rem; color: #94a3b8; font-style: italic; margin-bottom: 0.75rem; }
+
+    h3 { font-size: 1.05rem; color: #334155; margin: 1rem 0 0.5rem; }
+    p { margin-bottom: 0.75rem; }
+    ul, ol { margin: 0.5rem 0 0.75rem 1.5rem; }
+    li { margin-bottom: 0.25rem; }
+    code {
+      background: #f1f5f9; padding: 0.15rem 0.35rem; border-radius: 3px;
+      font-size: 0.875em;
+      font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    }
+
+    table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 0.9rem; }
+    th, td { text-align: left; padding: 0.5rem 0.75rem; border: 1px solid #e2e8f0; }
+    th { background: #f8fafc; font-weight: 600; color: #475569; }
+
+    .badge {
+      display: inline-block; padding: 0.15rem 0.5rem;
+      border-radius: 4px; font-size: 0.8rem; font-weight: 600;
+    }
+    .badge-pass { background: #dcfce7; color: #166534; }
+    .badge-fail { background: #fee2e2; color: #991b1b; }
+    .badge-warn { background: #fef9c3; color: #854d0e; }
+    .badge-info { background: #dbeafe; color: #1e40af; }
+
+    .outcome { margin-top: 1rem; padding: 0.75rem 1rem; border-radius: 6px; font-weight: 600; }
+    .outcome-passed { background: #dcfce7; color: #166534; border-left: 4px solid #22c55e; }
+    .outcome-failed { background: #fee2e2; color: #991b1b; border-left: 4px solid #ef4444; }
+  </style>
+</head>
+<body>
+
+  <div class="report-header">
+    <h1>1.2 — Data Model Null Safety</h1>
+    <div class="report-meta">
+      <span><strong>Story:</strong> 1.2</span>
+      <span><strong>Branch:</strong> feature/1.2-data-model-null-safety</span>
+      <span><strong>Created:</strong> 2026-06-03</span>
+    </div>
+  </div>
+
+  <main id="report-sections">
+  <section class="report-section" data-source="open_user_story" data-timestamp="2026-06-03T13:41:15Z">
+    <header>
+      <h2>Story Opened</h2>
+      <time datetime="2026-06-03T13:41:15Z">3 Jun 2026, 13:41 UTC</time>
+    </header>
+    <p class="section-source">Source: open_user_story</p>
+
+    <h3>User Story</h3>
+    <p><strong>1.2 Data Model Null Safety</strong> — Make all DTO and domain model fields nullable to handle incomplete telemetry gracefully, and remove the obsolete <code>currentSpeedKmh</code> field.</p>
+
+    <h3>Branch</h3>
+    <p><code>feature/1.2-data-model-null-safety</code> created from <code>main</code> at commit <code>0c4f297</code>.</p>
+
+    <h3>Story Refinement Summary</h3>
+    <ul>
+      <li>Identified a <span class="badge badge-fail">latent runtime crash</span>: <code>MotorDto.currentSpeedKmh</code> is non-nullable but the bundled JSON snapshot does not provide <code>current_speed_kmh</code>, causing <code>MissingFieldException</code> at runtime.</li>
+      <li>Added explicit enum nullability semantics: <code>null</code> = no data from sensor; <code>UNKNOWN</code> = unrecognised value received.</li>
+      <li>Added detailed mapper rules: null sub-objects, null enums, null timestamps, and null lists each have specific mapping behaviour.</li>
+      <li>Added non-functional analysis: no security, performance, GDPR, or forward-compatibility concerns.</li>
+      <li>Added a Definition of Done checklist with 7 concrete items.</li>
+      <li>Expanded test plan with 5 new test cases for null-handling scenarios and explicit fixture update instructions for 3 existing test files.</li>
+      <li>Scope covers 20 files: 17 production source files and 3 test files.</li>
+    </ul>
+  </section>
+  <section class="report-section" data-source="sdlc_propose" data-timestamp="2026-06-03T14:10:00Z">
+    <header>
+      <h2>Change Proposed</h2>
+      <time datetime="2026-06-03T14:10:00Z">3 Jun 2026, 14:10 UTC</time>
+    </header>
+    <p class="section-source">Source: sdlc_propose</p>
+
+    <h3>Exploration Findings</h3>
+    <ul>
+      <li><strong>Crash confirmed:</strong> JSON snapshot has no <code>current_speed_kmh</code> in the motor object, but <code>MotorDto</code> declares it as non-nullable — runtime <code>MissingFieldException</code>.</li>
+      <li><strong>All 8 DTO classes</strong> currently have non-nullable fields with no defaults.</li>
+      <li><strong>All 8 domain model classes</strong> currently have non-nullable fields.</li>
+      <li><strong>Mapper</strong> uses direct field assignment and <code>entries.find { ... } ?: UNKNOWN</code> for enums — no null handling.</li>
+      <li><strong>3 test files</strong> reference <code>currentSpeedKmh</code> in fixtures: <code>BikeInfoMapperTest</code>, <code>LocalBikeInfoRepositoryTest</code>, <code>GetBikeInfoUseCaseTest</code>.</li>
+      <li><strong>Existing main spec</strong> references <code>currentSpeedKmh</code> — delta spec updates this.</li>
+      <li><strong>No ambiguities found</strong> — the user story is comprehensive and self-consistent.</li>
+    </ul>
+
+    <h3>Questions &amp; Clarifications</h3>
+    <p>No questions were raised — the user story provided complete and unambiguous specifications for all 5 phases, including exact file paths, field lists, mapping rules, and BDD scenarios.</p>
+
+    <h3>Artefacts Created</h3>
+    <table>
+      <tr><th>Artefact</th><th>Path</th><th>Description</th></tr>
+      <tr><td><span class="badge badge-info">Proposal</span></td><td><code>openspec/changes/data-model-null-safety/proposal.md</code></td><td>Motivation and scope: remove <code>currentSpeedKmh</code>, make all fields nullable, update mapper and tests</td></tr>
+      <tr><td><span class="badge badge-info">Design</span></td><td><code>openspec/changes/data-model-null-safety/design.md</code></td><td>5 key decisions: nullable defaults in DTOs, nullable domain fields, null enum ≠ UNKNOWN, null sub-objects → null, null lists → null</td></tr>
+      <tr><td><span class="badge badge-info">Delta Spec</span></td><td><code>openspec/changes/data-model-null-safety/specs/bike-telemetry-data/spec.md</code></td><td>Modified 4 requirements in <code>bike-telemetry-data</code> spec; removed <code>currentSpeedKmh</code> requirement</td></tr>
+      <tr><td><span class="badge badge-info">Tasks</span></td><td><code>openspec/changes/data-model-null-safety/tasks.md</code></td><td>22 tasks in 6 groups: prerequisites (remove field, nullable DTOs, nullable domain), BDD mapper tests + implementation, fixture updates, verification</td></tr>
+    </table>
+
+    <h3>Task Structure Overview</h3>
+    <ul>
+      <li><strong>Group 1:</strong> Prerequisites — remove <code>currentSpeedKmh</code> (2 tasks)</li>
+      <li><strong>Group 2:</strong> Prerequisites — make all DTO fields nullable (8 tasks)</li>
+      <li><strong>Group 3:</strong> Prerequisites — make all domain fields nullable (8 tasks)</li>
+      <li><strong>Group 4 (BDD):</strong> Mapper null handling — 6 tests + 1 implementation task</li>
+      <li><strong>Group 5:</strong> Update existing test fixtures (2 tasks)</li>
+      <li><strong>Group 6:</strong> Verification — <code>./gradlew clean test</code> and <code>./gradlew check</code></li>
+    </ul>
+  </section>
+  <section class="report-section" data-source="sdlc_apply_changes" data-timestamp="2026-06-03T16:30:00Z">
+    <header>
+      <h2>Changes Applied</h2>
+      <time datetime="2026-06-03T16:30:00Z">3 Jun 2026, 16:30 UTC</time>
+    </header>
+    <p class="section-source">Source: sdlc_apply_changes</p>
+
+    <h3>What Was Applied</h3>
+    <p>All 29 tasks implemented across 6 groups in a single cycle. Changes span 17 production source files and 3 test files.</p>
+    <table>
+      <tr><th>Group</th><th>Tasks</th><th>Description</th></tr>
+      <tr><td>1 — Remove field</td><td>2</td><td>Removed <code>currentSpeedKmh</code> from <code>MotorDto</code> and <code>MotorInfo</code></td></tr>
+      <tr><td>2 — Nullable DTOs</td><td>8</td><td>All fields in 8 DTO classes made nullable with <code>= null</code> defaults</td></tr>
+      <tr><td>3 — Nullable domain</td><td>8</td><td>All fields in 8 domain model classes made nullable</td></tr>
+      <tr><td>4 — BDD mapper</td><td>7</td><td>6 new tests (RED confirmed) + mapper rewritten with <code>?.let {}</code> chains (GREEN confirmed)</td></tr>
+      <tr><td>5 — Fixture updates</td><td>2</td><td>Removed <code>currentSpeedKmh</code> from <code>LocalBikeInfoRepositoryTest</code> and <code>GetBikeInfoUseCaseTest</code> fixtures; fixed nullable access</td></tr>
+      <tr><td>6 — Verification</td><td>2</td><td><code>./gradlew clean test</code> and <code>./gradlew check</code> — both passed</td></tr>
+    </table>
+
+    <h3>BDD Cycle Summary</h3>
+    <ul>
+      <li><strong>1 BDD cycle</strong> — no rework needed</li>
+      <li>RED: 6 test tasks written; compilation errors confirmed before mapper implementation</li>
+      <li>GREEN: mapper rewritten with safe-call chains; all tests passed on first implementation attempt</li>
+    </ul>
+
+    <h3>TODOs</h3>
+    <p>No <code>TODO</code> comments found in <code>app/src/</code>. No RESOLVE NOW items.</p>
+
+    <h3>Instrumented Tests</h3>
+    <p>Ran <code>./gradlew connectedDebugAndroidTest</code> on physical device (Pixel 6a, Android 16). 1 instrumented test passed.</p>
+
+    <h3>Security Review</h3>
+    <p><span class="badge badge-pass">PASS</span> 0 findings. Changes are purely internal data model refactoring — nullable annotations, safe-call chains, and field removal. No new attack surface introduced.</p>
+
+    <h3>Documentation Updates</h3>
+    <ul>
+      <li><strong>README.md</strong> — Updated architecture table: DTOs described as "all fields nullable with <code>= null</code> defaults"; domain models described as "all fields nullable" with null/UNKNOWN semantics clarified</li>
+      <li><strong>AGENTS.md</strong> — Added <em>Null safety</em> key pattern; corrected MVI story reference; updated enum safety description with null/UNKNOWN distinction</li>
+    </ul>
+
+    <div class="outcome outcome-passed">Applied: PASSED — 29/29 tasks complete, all tests pass, security review clean</div>
+  </section>
+  <section class="report-section" data-source="sdlc_verify_story" data-timestamp="2026-06-03T14:58:00Z">
+    <header>
+      <h2>Verification</h2>
+      <time datetime="2026-06-03T14:58:00Z">3 Jun 2026, 14:58 UTC</time>
+    </header>
+    <p class="section-source">Source: sdlc_verify_story</p>
+
+    <h3>OpenSpec Verify</h3>
+    <p><span class="badge badge-pass">PASS</span> 29/29 tasks complete. All three dimensions checked:</p>
+    <ul>
+      <li><strong>Completeness:</strong> 29/29 tasks done; all spec requirements implemented</li>
+      <li><strong>Correctness:</strong> All requirements and scenarios covered; mapper, DTOs, domain models, and tests verified against spec</li>
+      <li><strong>Coherence:</strong> Design decisions followed — nullable defaults in DTOs, nullable domain fields, null enum ≠ UNKNOWN, null sub-objects → null, null lists → null</li>
+    </ul>
+
+    <h3>TODO Scan</h3>
+    <p><span class="badge badge-pass">PASS</span> No <code>TODO</code> comments found in <code>app/src/</code>. No RESOLVE NOW or ACKNOWLEDGED items.</p>
+
+    <h3>Security Review</h3>
+    <p><span class="badge badge-pass">PASS</span> No findings. Changes are purely internal data model refactoring — nullable field annotations, safe-call chains, and field removal. No new attack surface introduced.</p>
+
+    <h3>On-Device Tests</h3>
+    <p>Device: Pixel 6a, Android 16 (serial <code>2C091JEGR07097</code>)</p>
+    <ul>
+      <li><strong>Instrumented tests:</strong> <span class="badge badge-pass">PASS</span> <code>./gradlew connectedDebugAndroidTest</code> — 1 test passed</li>
+      <li><strong>App launch:</strong> <span class="badge badge-pass">PASS</span> <code>./gradlew installDebug</code> + <code>adb shell am start</code> — app launched, displayed "Hello Android!", no runtime exceptions in logcat</li>
+    </ul>
+
+    <h3>Definition of Done</h3>
+    <table>
+      <tr><th>Item</th><th>Status</th><th>Evidence</th></tr>
+      <tr>
+        <td><code>currentSpeedKmh</code> removed from <code>MotorDto</code>, <code>MotorInfo</code>, <code>BikeInfoMapper</code>, and all test fixtures</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td>Confirmed absent in <code>MotorDto.kt</code>, <code>MotorInfo.kt</code>, <code>BikeInfoMapper.kt</code>, <code>LocalBikeInfoRepositoryTest.kt</code>, <code>GetBikeInfoUseCaseTest.kt</code>; JSON asset motor object contains only <code>power_hp</code> and <code>temperature_c</code></td>
+      </tr>
+      <tr>
+        <td>All 8 DTO classes have nullable fields with <code>= null</code> defaults</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td>Confirmed in <code>BikeInfoSnapshotDto</code>, <code>BikeDto</code>, <code>BatteryDto</code>, <code>MotorDto</code>, <code>RideSettingsDto</code>, <code>SessionDto</code>, <code>DiagnosticsDto</code>, <code>WarningDto</code></td>
+      </tr>
+      <tr>
+        <td>All 8 domain model classes have nullable fields</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td>Confirmed in <code>BikeInfo</code>, <code>BikeDetails</code>, <code>BatteryInfo</code>, <code>MotorInfo</code>, <code>RideSettingsInfo</code>, <code>SessionInfo</code>, <code>DiagnosticsInfo</code>, <code>WarningInfo</code></td>
+      </tr>
+      <tr>
+        <td><code>BikeInfoMapper.toDomain()</code> propagates nulls correctly</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td>Null sub-objects use <code>?.let {}</code> chains; null enum strings → <code>null</code> (not <code>UNKNOWN</code>); null lists → <code>null</code>; null timestamp → <code>null</code> <code>Instant</code></td>
+      </tr>
+      <tr>
+        <td>All existing tests updated and passing</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td><code>LocalBikeInfoRepositoryTest</code> and <code>GetBikeInfoUseCaseTest</code> fixtures updated; <code>./gradlew test</code> passed (task 28)</td>
+      </tr>
+      <tr>
+        <td>5 new null-handling tests added to <code>BikeInfoMapperTest</code></td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td>Null sub-objects, all-null leaf fields, null enum strings → null (not UNKNOWN), null timestamp, null lists — all present and passing</td>
+      </tr>
+      <tr>
+        <td><code>./gradlew check</code> passes with no errors</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td>Confirmed via task 29</td>
+      </tr>
+    </table>
+
+    <div class="outcome outcome-passed">Verification: PASSED — Story renamed to <code>1.2-data-model-null-safety-DONE.md</code></div>
+  </section>
+
+  <section class="report-section" data-source="sdlc:sdlc_archive" data-timestamp="2026-06-03T00:00:00Z">
+    <header>
+      <h2>Archive</h2>
+      <time datetime="2026-06-03T00:00:00Z">3 June 2026</time>
+    </header>
+    <p class="section-source">Source: sdlc:sdlc_archive</p>
+
+    <table>
+      <tr>
+        <th>Item</th>
+        <th>Status</th>
+        <th>Detail</th>
+      </tr>
+      <tr>
+        <td>Change name</td>
+        <td><span class="badge badge-info">data-model-null-safety</span></td>
+        <td>Schema: <code>spec-driven</code></td>
+      </tr>
+      <tr>
+        <td>Archive location</td>
+        <td><span class="badge badge-pass">Archived</span></td>
+        <td><code>openspec/changes/archive/2026-06-03-data-model-null-safety/</code></td>
+      </tr>
+      <tr>
+        <td>Artifacts</td>
+        <td><span class="badge badge-pass">Complete</span></td>
+        <td>All 4 artifacts done: proposal, design, specs, tasks</td>
+      </tr>
+      <tr>
+        <td>Tasks</td>
+        <td><span class="badge badge-pass">Complete</span></td>
+        <td>29 / 29 tasks completed</td>
+      </tr>
+      <tr>
+        <td>Delta spec sync</td>
+        <td><span class="badge badge-pass">Synced</span></td>
+        <td>4 requirements modified in <code>bike-telemetry-data</code>: JSON asset (removed <code>current_speed_kmh</code>), DTOs (null safety + 2 new scenarios), domain models (all fields nullable, enum null semantics, 3 new scenarios), mapper (null-propagation rules, 6 new scenarios)</td>
+      </tr>
+      <tr>
+        <td>README.md sync</td>
+        <td><span class="badge badge-pass">In sync</span></td>
+        <td>Architecture table, null safety, and enum semantics already reflect the implemented changes</td>
+      </tr>
+      <tr>
+        <td>CLAUDE.md (AGENTS.md) sync</td>
+        <td><span class="badge badge-pass">In sync</span></td>
+        <td>Key Patterns section already documents null safety, enum safety, and mapper null-propagation patterns</td>
+      </tr>
+      <tr>
+        <td>Warnings</td>
+        <td><span class="badge badge-pass">None</span></td>
+        <td>No incomplete artifacts or tasks</td>
+      </tr>
+    </table>
+
+    <div class="outcome outcome-passed">Archive Complete — change archived to <code>openspec/changes/archive/2026-06-03-data-model-null-safety/</code></div>
+  </section>
+  </main>
+
+</body>
+</html>
