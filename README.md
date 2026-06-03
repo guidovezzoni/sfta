@@ -65,16 +65,18 @@ The app follows **Clean Architecture** with an **MVI** pattern (to be wired in U
 
 | Layer | Package | Contents |
 |-------|---------|----------|
+| DI | `di/` | `AppModule` — Hilt module (SingletonComponent), provides `BikeInfoRepository` as `@Singleton` |
 | Data | `data/model/` | 8 `@Serializable` DTO classes mapping the JSON schema |
 | Data | `data/repository/` | `LocalBikeInfoRepository` — reads and parses the bundled JSON asset |
 | Domain | `domain/model/` | 8 domain model data classes + 3 enums with `UNKNOWN` fallback |
 | Domain | `domain/repository/` | `BikeInfoRepository` interface |
 | Data | `data/mapper/` | `BikeInfoMapper` — `BikeInfoSnapshotDto.toDomain()` extension |
-| Domain | `domain/usecase/` | `GetBikeInfoUseCase` — delegates to repository |
+| Domain | `domain/usecase/` | `GetBikeInfoUseCase` — delegates to repository, `@Inject constructor` |
 
 ### Tech Stack
 
 - **Kotlin** 2.2.10, **Compose BOM** 2026.02.01, **AGP** 9.2.1
+- **Hilt** 2.56.2 + **KSP** 2.2.10-1.0.33 for dependency injection
 - **kotlinx-serialization-json** 1.8.1 for JSON parsing
 - **MockK** 1.14.4 + **kotlinx-coroutines-test** 1.10.2 for unit testing
 - App locked to **landscape orientation** (`sensorLandscape`)

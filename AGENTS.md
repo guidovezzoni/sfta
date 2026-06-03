@@ -33,20 +33,21 @@ Stark Future Technical Assessment — an Android rider dashboard app for the Sta
 ### Package Structure (`com.guidovezzoni.sfta`)
 
 ```
+di/                 — AppModule (Hilt, SingletonComponent)
 data/model/         — @Serializable DTO classes (8 files)
 data/repository/    — LocalBikeInfoRepository (reads JSON asset)
 data/mapper/        — BikeInfoMapper (DTO → domain)
 domain/model/       — Domain data classes + enums (11 files)
 domain/repository/  — BikeInfoRepository interface
-domain/usecase/     — GetBikeInfoUseCase
-ui/                 — MainActivity, theme (Compose)
+domain/usecase/     — GetBikeInfoUseCase (@Inject constructor)
+ui/                 — MainActivity (@AndroidEntryPoint), theme (Compose)
 ```
 
 ### Key Patterns
 
 - **Clean Architecture**: data → domain → ui layers
 - **MVI**: Model-View-Intent (UI layer, to be implemented in story 1.2)
-- **Manual DI**: Constructor injection, no Hilt yet
+- **Hilt DI**: Hilt with `@HiltAndroidApp` / `@AndroidEntryPoint`; `AppModule` binds `BikeInfoRepository` as `@Singleton`
 - **kotlinx-serialization**: JSON parsing with `@Serializable` / `@SerialName`
 - **Enum safety**: All enums have `UNKNOWN` fallback for unrecognised values
 - **Error handling**: `Result` type throughout, no `!!` operator
