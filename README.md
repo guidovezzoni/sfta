@@ -70,7 +70,7 @@ The app follows **Clean Architecture** with an **MVI** pattern (to be wired in U
 | Domain | `domain/model/` | 8 domain model data classes + 3 enums with `UNKNOWN` fallback |
 | Domain | `domain/repository/` | `BikeInfoRepository` interface |
 | Data | `data/mapper/` | `BikeInfoMapper` — `BikeInfoSnapshotDto.toDomain()` extension |
-| Domain | `domain/usecase/` | `GetBikeInfoUseCase` — chains repository and mapper |
+| Domain | `domain/usecase/` | `GetBikeInfoUseCase` — delegates to repository |
 
 ### Tech Stack
 
@@ -81,4 +81,4 @@ The app follows **Clean Architecture** with an **MVI** pattern (to be wired in U
 
 ### Data Flow
 
-`JSON asset` → `LocalBikeInfoRepository` (parses on `Dispatchers.IO`) → `GetBikeInfoUseCase` (maps DTO → domain) → `Result<BikeInfo>`
+`JSON asset` → `LocalBikeInfoRepository` (parses on `Dispatchers.IO`, maps DTO → domain) → `GetBikeInfoUseCase` (delegates to repository) → `Result<BikeInfo>`
