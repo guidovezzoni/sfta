@@ -9,7 +9,7 @@
 - [1.2 Data Model Null Safety](1.2-data-model-null-safety-DONE.md) -- Remove `currentSpeedKmh`, make all DTO and domain fields nullable for real data collection
 
 ### Feature 1.3: Dashboard UI
-- [1.3 Dashboard UI](1.3-dashboard-ui-WIP.md) -- Theme, MVI contract, composables, wiring, and associated tests (depends on 1.2)
+- [1.3 Dashboard UI](1.3-dashboard-ui-DONE.md) -- Theme, MVI contract, composables, wiring, and associated tests (depends on 1.2)
 
 ## Epic 2: Architecture Improvements
 

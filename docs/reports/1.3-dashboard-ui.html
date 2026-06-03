@@ -201,6 +201,59 @@
 
     <div class="outcome outcome-passed">All checks passed. Implementation complete.</div>
   </section>
+  <section class="report-section" data-source="sdlc:sdlc_verify_story" data-timestamp="2026-06-03T20:24:00Z">
+    <header>
+      <h2>Verification</h2>
+      <time datetime="2026-06-03T20:24:00Z">3 June 2026</time>
+    </header>
+    <p class="section-source">Source: sdlc:sdlc_verify_story</p>
+
+    <h3>OpenSpec Verify</h3>
+    <p><span class="badge badge-pass">PASS</span> 40/40 tasks complete. All three verification dimensions checked: Completeness, Correctness, and Coherence. No CRITICAL or WARNING issues found. Design decisions correctly implemented (flat UiState, UI-layer enums, dark-only theme, hiltViewModel(), collectAsStateWithLifecycle()).</p>
+
+    <h3>TODO Scan</h3>
+    <p>One TODO found in <code>app/src/main/res/xml/data_extraction_rules.xml</code> — a pre-existing Android system comment about backup rules configuration. Classified as <strong>ACKNOWLEDGED</strong>: unrelated to story 1.3 and its precondition is not fulfilled by this story.</p>
+
+    <h3>Security Review</h3>
+    <p><span class="badge badge-pass">PASS</span> No security findings. The change is a pure presentation layer with read-only access to a bundled local JSON asset. No network calls, no user input collection, no authentication, no cryptography, no WebView, no sensitive data logging.</p>
+
+    <h3>On-Device Tests</h3>
+    <p><strong>Device:</strong> Pixel 6a (Android 16) — connected via adb</p>
+    <table>
+      <thead>
+        <tr><th>Method</th><th>Result</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Instrumented Compose UI tests (<code>./gradlew connectedDebugAndroidTest</code>)</td><td><span class="badge badge-pass">9/9 PASSED</span></td></tr>
+        <tr><td>App install and launch (<code>./gradlew installDebug</code> + <code>adb shell am start</code>)</td><td><span class="badge badge-pass">PASSED</span></td></tr>
+        <tr><td>Screenshot verification — dashboard with live telemetry from bundled JSON</td><td><span class="badge badge-pass">PASSED</span></td></tr>
+      </tbody>
+    </table>
+    <p>Screenshot confirmed: dark background, warning banner (amber — "Motor temperature elevated"), BATTERY panel (73% green, 38 km, 34.7°C, Discharging), POWER panel (52.4 HP blue, 61.2°C), SESSION (1h 2m, 24.7 km, 94.1 km/h), SETTINGS (ENDURO, 80 HP, 45%, 60%).</p>
+
+    <h3>Definition of Done</h3>
+    <table>
+      <thead>
+        <tr><th>#</th><th>Criterion</th><th>Status</th><th>Evidence</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>All theme files updated with dark dashboard palette</td><td><span class="badge badge-pass">PASS</span></td><td><code>Color.kt</code> has all 11 required colours; <code>Theme.kt</code> is dark-only <code>darkColorScheme</code>; <code>Type.kt</code> adds displayLarge/titleLarge/titleMedium/labelMedium</td></tr>
+        <tr><td>2</td><td>MVI contract files created</td><td><span class="badge badge-pass">PASS</span></td><td><code>DashboardUiState.kt</code>, <code>DashboardUiIntent.kt</code>, <code>DashboardUiEffect.kt</code> all present; no domain imports in UI state files</td></tr>
+        <tr><td>3</td><td>DashboardViewModel implemented with domain-to-UI mapping</td><td><span class="badge badge-pass">PASS</span></td><td><code>@HiltViewModel</code>, <code>StateFlow</code>, <code>SharedFlow</code>, <code>onIntent()</code>; all enum and model mappings verified</td></tr>
+        <tr><td>4</td><td>All composables implemented with @Preview coverage</td><td><span class="badge badge-pass">PASS</span></td><td>13 preview functions across components; DashboardScreen has 6 previews covering content/loading/error/warnings/low-battery/null-fields</td></tr>
+        <tr><td>5</td><td>MainActivity wired to DashboardViewModel and DashboardScreen</td><td><span class="badge badge-pass">PASS</span></td><td><code>hiltViewModel()</code>, <code>collectAsStateWithLifecycle()</code>, <code>LaunchedEffect(Unit)</code> verified</td></tr>
+        <tr><td>6</td><td>All user-facing strings extracted to strings.xml</td><td><span class="badge badge-pass">PASS</span></td><td>Comprehensive strings.xml with global_ prefix, dashboard_ prefix, format strings, accessibility strings</td></tr>
+        <tr><td>7</td><td>Example test files deleted</td><td><span class="badge badge-pass">PASS</span></td><td><code>ExampleUnitTest.kt</code> and <code>ExampleInstrumentedTest.kt</code> both confirmed absent</td></tr>
+        <tr><td>8</td><td>Unit tests pass: ./gradlew test</td><td><span class="badge badge-pass">PASS</span></td><td>All 5 ViewModel unit tests pass (verified during apply phase)</td></tr>
+        <tr><td>9</td><td>Compose UI tests pass: ./gradlew connectedDebugAndroidTest</td><td><span class="badge badge-pass">PASS</span></td><td>9/9 tests passed on Pixel 6a (Android 16)</td></tr>
+        <tr><td>10</td><td>Build succeeds: ./gradlew build</td><td><span class="badge badge-pass">PASS</span></td><td>Clean build succeeded during apply phase</td></tr>
+        <tr><td>11</td><td>On-device verification: dashboard displays with telemetry</td><td><span class="badge badge-pass">PASS</span></td><td>Screenshot confirms full dashboard rendering with all panels, warning banner, and correct values from bundled JSON</td></tr>
+      </tbody>
+    </table>
+
+    <div class="outcome outcome-passed">PASSED — Story closed: 1.3-dashboard-ui-DONE.md</div>
+  </section>
+
   </main>
 
 </body>
