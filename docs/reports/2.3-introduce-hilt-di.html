@@ -109,6 +109,55 @@
       <li>Clarified files NOT modified and the reasons why.</li>
     </ul>
   </section>
+  <section class="report-section" data-source="sdlc:sdlc_verify_story" data-timestamp="2026-06-03T11:40:00Z">
+    <header>
+      <h2>Verification</h2>
+      <time datetime="2026-06-03T11:40:00Z">3 Jun 2026</time>
+    </header>
+    <p class="section-source">Source: sdlc:sdlc_verify_story</p>
+
+    <h3>OpenSpec Verify</h3>
+    <table>
+      <tr><th>Dimension</th><th>Result</th><th>Detail</th></tr>
+      <tr><td>Completeness</td><td><span class="badge badge-pass">PASS</span></td><td>18/18 tasks complete</td></tr>
+      <tr><td>Correctness</td><td><span class="badge badge-pass">PASS</span></td><td>All spec requirements implemented</td></tr>
+      <tr><td>Coherence</td><td><span class="badge badge-pass">PASS</span></td><td>All 5 design decisions followed</td></tr>
+    </table>
+    <p>Note: Hilt version used is <code>2.59.2</code> (spec said <code>2.56.2</code>) and KSP is <code>2.3.5</code> (spec said <code>2.2.10-1.0.33</code>) — both are newer compatible versions, likely updated to match current Kotlin version. Task 17 was initially incomplete (<code>1.1-data-infrastructure-DONE.md</code> not updated); fix applied before closing.</p>
+
+    <h3>TODO Scan</h3>
+    <p>No TODO comments found in <code>app/src/</code>.</p>
+
+    <h3>Security Review</h3>
+    <p>No critical or high-severity findings. This change introduces a compile-time DI framework with no new network, IO, or user-input surfaces.</p>
+
+    <h3>On-Device Tests</h3>
+    <table>
+      <tr><th>Check</th><th>Result</th><th>Detail</th></tr>
+      <tr><td>Device</td><td><span class="badge badge-info">INFO</span></td><td>Pixel 6a — Android 16 (serial 2C091JEGR07097)</td></tr>
+      <tr><td>connectedDebugAndroidTest</td><td><span class="badge badge-pass">PASS</span></td><td>1 test passed on device (AppModuleTest)</td></tr>
+      <tr><td>installDebug</td><td><span class="badge badge-pass">PASS</span></td><td>APK installed successfully</td></tr>
+      <tr><td>App launch</td><td><span class="badge badge-pass">PASS</span></td><td>Logcat: <code>Displayed com.guidovezzoni.sfta/.MainActivity</code> — no Hilt initialisation errors</td></tr>
+    </table>
+
+    <h3>Definition of Done — Completion Criteria</h3>
+    <table>
+      <tr><th>#</th><th>Criterion</th><th>Status</th><th>Justification</th></tr>
+      <tr><td>1</td><td>All Gradle config in place and project compiles</td><td><span class="badge badge-pass">PASS</span></td><td>Hilt <code>2.59.2</code>, KSP <code>2.3.5</code> in <code>libs.versions.toml</code>; plugins applied in both build files; <code>assembleDebug</code> succeeds</td></tr>
+      <tr><td>2</td><td><code>SftaApplication</code> created and registered</td><td><span class="badge badge-pass">PASS</span></td><td><code>SftaApplication.kt</code> with <code>@HiltAndroidApp</code>; <code>AndroidManifest.xml</code> has <code>android:name=".SftaApplication"</code></td></tr>
+      <tr><td>3</td><td><code>AppModule</code> provides <code>AssetManager</code> and <code>BikeInfoRepository</code></td><td><span class="badge badge-pass">PASS</span></td><td><code>AppModule.kt</code> has <code>@Provides</code> for both; <code>BikeInfoRepository</code> is <code>@Singleton</code> bound to <code>LocalBikeInfoRepository</code></td></tr>
+      <tr><td>4</td><td><code>GetBikeInfoUseCase</code> has <code>@Inject constructor</code></td><td><span class="badge badge-pass">PASS</span></td><td>Confirmed in <code>GetBikeInfoUseCase.kt</code></td></tr>
+      <tr><td>5</td><td><code>MainActivity</code> annotated with <code>@AndroidEntryPoint</code></td><td><span class="badge badge-pass">PASS</span></td><td>Confirmed in <code>MainActivity.kt</code></td></tr>
+      <tr><td>6</td><td><code>./gradlew assembleDebug</code> succeeds</td><td><span class="badge badge-pass">PASS</span></td><td>BUILD SUCCESSFUL</td></tr>
+      <tr><td>7</td><td><code>./gradlew test</code> passes all existing tests</td><td><span class="badge badge-pass">PASS</span></td><td>BUILD SUCCESSFUL — all unit tests pass</td></tr>
+      <tr><td>8</td><td><code>./gradlew check</code> passes</td><td><span class="badge badge-pass">PASS</span></td><td>BUILD SUCCESSFUL</td></tr>
+      <tr><td>9</td><td>App launches without Hilt init errors</td><td><span class="badge badge-pass">PASS</span></td><td>Pixel 6a logcat confirms launch with no errors</td></tr>
+      <tr><td>10</td><td>OpenSpec and user story documentation updated</td><td><span class="badge badge-pass">PASS</span></td><td><code>openspec/specs/bike-telemetry-data/spec.md</code> updated; <code>1.1-data-infrastructure-DONE.md</code> updated with Hilt notes (fix applied during verification)</td></tr>
+      <tr><td>11</td><td>Report is generated</td><td><span class="badge badge-pass">PASS</span></td><td>This report exists from the apply phase</td></tr>
+    </table>
+
+    <div class="outcome outcome-passed">PASSED — Story renamed to <code>2.3-introduce-hilt-di-DONE.md</code></div>
+  </section>
   </main>
 
 </body>
