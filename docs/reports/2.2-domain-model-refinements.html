@@ -111,6 +111,35 @@
       <li><strong>Endpoints</strong> — confirmed none required (local JSON asset only)</li>
     </ul>
   </section>
+  <section class="report-section" data-source="opsx:propose" data-timestamp="2026-06-03T10:00:00Z">
+    <header>
+      <h2>Change Proposed</h2>
+      <time datetime="2026-06-03T10:00:00Z">3 Jun 2026</time>
+    </header>
+    <p class="section-source">Source: opsx:propose</p>
+
+    <h3>Exploration Findings</h3>
+    <ul>
+      <li><code>BikeInfo.timestamp</code> is currently a raw <code>String</code> — needs to become <code>kotlinx.datetime.Instant</code></li>
+      <li><code>DiagnosticsDto.faultCodes</code> is already parsed from JSON but silently dropped in the mapper — only <code>warnings</code> is mapped to <code>DiagnosticsInfo</code></li>
+      <li>The JSON asset has <code>fault_codes: []</code> (empty), while the test fixture uses <code>listOf("F001")</code> — both cases are covered</li>
+      <li>The spec (<code>bike-telemetry-data/spec.md</code>) explicitly states to exclude <code>faultCodes</code> — this needs updating</li>
+      <li>Repository test doesn't currently assert timestamp value — needs a new assertion</li>
+      <li>No ambiguities or blockers identified — the user story is fully specified</li>
+    </ul>
+
+    <h3>Questions &amp; Clarifications</h3>
+    <p>No questions were needed — all requirements are explicit in the user story with exact file paths, before/after values, and BDD scenarios.</p>
+
+    <h3>Artefacts Created</h3>
+    <table>
+      <tr><th>Artefact</th><th>Path</th><th>Description</th></tr>
+      <tr><td>Proposal</td><td><code>openspec/changes/domain-model-refinements/proposal.md</code></td><td>Motivation and scope: timestamp type change + faultCodes mapping</td></tr>
+      <tr><td>Design</td><td><code>openspec/changes/domain-model-refinements/design.md</code></td><td>Technical decisions: kotlinx-datetime over java.time, Instant.parse() error handling, field ordering</td></tr>
+      <tr><td>Delta Spec</td><td><code>openspec/changes/domain-model-refinements/specs/bike-telemetry-data/spec.md</code></td><td>Modified requirements for domain models and mapper</td></tr>
+      <tr><td>Tasks</td><td><code>openspec/changes/domain-model-refinements/tasks.md</code></td><td>13 tasks in BDD structure: prerequisites, timestamp BDD pair, faultCodes BDD pair, repository test, docs, verification</td></tr>
+    </table>
+  </section>
   </main>
 
 </body>

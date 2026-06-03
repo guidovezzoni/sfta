@@ -40,9 +40,3 @@ Run once after cloning, or after adding a new command to `docs/sdlc/commands/`:
 - **Windows** (PowerShell, Developer Mode or elevated): `.\docs\sdlc\sdlc_init.ps1`
 
 These scripts create symlinks in `.claude/commands/sdlc/` and `.cursor/commands/` for every SDLC command.
-
-## TODO
-
-- add PR review
-- use git mv during verification
-- archive should also sync
