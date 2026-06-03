@@ -11,6 +11,7 @@ import com.guidovezzoni.sfta.domain.model.RideSettingsInfo
 import com.guidovezzoni.sfta.domain.model.SessionInfo
 import com.guidovezzoni.sfta.domain.repository.BikeInfoRepository
 import io.mockk.coEvery
+import kotlinx.datetime.Instant
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
 import kotlinx.coroutines.test.runTest
@@ -43,7 +44,7 @@ class GetBikeInfoUseCaseTest {
             firmwareVersion = "3.4.1",
             imageUrl = "https://example.com/image.webp",
         ),
-        timestamp = "2025-05-19T10:32:45Z",
+        timestamp = Instant.parse("2025-05-19T10:32:45Z"),
         battery = BatteryInfo(
             stateOfChargePercent = 73,
             estimatedRangeKm = 38,
@@ -67,6 +68,7 @@ class GetBikeInfoUseCaseTest {
             maxSpeedKmh = 94.1,
         ),
         diagnostics = DiagnosticsInfo(
+            faultCodes = emptyList(),
             warnings = emptyList(),
         ),
     )
