@@ -24,6 +24,7 @@ Some assumptions have been made during the implementation:
 Things that should be tackled next:
 - Implementation of release flavour
 - Implementation of proper CI/CD - depending on the repository and services used
+- Some UI elements should be reviewed in terms of usability: using the phone as a bike dashboard doesn't meet the same UI criteria for regular apps, f.i.: retry buttons
 - Requirements clarification:
   - Current speed has been added and removed from the requirements, still not present in the JSON, most likely that need to be addressed as the user is expecting the current speed. 
   - Define correctly the missing enums values - ChargingState, PowerMap, and WarningSeverity - current values are those in the JSON, but there will be more.
