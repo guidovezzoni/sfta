@@ -35,7 +35,7 @@ The AI setup in the project is layered across different levels, but all are incl
   - apply
   - verify
   - archive
-- An additional library (SDLC), which I am currently working on, is handling the full lifecycle of user stories. More info at [docs/sdlc/SDLC-README.md](docs/sdlc/SDLC-README.md). Commands are:
+- An additional library (SDLC), which I am currently working on, is handling the full lifecycle of user stories. More info at [SDLC-README.md](docs/sdlc/commands/SDLC-README.md). Commands are:
   - **/sdlc_open_story** which analyse the next story to open, creates a branch, sets the story open and refines it adding a full and detailed analysis
   - **/sdlc_propose** analyses the user story, asks for questions if something isn't clear, and finally generates the SDD artifacts: proposal, design, specs, and tasks. These are defined with a BDD approach, based on acceptance criteria and fail-first
   - **/sdlc_apply_changes** implements the current OpenSpec change using BDD Red/Green cycle (test tasks verified RED before implementation, implementation tasks verified GREEN after). Then runs a security review and updates the documentation
