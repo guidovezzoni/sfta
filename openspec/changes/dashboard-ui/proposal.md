@@ -5,8 +5,8 @@ The app currently shows a placeholder "Hello Android" screen. Riders need a dark
 ## What Changes
 
 - **Theme overhaul**: Replace default Material purple/pink palette with a dark dashboard colour scheme (near-black background, Stark gold accent, semantic battery/warning/power colours). Remove dynamic colours and light theme. Extend typography for dashboard metrics.
-- **MVI contract**: Introduce `DashboardUiState` (flat, all nullable telemetry fields), `DashboardUiIntent` (LoadDashboard, RetryLoad), and `DashboardUiEffect` (empty placeholder).
-- **ViewModel**: `DashboardViewModel` (`@HiltViewModel`) that calls `GetBikeInfoUseCase`, flattens `BikeInfo` domain model into `DashboardUiState`, and handles loading/error/retry states.
+- **MVI contract**: Introduce `DashboardUiState` (flat, all nullable telemetry fields using UI-specific enums), `DashboardUiIntent` (LoadDashboard, RetryLoad), and `DashboardUiEffect` (empty placeholder). UI-layer types: `DashboardChargingState`, `DashboardPowerMap`, `DashboardWarningSeverity` enums and `DashboardWarningInfo` data class — no domain types in the UI layer.
+- **ViewModel**: `DashboardViewModel` (`@HiltViewModel`) that calls `GetBikeInfoUseCase`, flattens `BikeInfo` domain model into `DashboardUiState` (including domain-to-UI enum/model mapping), and handles loading/error/retry states.
 - **Composables**: Landscape dashboard layout with `BatteryPanel`, `PowerPanel`, `SessionPanel`, `RideSettingsBar`, and `WarningBanner`. All null values display "--" placeholder. Full `@Preview` coverage.
 - **Wiring**: `MainActivity` connects `hiltViewModel()` + `collectAsStateWithLifecycle()` + `LaunchedEffect`.
 - **Dependencies**: Add `hilt-navigation-compose` and `lifecycle-runtime-compose`.

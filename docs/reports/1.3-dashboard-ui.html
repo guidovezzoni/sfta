@@ -133,7 +133,7 @@
     <ul>
       <li>Theme function name <code>StarkFutureTechnicalAssessmentTheme</code> retained (internals changed to dark-only)</li>
       <li>Flat <code>DashboardUiState</code> chosen over nested sub-states</li>
-      <li>Domain enum types (<code>ChargingState</code>, <code>PowerMap</code>) referenced directly in UiState</li>
+      <li>UI-specific enums (<code>DashboardChargingState</code>, <code>DashboardPowerMap</code>, <code>DashboardWarningSeverity</code>) and <code>DashboardWarningInfo</code> data class used instead of domain types — clean layer separation</li>
       <li>Battery colour thresholds as inline composable logic, not ViewModel mapping</li>
     </ul>
 
@@ -141,8 +141,8 @@
     <table>
       <tr><th>Artefact</th><th>Path</th><th>Description</th></tr>
       <tr><td>Proposal</td><td><code>openspec/changes/dashboard-ui/proposal.md</code></td><td>What &amp; why — 4 phases, 2 new dependencies, theme overhaul, MVI, composables, wiring</td></tr>
-      <tr><td>Design</td><td><code>openspec/changes/dashboard-ui/design.md</code></td><td>7 key decisions with rationale: flat UiState, domain types in state, theme name preserved, hiltViewModel(), collectAsStateWithLifecycle(), composable isolation, battery colour thresholds</td></tr>
-      <tr><td>Spec (new)</td><td><code>openspec/changes/dashboard-ui/specs/dashboard-ui/spec.md</code></td><td>15 requirements with 30+ scenarios covering theme, MVI contract, ViewModel, all composables, wiring, strings, cleanup</td></tr>
+      <tr><td>Design</td><td><code>openspec/changes/dashboard-ui/design.md</code></td><td>7 key decisions with rationale: flat UiState, UI-specific enums (no domain types in UI), theme name preserved, hiltViewModel(), collectAsStateWithLifecycle(), composable isolation, battery colour thresholds</td></tr>
+      <tr><td>Spec (new)</td><td><code>openspec/changes/dashboard-ui/specs/dashboard-ui/spec.md</code></td><td>16 requirements with 30+ scenarios covering theme, UI types, MVI contract, ViewModel with domain-to-UI mapping, all composables, wiring, strings, cleanup</td></tr>
       <tr><td>Spec (delta)</td><td><code>openspec/changes/dashboard-ui/specs/bike-telemetry-data/spec.md</code></td><td>Modified dependency requirement to include hilt-navigation-compose and lifecycle-runtime-compose</td></tr>
       <tr><td>Tasks</td><td><code>openspec/changes/dashboard-ui/tasks.md</code></td><td>30 tasks across 7 groups: prerequisites, theme, MVI contract, ViewModel BDD (5 tests + impl), composables BDD (9 tests + 7 impl), wiring, verification</td></tr>
     </table>
@@ -152,7 +152,7 @@
     <ul>
       <li><strong>Prerequisites</strong> (3 tasks): dependencies, cleanup, strings</li>
       <li><strong>Theme</strong> (3 tasks): Color.kt, Type.kt, Theme.kt</li>
-      <li><strong>MVI Contract</strong> (3 tasks): UiState, UiIntent, UiEffect</li>
+      <li><strong>MVI Contract</strong> (7 tasks): 4 UI types (DashboardChargingState, DashboardPowerMap, DashboardWarningSeverity, DashboardWarningInfo), UiState, UiIntent, UiEffect</li>
       <li><strong>ViewModel BDD</strong> (6 tasks): 5 unit tests first, then implementation</li>
       <li><strong>Composables BDD</strong> (16 tasks): 9 Compose UI tests first, then 6 component implementations + previews</li>
       <li><strong>Wiring</strong> (1 task): MainActivity</li>

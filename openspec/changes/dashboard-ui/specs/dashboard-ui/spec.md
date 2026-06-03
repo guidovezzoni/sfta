@@ -22,12 +22,31 @@ The typography SHALL include `displayLarge` (48sp, Bold) for primary metrics, `t
 - **WHEN** a panel header (BATTERY, POWER, SESSION, SETTINGS) is rendered
 - **THEN** it uses 20sp SemiBold typography
 
+### Requirement: UI-layer enums and models for dashboard state
+The UI layer SHALL define its own types instead of referencing domain types. Each type SHALL be in its own file under `ui/state/`:
+- `DashboardChargingState`: enum with values matching domain `ChargingState` (`DISCHARGING`, `UNKNOWN`)
+- `DashboardPowerMap`: enum with values matching domain `PowerMap` (`ENDURO`, `UNKNOWN`)
+- `DashboardWarningSeverity`: enum with values matching domain `WarningSeverity` (`WARNING`, `UNKNOWN`)
+- `DashboardWarningInfo`: data class with `code: String?`, `message: String?`, `severity: DashboardWarningSeverity?`
+
+#### Scenario: UI types mirror domain enum values
+- **WHEN** the UI enums are defined
+- **THEN** they contain the same value set as their domain counterparts
+
+#### Scenario: UI types have no imports from the domain layer
+- **WHEN** the UI type files are reviewed
+- **THEN** they contain no imports from `com.guidovezzoni.sfta.domain`
+
 ### Requirement: DashboardUiState is a flat data class with all nullable telemetry fields
-`DashboardUiState` SHALL be a data class with `isLoading: Boolean` (default false), `errorMessage: String?` (default null), `bikeName: String?`, and nullable fields for battery (`batteryChargePercent: Int?`, `batteryRangeKm: Int?`, `batteryTemperatureCelsius: Double?`, `chargingState: ChargingState?`), power (`motorPowerHp: Double?`, `motorTemperatureCelsius: Double?`), ride settings (`powerMap: PowerMap?`, `maxPowerHp: Int?`, `engineBrakingPercent: Int?`, `regenPercent: Int?`), session (`sessionDurationSeconds: Long?`, `sessionDistanceKm: Double?`, `sessionMaxSpeedKmh: Double?`), and warnings (`warnings: List<WarningInfo>?`).
+`DashboardUiState` SHALL be a data class with `isLoading: Boolean` (default false), `errorMessage: String?` (default null), `bikeName: String?`, and nullable fields for battery (`batteryChargePercent: Int?`, `batteryRangeKm: Int?`, `batteryTemperatureCelsius: Double?`, `chargingState: DashboardChargingState?`), power (`motorPowerHp: Double?`, `motorTemperatureCelsius: Double?`), ride settings (`powerMap: DashboardPowerMap?`, `maxPowerHp: Int?`, `engineBrakingPercent: Int?`, `regenPercent: Int?`), session (`sessionDurationSeconds: Long?`, `sessionDistanceKm: Double?`, `sessionMaxSpeedKmh: Double?`), and warnings (`warnings: List<DashboardWarningInfo>?`). All referenced types SHALL be UI-layer types, not domain types.
 
 #### Scenario: Default UiState represents initial idle state
 - **WHEN** a `DashboardUiState` is constructed with default values
 - **THEN** `isLoading` is false, `errorMessage` is null, and all telemetry fields are null
+
+#### Scenario: UiState does not import domain types
+- **WHEN** `DashboardUiState.kt` is reviewed
+- **THEN** it contains no imports from `com.guidovezzoni.sfta.domain`
 
 ### Requirement: DashboardUiIntent defines LoadDashboard and RetryLoad intents
 `DashboardUiIntent` SHALL be a sealed class with `LoadDashboard` (data object) and `RetryLoad` (data object) subclasses.
@@ -48,7 +67,7 @@ The typography SHALL include `displayLarge` (48sp, Bold) for primary metrics, `t
 - **THEN** no `DashboardUiEffect` is emitted
 
 ### Requirement: DashboardViewModel processes intents and maps domain model to flat UiState
-`DashboardViewModel` SHALL be annotated with `@HiltViewModel` and inject `GetBikeInfoUseCase`. It SHALL expose `uiState: StateFlow<DashboardUiState>` and `uiEffect: SharedFlow<DashboardUiEffect>`. It SHALL provide `fun onIntent(intent: DashboardUiIntent)`. On `LoadDashboard` or `RetryLoad`, it SHALL emit `isLoading = true`, call the use case, and on success flatten `BikeInfo` fields into `DashboardUiState` with `isLoading = false`. On failure, it SHALL emit `errorMessage` with a user-friendly string. Mapping: `bikeName` from `bikeInfo.bike?.model` (appending variant if present), battery fields from `bikeInfo.battery`, motor fields from `bikeInfo.motor`, session fields from `bikeInfo.session`, ride settings from `bikeInfo.rideSettings`, warnings from `bikeInfo.diagnostics?.warnings`.
+`DashboardViewModel` SHALL be annotated with `@HiltViewModel` and inject `GetBikeInfoUseCase`. It SHALL expose `uiState: StateFlow<DashboardUiState>` and `uiEffect: SharedFlow<DashboardUiEffect>`. It SHALL provide `fun onIntent(intent: DashboardUiIntent)`. On `LoadDashboard` or `RetryLoad`, it SHALL emit `isLoading = true`, call the use case, and on success flatten `BikeInfo` fields into `DashboardUiState` with `isLoading = false`. On failure, it SHALL emit `errorMessage` with a user-friendly string. Mapping: `bikeName` from `bikeInfo.bike?.model` (appending variant if present), battery fields from `bikeInfo.battery`, motor fields from `bikeInfo.motor`, session fields from `bikeInfo.session`, ride settings from `bikeInfo.rideSettings`, warnings from `bikeInfo.diagnostics?.warnings`. The ViewModel SHALL map domain enums to UI enums (`ChargingState` → `DashboardChargingState`, `PowerMap` → `DashboardPowerMap`, `WarningSeverity` → `DashboardWarningSeverity`) and domain `WarningInfo` to `DashboardWarningInfo`.
 
 #### Scenario: ViewModel emits loading then content on LoadDashboard
 - **WHEN** the ViewModel receives `LoadDashboard` intent and the use case returns success
@@ -86,7 +105,7 @@ The typography SHALL include `displayLarge` (48sp, Bold) for primary metrics, `t
 - **THEN** a `RetryLoad` intent is emitted via `onIntent`
 
 ### Requirement: BatteryPanel displays SOC with colour-coded levels
-`BatteryPanel` SHALL display `batteryChargePercent` as the focal metric using `displayLarge` typography. SOC colour SHALL be `BatteryGreen` when >= 50%, `BatteryAmber` when 20-49%, `BatteryRed` when < 20%, and `TextSecondary` when null. It SHALL also display range, temperature, and charging state as secondary metrics. Null values SHALL display "--".
+`BatteryPanel` SHALL display `batteryChargePercent` as the focal metric using `displayLarge` typography. SOC colour SHALL be `BatteryGreen` when >= 50%, `BatteryAmber` when 20-49%, `BatteryRed` when < 20%, and `TextSecondary` when null. It SHALL also display range, temperature, and charging state (`DashboardChargingState?`) as secondary metrics. Null values SHALL display "--".
 
 #### Scenario: Battery panel shows SOC, range, and temperature
 - **WHEN** `BatteryPanel` receives populated values
@@ -138,7 +157,7 @@ The typography SHALL include `displayLarge` (48sp, Bold) for primary metrics, `t
 - **THEN** "--" is displayed for each setting
 
 ### Requirement: WarningBanner shows when warnings are present
-`WarningBanner` SHALL be a full-width banner displayed only when the warnings list is non-null and non-empty. Background colour SHALL be based on highest severity: `WarningRed` for CRITICAL (future-proofing), `WarningAmber` for WARNING. It SHALL display warning message text.
+`WarningBanner` SHALL be a full-width banner displayed only when the warnings list (`List<DashboardWarningInfo>`) is non-null and non-empty. Background colour SHALL be based on highest `DashboardWarningSeverity`: `WarningRed` for UNKNOWN (future-proofing for critical), `WarningAmber` for WARNING. It SHALL display warning message text.
 
 #### Scenario: Warning banner visible with warnings
 - **WHEN** the UiState contains a non-empty warnings list

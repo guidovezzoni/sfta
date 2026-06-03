@@ -31,11 +31,13 @@ The app is locked to `sensorLandscape` orientation in the manifest. All domain m
 
 **Alternative considered**: Nested sub-states. Rejected because it adds boilerplate without benefit — the composables don't consume state objects, they consume individual values.
 
-### 2. Domain types in UiState for enums
+### 2. UI-specific enums and models over domain types in UiState
 
-**Decision**: `DashboardUiState` references domain types (`ChargingState`, `PowerMap`, `WarningInfo`) directly rather than mapping to strings or UI-specific types.
+**Decision**: `DashboardUiState` uses UI-layer types (`DashboardChargingState`, `DashboardPowerMap`, `DashboardWarningSeverity`, `DashboardWarningInfo`) instead of referencing domain types directly. The ViewModel maps domain enums/models to their UI counterparts.
 
-**Rationale**: These enums are simple value types with no domain logic. Creating UI-layer duplicates would be pure boilerplate. The composables need the enum to select display text and colours — mapping to strings in the ViewModel would push presentation logic into the wrong layer.
+**Rationale**: Clean layer separation — the UI layer should not depend on domain model types. This prevents domain refactoring from rippling into composables, keeps the UI contract self-contained, and makes UI tests independent of domain definitions. The mapping cost is minimal (a `when` expression per enum in the ViewModel).
+
+**Alternative considered**: Reusing domain types directly. Rejected because it couples the UI layer to domain internals, violating Clean Architecture boundaries.
 
 ### 3. Theme function name preserved
 
@@ -71,5 +73,5 @@ The app is locked to `sensorLandscape` orientation in the manifest. All domain m
 
 - **[Risk] Missing dependencies break build** → Mitigated by adding `hilt-navigation-compose` and `lifecycle-runtime-compose` as a prerequisite task before any code that imports them.
 - **[Risk] Theme change affects existing previews** → Low risk. Only `GreetingPreview` exists and it's being deleted along with the `Greeting` composable.
-- **[Trade-off] Domain types in UiState couples UI to domain** → Acceptable for this project size. If the domain layer evolves independently, a mapping layer can be introduced later.
+- **[Trade-off] UI enum/model duplication adds mapping code** → Acceptable cost for clean layer boundaries. The mapping is a small `when` per enum in the ViewModel, and UI tests no longer depend on domain definitions.
 - **[Trade-off] Flat UiState becomes unwieldy if many more fields added** → At ~17 fields it's manageable. If it grows past ~25 fields, consider grouping.

@@ -12,9 +12,13 @@
 
 ## 3. MVI Contract
 
-- [ ] 3.1 Create `DashboardUiState.kt` in `ui/state/` — flat data class with all nullable telemetry fields
-- [ ] 3.2 Create `DashboardUiIntent.kt` in `ui/intent/` — sealed class with `LoadDashboard` and `RetryLoad`
-- [ ] 3.3 Create `DashboardUiEffect.kt` in `ui/effect/` — empty sealed class placeholder
+- [ ] 3.1 Create `DashboardChargingState.kt` in `ui/state/` — UI enum mirroring domain `ChargingState` values (`DISCHARGING`, `UNKNOWN`)
+- [ ] 3.2 Create `DashboardPowerMap.kt` in `ui/state/` — UI enum mirroring domain `PowerMap` values (`ENDURO`, `UNKNOWN`)
+- [ ] 3.3 Create `DashboardWarningSeverity.kt` in `ui/state/` — UI enum mirroring domain `WarningSeverity` values (`WARNING`, `UNKNOWN`)
+- [ ] 3.4 Create `DashboardWarningInfo.kt` in `ui/state/` — UI data class with `code: String?`, `message: String?`, `severity: DashboardWarningSeverity?`
+- [ ] 3.5 Create `DashboardUiState.kt` in `ui/state/` — flat data class using UI-layer types (`DashboardChargingState`, `DashboardPowerMap`, `DashboardWarningInfo`), no domain imports
+- [ ] 3.6 Create `DashboardUiIntent.kt` in `ui/intent/` — sealed class with `LoadDashboard` and `RetryLoad`
+- [ ] 3.7 Create `DashboardUiEffect.kt` in `ui/effect/` — empty sealed class placeholder
 
 ## 4. DashboardViewModel (BDD)
 
@@ -23,7 +27,7 @@
 - [ ] 4.3 Write test: `GIVEN ViewModel is in error state WHEN RetryLoad intent received THEN clears error and reloads` in `DashboardViewModelTest`
 - [ ] 4.4 Write test: `GIVEN use case returns BikeInfo with warnings WHEN LoadDashboard intent received THEN state contains warnings` in `DashboardViewModelTest`
 - [ ] 4.5 Write test: `GIVEN use case returns BikeInfo with null battery WHEN LoadDashboard intent received THEN battery fields are null in state` in `DashboardViewModelTest`
-- [ ] 4.6 Implement `DashboardViewModel` — `@HiltViewModel`, inject `GetBikeInfoUseCase`, process intents, flatten `BikeInfo` to `DashboardUiState`
+- [ ] 4.6 Implement `DashboardViewModel` — `@HiltViewModel`, inject `GetBikeInfoUseCase`, process intents, flatten `BikeInfo` to `DashboardUiState`, map domain enums/models to UI types (`ChargingState` → `DashboardChargingState`, `PowerMap` → `DashboardPowerMap`, `WarningInfo` → `DashboardWarningInfo`)
 
 ## 5. Dashboard Composables (BDD)
 
