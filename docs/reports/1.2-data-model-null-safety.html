@@ -192,6 +192,76 @@
 
     <div class="outcome outcome-passed">Applied: PASSED — 29/29 tasks complete, all tests pass, security review clean</div>
   </section>
+  <section class="report-section" data-source="sdlc_verify_story" data-timestamp="2026-06-03T14:58:00Z">
+    <header>
+      <h2>Verification</h2>
+      <time datetime="2026-06-03T14:58:00Z">3 Jun 2026, 14:58 UTC</time>
+    </header>
+    <p class="section-source">Source: sdlc_verify_story</p>
+
+    <h3>OpenSpec Verify</h3>
+    <p><span class="badge badge-pass">PASS</span> 29/29 tasks complete. All three dimensions checked:</p>
+    <ul>
+      <li><strong>Completeness:</strong> 29/29 tasks done; all spec requirements implemented</li>
+      <li><strong>Correctness:</strong> All requirements and scenarios covered; mapper, DTOs, domain models, and tests verified against spec</li>
+      <li><strong>Coherence:</strong> Design decisions followed — nullable defaults in DTOs, nullable domain fields, null enum ≠ UNKNOWN, null sub-objects → null, null lists → null</li>
+    </ul>
+
+    <h3>TODO Scan</h3>
+    <p><span class="badge badge-pass">PASS</span> No <code>TODO</code> comments found in <code>app/src/</code>. No RESOLVE NOW or ACKNOWLEDGED items.</p>
+
+    <h3>Security Review</h3>
+    <p><span class="badge badge-pass">PASS</span> No findings. Changes are purely internal data model refactoring — nullable field annotations, safe-call chains, and field removal. No new attack surface introduced.</p>
+
+    <h3>On-Device Tests</h3>
+    <p>Device: Pixel 6a, Android 16 (serial <code>2C091JEGR07097</code>)</p>
+    <ul>
+      <li><strong>Instrumented tests:</strong> <span class="badge badge-pass">PASS</span> <code>./gradlew connectedDebugAndroidTest</code> — 1 test passed</li>
+      <li><strong>App launch:</strong> <span class="badge badge-pass">PASS</span> <code>./gradlew installDebug</code> + <code>adb shell am start</code> — app launched, displayed "Hello Android!", no runtime exceptions in logcat</li>
+    </ul>
+
+    <h3>Definition of Done</h3>
+    <table>
+      <tr><th>Item</th><th>Status</th><th>Evidence</th></tr>
+      <tr>
+        <td><code>currentSpeedKmh</code> removed from <code>MotorDto</code>, <code>MotorInfo</code>, <code>BikeInfoMapper</code>, and all test fixtures</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td>Confirmed absent in <code>MotorDto.kt</code>, <code>MotorInfo.kt</code>, <code>BikeInfoMapper.kt</code>, <code>LocalBikeInfoRepositoryTest.kt</code>, <code>GetBikeInfoUseCaseTest.kt</code>; JSON asset motor object contains only <code>power_hp</code> and <code>temperature_c</code></td>
+      </tr>
+      <tr>
+        <td>All 8 DTO classes have nullable fields with <code>= null</code> defaults</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td>Confirmed in <code>BikeInfoSnapshotDto</code>, <code>BikeDto</code>, <code>BatteryDto</code>, <code>MotorDto</code>, <code>RideSettingsDto</code>, <code>SessionDto</code>, <code>DiagnosticsDto</code>, <code>WarningDto</code></td>
+      </tr>
+      <tr>
+        <td>All 8 domain model classes have nullable fields</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td>Confirmed in <code>BikeInfo</code>, <code>BikeDetails</code>, <code>BatteryInfo</code>, <code>MotorInfo</code>, <code>RideSettingsInfo</code>, <code>SessionInfo</code>, <code>DiagnosticsInfo</code>, <code>WarningInfo</code></td>
+      </tr>
+      <tr>
+        <td><code>BikeInfoMapper.toDomain()</code> propagates nulls correctly</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td>Null sub-objects use <code>?.let {}</code> chains; null enum strings → <code>null</code> (not <code>UNKNOWN</code>); null lists → <code>null</code>; null timestamp → <code>null</code> <code>Instant</code></td>
+      </tr>
+      <tr>
+        <td>All existing tests updated and passing</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td><code>LocalBikeInfoRepositoryTest</code> and <code>GetBikeInfoUseCaseTest</code> fixtures updated; <code>./gradlew test</code> passed (task 28)</td>
+      </tr>
+      <tr>
+        <td>5 new null-handling tests added to <code>BikeInfoMapperTest</code></td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td>Null sub-objects, all-null leaf fields, null enum strings → null (not UNKNOWN), null timestamp, null lists — all present and passing</td>
+      </tr>
+      <tr>
+        <td><code>./gradlew check</code> passes with no errors</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td>Confirmed via task 29</td>
+      </tr>
+    </table>
+
+    <div class="outcome outcome-passed">Verification: PASSED — Story renamed to <code>1.2-data-model-null-safety-DONE.md</code></div>
+  </section>
   </main>
 
 </body>
