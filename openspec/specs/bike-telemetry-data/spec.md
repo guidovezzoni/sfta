@@ -88,6 +88,17 @@ The domain layer SHALL provide `BikeInfo`, `BikeDetails`, `BatteryInfo`, `MotorI
 - **WHEN** `toDomain()` is called on a DTO with an empty warnings list
 - **THEN** the `BikeInfo.diagnostics.warnings` list is empty
 
+### Requirement: Dependencies are provided via Hilt
+`BikeInfoRepository` (bound to `LocalBikeInfoRepository`) and `GetBikeInfoUseCase` SHALL be provided through the Hilt dependency graph. `BikeInfoRepository` SHALL be scoped as `@Singleton`. `AppModule` (`@Module`, `@InstallIn(SingletonComponent::class)`) SHALL provide `AssetManager` (from `@ApplicationContext`) and the repository binding. `GetBikeInfoUseCase` SHALL have an `@Inject constructor` for automatic resolution. `MainActivity` SHALL be annotated with `@AndroidEntryPoint`.
+
+#### Scenario: Repository is singleton-scoped
+- **WHEN** `BikeInfoRepository` is requested from the Hilt component twice
+- **THEN** the same instance is returned both times
+
+#### Scenario: AppModule provides a LocalBikeInfoRepository
+- **WHEN** `BikeInfoRepository` is requested from AppModule
+- **THEN** a `LocalBikeInfoRepository` instance is returned
+
 ### Requirement: Use case delegates to repository
 `GetBikeInfoUseCase` SHALL call the repository's `getBikeInfoSnapshot()` and return the result directly. The repository already returns `Result<BikeInfo>`, so the use case SHALL NOT perform any mapping. On failure, it SHALL propagate the `Result.failure` unchanged.
 
