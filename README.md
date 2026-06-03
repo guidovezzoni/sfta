@@ -1,11 +1,8 @@
 # README
 
-As an agent please do NOT modify the below section [Human managed part of the README] and its subsections, this is only for manually added info.
-Any automatically added info can be added to the other specific section [## LLM managed part of the README].
+As an agent please do NOT modify this file, you can add any info to [AGENTS.md](AGENTS.md), this file is reserved for manual info.
 
-## Human managed part of the README
-
-### TL;DR
+## General Introduction
 In implementing this assessment I used an AI supported SDD methodology (Spec-Driven Development) in which, the specification are fully defined before starting coding, to force the agent to follow the established plan.
 On top of the SDD library (OpenSpec) I used a library I am developing, which, by using AI, allows to automate the full lifecycle, from user story refinement, to enforcing BDD, to final verification of the user story, including definition of done, unit tests, UI test, security assessment, on-device testing, etc.
 
@@ -30,10 +27,11 @@ Things that should be tackled next:
 - Implementation of proper CI/CD - depending on the repository and services used
 - Adding networking to get up-to-date real time status from the bike, it could be BLE or another solution. 
 - Some UI elements should be reviewed in terms of usability: using the phone as a bike dashboard doesn't meet the same UI criteria as for regular apps, f.i.: retry buttons should be replaced by a polling. Also the whole UI should be prepared by a professional designer for maximum effectiveness.
-- Requirements clarification with product:
+- Requirements needing clarifications with product:
   - Current speed has been added and removed from the requirements, still not present in the JSON, most likely that need to be addressed as the user is expecting the current speed. 
   - Define correctly the missing enums values - ChargingState, PowerMap, and WarningSeverity - current values are those in the JSON, but there will be more.
 
+## Additional info
 
 ### AI Setup
 The AI setup in the project is layered across different levels, but all are included in git, so they can be shared across different members of the team.
@@ -47,31 +45,3 @@ The AI setup in the project is layered across different levels, but all are incl
   - **/sdlc_archive** runs OpenSpec's archive to finalise and archive the completed change, then verifies that the documentation is in sync with the codebase and specs.
 
 The SDLC library is still work in progress, and I'm improving it while I use it, and adding additional features like  multi-agent orchestration, LLM independence, self-improvement by adding learnt lessons.
-
-## LLM managed part of the README
-
-### Architecture
-
-The app follows **Clean Architecture** with an **MVI** pattern (to be wired in UI story 1.2):
-
-| Layer | Package | Contents |
-|-------|---------|----------|
-| DI | `di/` | `AppModule` — Hilt module (SingletonComponent), provides `BikeInfoRepository` as `@Singleton` |
-| Data | `data/model/` | 8 `@Serializable` DTO classes mapping the JSON schema; all fields nullable with `= null` defaults |
-| Data | `data/repository/` | `LocalBikeInfoRepository` — reads and parses the bundled JSON asset |
-| Domain | `domain/model/` | 8 domain model data classes (all fields nullable) + 3 enums with `UNKNOWN` fallback; `null` = no sensor data, `UNKNOWN` = unrecognised non-null value |
-| Domain | `domain/repository/` | `BikeInfoRepository` interface |
-| Data | `data/mapper/` | `BikeInfoMapper` — `BikeInfoSnapshotDto.toDomain()` extension |
-| Domain | `domain/usecase/` | `GetBikeInfoUseCase` — delegates to repository, `@Inject constructor` |
-
-### Tech Stack
-
-- **Kotlin** 2.2.10, **Compose BOM** 2026.02.01, **AGP** 9.2.1
-- **Hilt** 2.56.2 + **KSP** 2.2.10-1.0.33 for dependency injection
-- **kotlinx-serialization-json** 1.8.1 for JSON parsing
-- **MockK** 1.14.4 + **kotlinx-coroutines-test** 1.10.2 for unit testing
-- App locked to **landscape orientation** (`sensorLandscape`)
-
-### Data Flow
-
-`JSON asset` → `LocalBikeInfoRepository` (parses on `Dispatchers.IO`, maps DTO → domain) → `GetBikeInfoUseCase` (delegates to repository) → `Result<BikeInfo>`

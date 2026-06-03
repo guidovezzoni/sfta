@@ -159,6 +159,48 @@
       <li><strong>Verification</strong> (4 tasks): build, unit tests, UI tests, on-device</li>
     </ul>
   </section>
+  <section class="report-section" data-source="sdlc:sdlc_apply_changes" data-timestamp="2026-06-03T19:36:00Z">
+    <header>
+      <h2>Changes Applied</h2>
+      <time datetime="2026-06-03T19:36:00Z">3 June 2026</time>
+    </header>
+    <p class="section-source">Source: sdlc:sdlc_apply_changes</p>
+
+    <h3>Summary</h3>
+    <p>All 40 tasks implemented following the BDD Red/Green cycle. The full dashboard UI is now live — dark-themed Jetpack Compose dashboard displaying real bike telemetry from the bundled JSON snapshot.</p>
+
+    <h3>Tasks Applied (40/40)</h3>
+    <table>
+      <tr><th>Group</th><th>Tasks</th><th>Status</th></tr>
+      <tr><td>1. Prerequisites</td><td>Dependencies, cleanup, strings</td><td><span class="badge badge-pass">✓ 3/3</span></td></tr>
+      <tr><td>2. Theme</td><td>Color.kt, Type.kt, Theme.kt</td><td><span class="badge badge-pass">✓ 3/3</span></td></tr>
+      <tr><td>3. MVI Contract</td><td>DashboardChargingState, DashboardPowerMap, DashboardWarningSeverity, DashboardWarningInfo, DashboardUiState, DashboardUiIntent, DashboardUiEffect</td><td><span class="badge badge-pass">✓ 7/7</span></td></tr>
+      <tr><td>4. ViewModel (BDD)</td><td>5 unit tests → RED confirmed; DashboardViewModel → GREEN (5/5 pass)</td><td><span class="badge badge-pass">✓ 6/6</span></td></tr>
+      <tr><td>5. Composables (BDD)</td><td>9 Compose UI tests → RED confirmed; BatteryPanel, PowerPanel, SessionPanel, RideSettingsBar, WarningBanner, DashboardScreen + Previews</td><td><span class="badge badge-pass">✓ 16/16</span></td></tr>
+      <tr><td>6. Wiring</td><td>MainActivity — hiltViewModel(), collectAsStateWithLifecycle(), LaunchedEffect</td><td><span class="badge badge-pass">✓ 1/1</span></td></tr>
+      <tr><td>7. Verification</td><td>Build, unit tests, Compose UI tests (device), on-device launch</td><td><span class="badge badge-pass">✓ 4/4</span></td></tr>
+    </table>
+
+    <h3>BDD Cycles</h3>
+    <ul>
+      <li><strong>ViewModel</strong>: 1 iteration. Tests failed with compilation errors (RED) → DashboardViewModel implemented → 5/5 tests pass (GREEN). One test fix required: test 4.1 used <code>backgroundScope</code> collection but loading state wasn't captured due to scheduler ordering; replaced with <code>coAnswers</code> to capture state at use-case invocation point.</li>
+      <li><strong>Composables</strong>: 1 iteration. Tests failed with compilation errors (RED, DashboardScreen absent) → all composables implemented → 9/9 Compose UI tests pass on device (GREEN). Fix required: import corrections in DashboardScreenTest — <code>assertDoesNotExist</code> is a member function (no import), <code>AndroidJUnit4</code> lives in <code>androidx.test.ext.junit.runners</code> not <code>junit4</code>. Also renamed test methods from backtick/space convention to camelCase (DEX &lt;040 constraint with <code>minSdk=24</code>).</li>
+    </ul>
+
+    <h3>TODOs</h3>
+    <p>No TODOs found in source files under <code>app/src/</code>.</p>
+
+    <h3>Security Review</h3>
+    <p><span class="badge badge-pass">PASS</span> — No findings. Changes are purely UI-layer: theme, MVI state/intent/effect, ViewModel reading from a local bundled JSON asset, Jetpack Compose composables. No network I/O, user-supplied input, cryptographic operations, or sensitive data handling.</p>
+
+    <h3>Documentation Updates</h3>
+    <ul>
+      <li><strong>README.md</strong>: Skipped — file contains explicit "do NOT modify" instruction for agents.</li>
+      <li><strong>AGENTS.md</strong>: Updated — package structure extended with new UI folders (<code>ui/state/</code>, <code>ui/intent/</code>, <code>ui/effect/</code>, <code>ui/viewmodel/</code>, <code>ui/screens/</code>, <code>ui/screens/components/</code>); MVI entry updated from "to be implemented" to implemented description.</li>
+    </ul>
+
+    <div class="outcome outcome-passed">All checks passed. Implementation complete.</div>
+  </section>
   </main>
 
 </body>

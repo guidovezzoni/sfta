@@ -33,20 +33,26 @@ Stark Future Technical Assessment — an Android rider dashboard app for the Sta
 ### Package Structure (`com.guidovezzoni.sfta`)
 
 ```
-di/                 — AppModule (Hilt, SingletonComponent)
-data/model/         — @Serializable DTO classes (8 files)
-data/repository/    — LocalBikeInfoRepository (reads JSON asset)
-data/mapper/        — BikeInfoMapper (DTO → domain)
-domain/model/       — Domain data classes + enums (11 files)
-domain/repository/  — BikeInfoRepository interface
-domain/usecase/     — GetBikeInfoUseCase (@Inject constructor)
-ui/                 — MainActivity (@AndroidEntryPoint), theme (Compose)
+di/                        — AppModule (Hilt, SingletonComponent)
+data/model/                — @Serializable DTO classes (8 files)
+data/repository/           — LocalBikeInfoRepository (reads JSON asset)
+data/mapper/               — BikeInfoMapper (DTO → domain)
+domain/model/              — Domain data classes + enums (11 files)
+domain/repository/         — BikeInfoRepository interface
+domain/usecase/            — GetBikeInfoUseCase (@Inject constructor)
+ui/                        — MainActivity (@AndroidEntryPoint), theme (Compose)
+ui/state/                  — DashboardUiState + UI-layer enums/models (5 files)
+ui/intent/                 — DashboardUiIntent (LoadDashboard, RetryLoad)
+ui/effect/                 — DashboardUiEffect (empty placeholder)
+ui/viewmodel/              — DashboardViewModel (@HiltViewModel)
+ui/screens/                — DashboardScreen composable
+ui/screens/components/     — BatteryPanel, PowerPanel, SessionPanel, RideSettingsBar, WarningBanner
 ```
 
 ### Key Patterns
 
 - **Clean Architecture**: data → domain → ui layers
-- **MVI**: Model-View-Intent (UI layer, to be implemented in a future story)
+- **MVI**: Model-View-Intent (UI layer) — `DashboardUiState` / `DashboardUiIntent` / `DashboardUiEffect`; ViewModel exposes `uiState: StateFlow` and `uiEffect: SharedFlow`; intents via `onIntent()`
 - **Hilt DI**: Hilt with `@HiltAndroidApp` / `@AndroidEntryPoint`; `AppModule` binds `BikeInfoRepository` as `@Singleton`
 - **kotlinx-serialization**: JSON parsing with `@Serializable` / `@SerialName`
 - **Null safety**: All DTO fields nullable with `= null` defaults; all domain model fields nullable; mapper uses `?.let {}` chains for null propagation
