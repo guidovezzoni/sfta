@@ -129,6 +129,15 @@ class BikeInfoMapperTest {
         assertEquals(emptyList<Any>(), result.diagnostics.warnings)
     }
 
+    @Test(expected = IllegalArgumentException::class)
+    fun `GIVEN a DTO with a malformed timestamp WHEN toDomain is called THEN Instant parse throws IllegalArgumentException`() {
+        val dtoWithMalformedTimestamp = fullyPopulatedDto.copy(
+            timestamp = "not-a-date",
+        )
+
+        dtoWithMalformedTimestamp.toDomain()
+    }
+
     @Test
     fun `GIVEN a DTO with empty faultCodes WHEN toDomain is called THEN diagnostics faultCodes is empty`() {
         val dtoWithEmptyFaultCodes = fullyPopulatedDto.copy(

@@ -8,6 +8,7 @@
 
 - [x] 2.1 Write test: GIVEN a fully populated DTO with timestamp "2025-05-19T10:32:45Z" WHEN toDomain is called THEN timestamp is `Instant.parse("2025-05-19T10:32:45Z")` — update existing assertion in `BikeInfoMapperTest`
 - [x] 2.2 Implement: parse timestamp to `Instant` in `BikeInfoMapper.toDomain()` using `Instant.parse(timestamp)`
+- [x] 2.3 Write test: GIVEN a DTO with a malformed timestamp WHEN toDomain is called THEN Instant.parse throws IllegalArgumentException — add new test in `BikeInfoMapperTest`
 
 ## 3. Fault Codes Mapping (BDD)
 

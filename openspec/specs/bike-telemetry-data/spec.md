@@ -76,6 +76,10 @@ The domain layer SHALL provide `BikeInfo`, `BikeDetails`, `BatteryInfo`, `MotorI
 - **WHEN** `toDomain()` is called on a DTO with an empty `faultCodes` list
 - **THEN** `DiagnosticsInfo.faultCodes` is an empty list
 
+#### Scenario: Malformed timestamp causes mapping failure
+- **WHEN** `toDomain()` is called on a DTO with a malformed timestamp string (e.g. `"not-a-date"`)
+- **THEN** `Instant.parse()` throws an `IllegalArgumentException`
+
 #### Scenario: Mapper handles unknown enum values with UNKNOWN fallback
 - **WHEN** `toDomain()` is called on a DTO with unrecognised enum string values
 - **THEN** the corresponding enum fields fall back to `UNKNOWN`
