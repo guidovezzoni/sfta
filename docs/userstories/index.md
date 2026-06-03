@@ -19,4 +19,4 @@
 - [2.2 Domain Model Refinements](2.2-domain-model-refinements-DONE.md) -- Parse timestamp to Instant, add faultCodes to DiagnosticsInfo
 
 ### Feature 2.3: Dependency Injection
-- [2.3 Introduce Hilt DI](2.3-introduce-hilt-di.md) -- Add Hilt, create AppModule, annotate existing classes for injection
+- [2.3 Introduce Hilt DI](2.3-introduce-hilt-di-WIP.md) -- Add Hilt, create AppModule, annotate existing classes for injection
