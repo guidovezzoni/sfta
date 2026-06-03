@@ -11,6 +11,7 @@ import com.guidovezzoni.sfta.data.model.WarningDto
 import com.guidovezzoni.sfta.domain.model.ChargingState
 import com.guidovezzoni.sfta.domain.model.PowerMap
 import com.guidovezzoni.sfta.domain.model.WarningSeverity
+import kotlinx.datetime.Instant
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -66,7 +67,8 @@ class BikeInfoMapperTest {
         assertEquals("Alpha", result.bike.variant)
         assertEquals("3.4.1", result.bike.firmwareVersion)
         assertEquals("https://example.com/image.webp", result.bike.imageUrl)
-        assertEquals("2025-05-19T10:32:45Z", result.timestamp)
+        val expectedTimestamp = Instant.parse("2025-05-19T10:32:45Z")
+        assertEquals(expectedTimestamp, result.timestamp)
         assertEquals(73, result.battery.stateOfChargePercent)
         assertEquals(38, result.battery.estimatedRangeKm)
         assertEquals(34.7, result.battery.temperatureCelsius, 0.001)
@@ -81,6 +83,8 @@ class BikeInfoMapperTest {
         assertEquals(3742L, result.session.durationSeconds)
         assertEquals(24.7, result.session.distanceKm, 0.001)
         assertEquals(94.1, result.session.maxSpeedKmh, 0.001)
+        val expectedFaultCodes = listOf("F001")
+        assertEquals(expectedFaultCodes, result.diagnostics.faultCodes)
         assertEquals(1, result.diagnostics.warnings.size)
         assertEquals("W_MOT_TEMP_HIGH", result.diagnostics.warnings[0].code)
         assertEquals("Motor temperature elevated", result.diagnostics.warnings[0].message)
@@ -121,6 +125,30 @@ class BikeInfoMapperTest {
 
         val result = dtoWithEmptyWarnings.toDomain()
 
+        assertEquals(emptyList<String>(), result.diagnostics.faultCodes)
         assertEquals(emptyList<Any>(), result.diagnostics.warnings)
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun `GIVEN a DTO with a malformed timestamp WHEN toDomain is called THEN Instant parse throws IllegalArgumentException`() {
+        val dtoWithMalformedTimestamp = fullyPopulatedDto.copy(
+            timestamp = "not-a-date",
+        )
+
+        dtoWithMalformedTimestamp.toDomain()
+    }
+
+    @Test
+    fun `GIVEN a DTO with empty faultCodes WHEN toDomain is called THEN diagnostics faultCodes is empty`() {
+        val dtoWithEmptyFaultCodes = fullyPopulatedDto.copy(
+            diagnostics = DiagnosticsDto(
+                faultCodes = emptyList(),
+                warnings = fullyPopulatedDto.diagnostics.warnings,
+            ),
+        )
+
+        val result = dtoWithEmptyFaultCodes.toDomain()
+
+        assertEquals(emptyList<String>(), result.diagnostics.faultCodes)
     }
 }

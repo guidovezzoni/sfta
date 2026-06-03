@@ -6,21 +6,24 @@ Any automatically added info can be added to the other specific section [## LLM 
 ## Human managed part of the README
 
 ### TL;DR
-In implementing this test I used an AI supported SDD methodology (Spec-Driven Development) in which, the specification are fully defined before starting coding, to force the agent to follow the established plan.
-On top of the SDD library (OpenSpec) I used a library I am developing, that by using AI allows to automate the full lifecycle, from user story refinement, to enforcing BDD, to final verification of the user story, including definition of done, unit tests, UI test, security assessment, on-device testing, etc.
+In implementing this assessment I used an AI supported SDD methodology (Spec-Driven Development) in which, the specification are fully defined before starting coding, to force the agent to follow the established plan.
+On top of the SDD library (OpenSpec) I used a library I am developing, which, by using AI, allows to automate the full lifecycle, from user story refinement, to enforcing BDD, to final verification of the user story, including definition of done, unit tests, UI test, security assessment, on-device testing, etc.
 
-I will quickly provide here the info requested, leaving more info in the sections below.
+I will summarise here the info requested, leaving more info in the sections below.
 
 Tha app has been treated as a production app, so technical and architectural decision have been taken thinking this app as the first step for a larger app.
-The App follows a Clean Architecture approach, with MVI at UI level based on the ViewModel implementation.
+The App follows a Clean Architecture approach, with MVI at UI level based on the google ViewModel pattern.
 Libraries used include:
 - Dagger Hilt
 - Flow & Coroutines
 - jetpack compose
 
 Things that should be tackled next:
-- Clarify the current speed issue - there isn't one in the JSON, only a max speed for the session. 
-- Having access to the complete API documentation would help to define correctly the missing enums values - ChargingState, PowerMap, and WarningSeverity.
+- Implementation of release flavour
+- Implementation of proper CI/CD - depending on the repository and services used
+- Requirements clarification:
+  - Current speed has been added and removed from the requirements, still not present in the JSON, most likely that need to be addressed as the user is expecting the current speed. 
+  - Define correctly the missing enums values - ChargingState, PowerMap, and WarningSeverity - current values are those in the JSON, but there will be more.
 
 
 ### AI Setup
@@ -67,7 +70,7 @@ The app follows **Clean Architecture** with an **MVI** pattern (to be wired in U
 | Domain | `domain/model/` | 8 domain model data classes + 3 enums with `UNKNOWN` fallback |
 | Domain | `domain/repository/` | `BikeInfoRepository` interface |
 | Data | `data/mapper/` | `BikeInfoMapper` — `BikeInfoSnapshotDto.toDomain()` extension |
-| Domain | `domain/usecase/` | `GetBikeInfoUseCase` — chains repository and mapper |
+| Domain | `domain/usecase/` | `GetBikeInfoUseCase` — delegates to repository |
 
 ### Tech Stack
 
@@ -78,4 +81,4 @@ The app follows **Clean Architecture** with an **MVI** pattern (to be wired in U
 
 ### Data Flow
 
-`JSON asset` → `LocalBikeInfoRepository` (parses on `Dispatchers.IO`) → `GetBikeInfoUseCase` (maps DTO → domain) → `Result<BikeInfo>`
+`JSON asset` → `LocalBikeInfoRepository` (parses on `Dispatchers.IO`, maps DTO → domain) → `GetBikeInfoUseCase` (delegates to repository) → `Result<BikeInfo>`

@@ -2,6 +2,7 @@ package com.guidovezzoni.sfta.data.mapper
 
 import com.guidovezzoni.sfta.data.model.BikeInfoSnapshotDto
 import com.guidovezzoni.sfta.domain.model.BatteryInfo
+import kotlinx.datetime.Instant
 import com.guidovezzoni.sfta.domain.model.BikeDetails
 import com.guidovezzoni.sfta.domain.model.BikeInfo
 import com.guidovezzoni.sfta.domain.model.ChargingState
@@ -20,7 +21,7 @@ fun BikeInfoSnapshotDto.toDomain(): BikeInfo = BikeInfo(
         firmwareVersion = bike.firmwareVersion,
         imageUrl = bike.imageUrl,
     ),
-    timestamp = timestamp,
+    timestamp = Instant.parse(timestamp),
     battery = BatteryInfo(
         stateOfChargePercent = battery.stateOfChargePct,
         estimatedRangeKm = battery.estimatedRangeKm,
@@ -48,6 +49,7 @@ fun BikeInfoSnapshotDto.toDomain(): BikeInfo = BikeInfo(
         maxSpeedKmh = session.maxSpeedKmh,
     ),
     diagnostics = DiagnosticsInfo(
+        faultCodes = diagnostics.faultCodes,
         warnings = diagnostics.warnings.map { warningDto ->
             WarningInfo(
                 code = warningDto.code,

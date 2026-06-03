@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report: 2.2 — Domain Model Refinements</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background: #fafafa;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    .report-header {
+      border-bottom: 3px solid #2563eb;
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
+    }
+    .report-header h1 { font-size: 1.75rem; color: #1e293b; }
+    .report-meta {
+      display: flex; gap: 2rem; flex-wrap: wrap;
+      margin-top: 0.5rem; font-size: 0.875rem; color: #64748b;
+    }
+    .report-meta span { display: inline-flex; align-items: center; gap: 0.25rem; }
+
+    .report-section {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .report-section header {
+      display: flex; justify-content: space-between; align-items: baseline;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 0.75rem; margin-bottom: 1rem;
+    }
+    .report-section header h2 { font-size: 1.25rem; color: #1e293b; }
+    .report-section header time { font-size: 0.8rem; color: #94a3b8; white-space: nowrap; }
+    .section-source { font-size: 0.75rem; color: #94a3b8; font-style: italic; margin-bottom: 0.75rem; }
+
+    h3 { font-size: 1.05rem; color: #334155; margin: 1rem 0 0.5rem; }
+    p { margin-bottom: 0.75rem; }
+    ul, ol { margin: 0.5rem 0 0.75rem 1.5rem; }
+    li { margin-bottom: 0.25rem; }
+    code {
+      background: #f1f5f9; padding: 0.15rem 0.35rem; border-radius: 3px;
+      font-size: 0.875em;
+      font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    }
+
+    table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 0.9rem; }
+    th, td { text-align: left; padding: 0.5rem 0.75rem; border: 1px solid #e2e8f0; }
+    th { background: #f8fafc; font-weight: 600; color: #475569; }
+
+    .badge {
+      display: inline-block; padding: 0.15rem 0.5rem;
+      border-radius: 4px; font-size: 0.8rem; font-weight: 600;
+    }
+    .badge-pass { background: #dcfce7; color: #166534; }
+    .badge-fail { background: #fee2e2; color: #991b1b; }
+    .badge-warn { background: #fef9c3; color: #854d0e; }
+    .badge-info { background: #dbeafe; color: #1e40af; }
+
+    .outcome { margin-top: 1rem; padding: 0.75rem 1rem; border-radius: 6px; font-weight: 600; }
+    .outcome-passed { background: #dcfce7; color: #166534; border-left: 4px solid #22c55e; }
+    .outcome-failed { background: #fee2e2; color: #991b1b; border-left: 4px solid #ef4444; }
+  </style>
+</head>
+<body>
+
+  <div class="report-header">
+    <h1>2.2 — Domain Model Refinements</h1>
+    <div class="report-meta">
+      <span><strong>Story:</strong> 2.2</span>
+      <span><strong>Branch:</strong> feature/2.2-domain-model-refinements</span>
+      <span><strong>Created:</strong> 2026-06-02</span>
+    </div>
+  </div>
+
+  <main id="report-sections">
+  <section class="report-section" data-source="open_user_story" data-timestamp="2026-06-02T15:06:33Z">
+    <header>
+      <h2>Story Opened</h2>
+      <time datetime="2026-06-02T15:06:33Z">2 Jun 2026</time>
+    </header>
+    <p class="section-source">Source: open_user_story</p>
+
+    <h3>User Story</h3>
+    <p><strong>2.2 Domain Model Refinements</strong> — Parse <code>BikeInfo.timestamp</code> to <code>kotlinx.datetime.Instant</code> and add <code>faultCodes</code> to <code>DiagnosticsInfo</code>.</p>
+
+    <h3>Branch</h3>
+    <p><code>feature/2.2-domain-model-refinements</code> created from <code>main</code> at commit <code>8392647</code>.</p>
+
+    <h3>Refinement Summary</h3>
+    <p>The original user story was already well-structured with two clear changes (C1: timestamp type, C2: fault codes). The refinement added:</p>
+    <ul>
+      <li><strong>Fields to Update</strong> table — explicit before/after for each domain model and mapper change</li>
+      <li><strong>Testing Approach</strong> — detailed guidance on how to update existing tests and what new assertions to add</li>
+      <li><strong>Security Considerations</strong> — confirmed no new attack surface, no PII impact, fault codes are non-sensitive</li>
+      <li><strong>Performance Considerations</strong> — <code>Instant.parse()</code> overhead is negligible; faultCodes is a reference pass-through</li>
+      <li><strong>GDPR and Sensitive Information</strong> — machine telemetry only, no personal data</li>
+      <li><strong>Non-Functional Requirements</strong> — backward compatibility, error handling via <code>runCatching</code>, lightweight library</li>
+      <li><strong>Definition of Done</strong> — 11-item checklist covering code, tests, documentation, and quality gates</li>
+      <li><strong>Endpoints</strong> — confirmed none required (local JSON asset only)</li>
+    </ul>
+  </section>
+  <section class="report-section" data-source="opsx:propose" data-timestamp="2026-06-03T10:00:00Z">
+    <header>
+      <h2>Change Proposed</h2>
+      <time datetime="2026-06-03T10:00:00Z">3 Jun 2026</time>
+    </header>
+    <p class="section-source">Source: opsx:propose</p>
+
+    <h3>Exploration Findings</h3>
+    <ul>
+      <li><code>BikeInfo.timestamp</code> is currently a raw <code>String</code> — needs to become <code>kotlinx.datetime.Instant</code></li>
+      <li><code>DiagnosticsDto.faultCodes</code> is already parsed from JSON but silently dropped in the mapper — only <code>warnings</code> is mapped to <code>DiagnosticsInfo</code></li>
+      <li>The JSON asset has <code>fault_codes: []</code> (empty), while the test fixture uses <code>listOf("F001")</code> — both cases are covered</li>
+      <li>The spec (<code>bike-telemetry-data/spec.md</code>) explicitly states to exclude <code>faultCodes</code> — this needs updating</li>
+      <li>Repository test doesn't currently assert timestamp value — needs a new assertion</li>
+      <li>No ambiguities or blockers identified — the user story is fully specified</li>
+    </ul>
+
+    <h3>Questions &amp; Clarifications</h3>
+    <p>No questions were needed — all requirements are explicit in the user story with exact file paths, before/after values, and BDD scenarios.</p>
+
+    <h3>Artefacts Created</h3>
+    <table>
+      <tr><th>Artefact</th><th>Path</th><th>Description</th></tr>
+      <tr><td>Proposal</td><td><code>openspec/changes/domain-model-refinements/proposal.md</code></td><td>Motivation and scope: timestamp type change + faultCodes mapping</td></tr>
+      <tr><td>Design</td><td><code>openspec/changes/domain-model-refinements/design.md</code></td><td>Technical decisions: kotlinx-datetime over java.time, Instant.parse() error handling, field ordering</td></tr>
+      <tr><td>Delta Spec</td><td><code>openspec/changes/domain-model-refinements/specs/bike-telemetry-data/spec.md</code></td><td>Modified requirements for domain models and mapper</td></tr>
+      <tr><td>Tasks</td><td><code>openspec/changes/domain-model-refinements/tasks.md</code></td><td>13 tasks in BDD structure: prerequisites, timestamp BDD pair, faultCodes BDD pair, repository test, docs, verification</td></tr>
+    </table>
+  </section>
+  <section class="report-section" data-source="sdlc:sdlc_verify_story" data-timestamp="2026-06-03T10:20:00Z">
+    <header>
+      <h2>Verification</h2>
+      <time datetime="2026-06-03T10:20:00Z">3 Jun 2026</time>
+    </header>
+    <p class="section-source">Source: sdlc:sdlc_verify_story</p>
+
+    <h3>OpenSpec Verify</h3>
+    <p><span class="badge badge-pass">PASS</span> All 14/14 tasks complete. Completeness, correctness, and coherence checks all passed. No CRITICAL or WARNING issues found.</p>
+
+    <h3>TODO Scan</h3>
+    <p><span class="badge badge-pass">PASS</span> No TODO comments found in <code>app/src/</code>. None to classify.</p>
+
+    <h3>Security Review</h3>
+    <p><span class="badge badge-pass">PASS</span> No security vulnerabilities identified. Changes are confined to in-memory domain model transformations on data from a bundled read-only asset. No new attack surfaces, authentication logic, network calls, or user-controlled inputs are introduced. <code>Instant.parse()</code> is called on a trusted local asset string; malformed input is caught by the repository's existing <code>runCatching</code>.</p>
+
+    <h3>On-Device Tests</h3>
+    <p><span class="badge badge-warn">PARTIAL</span> No Android device was connected at time of verification (<code>adb devices</code> returned no attached devices). Unit tests run via <code>./gradlew test</code> — <strong>BUILD SUCCESSFUL</strong>, 24 tasks all up-to-date. Instrumented Compose UI tests could not be executed. This story introduces no UI changes; on-device manual verification is not applicable.</p>
+
+    <h3>Definition of Done</h3>
+    <table>
+      <tr><th>Criterion</th><th>Status</th><th>Evidence</th></tr>
+      <tr>
+        <td><code>kotlinx-datetime</code> dependency added and project compiles</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td><code>gradle/libs.versions.toml</code> version <code>0.6.2</code>; <code>app/build.gradle.kts</code> implementation added; <code>./gradlew assembleDebug</code> BUILD SUCCESSFUL</td>
+      </tr>
+      <tr>
+        <td><code>BikeInfo.timestamp</code> changed from <code>String</code> to <code>Instant</code></td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td><code>BikeInfo.kt</code> declares <code>val timestamp: Instant</code> with <code>import kotlinx.datetime.Instant</code></td>
+      </tr>
+      <tr>
+        <td><code>DiagnosticsInfo.faultCodes</code> field added as <code>List&lt;String&gt;</code></td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td><code>DiagnosticsInfo.kt</code> declares <code>val faultCodes: List&lt;String&gt;</code> before <code>warnings</code></td>
+      </tr>
+      <tr>
+        <td>Mapper parses timestamp string to <code>Instant</code> via <code>Instant.parse()</code></td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td><code>BikeInfoMapper.kt:24</code> — <code>timestamp = Instant.parse(timestamp)</code></td>
+      </tr>
+      <tr>
+        <td>Mapper passes through <code>faultCodes</code> from DTO to domain model</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td><code>BikeInfoMapper.kt:52</code> — <code>faultCodes = diagnostics.faultCodes</code></td>
+      </tr>
+      <tr>
+        <td>All existing mapper tests updated for new types and pass</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td>Fully-populated test asserts <code>Instant.parse("2025-05-19T10:32:45Z")</code> and <code>listOf("F001")</code>; <code>./gradlew test</code> BUILD SUCCESSFUL</td>
+      </tr>
+      <tr>
+        <td>New tests added for faultCodes mapping (populated and empty)</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td><code>BikeInfoMapperTest.kt</code> has dedicated test for empty faultCodes and asserts populated faultCodes in fully-populated test; empty-warnings test also asserts empty faultCodes</td>
+      </tr>
+      <tr>
+        <td>Repository test updated for <code>Instant</code> timestamp and passes</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td><code>LocalBikeInfoRepositoryTest.kt:90–91</code> asserts <code>Instant.parse("2025-05-19T10:32:45Z")</code>; <code>./gradlew test</code> BUILD SUCCESSFUL</td>
+      </tr>
+      <tr>
+        <td>OpenSpec <code>spec.md</code> updated to reflect new domain model and mapper behaviour</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td><code>openspec/specs/bike-telemetry-data/spec.md</code> includes <code>timestamp: Instant</code>, <code>faultCodes: List&lt;String&gt;</code>, and mapper scenarios for timestamp parsing and faultCodes pass-through; note about excluding faultCodes removed</td>
+      </tr>
+      <tr>
+        <td>User story 1.1 updated to reflect domain model and mapper changes</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td><code>docs/userstories/1.1-data-infrastructure-DONE.md</code> updated with <code>timestamp: Instant</code> and <code>faultCodes: List&lt;String&gt;</code> in the domain model table and mapper description</td>
+      </tr>
+      <tr>
+        <td>Code quality checks pass (<code>./gradlew check</code>)</td>
+        <td><span class="badge badge-pass">PASS</span></td>
+        <td><code>./gradlew check</code> BUILD SUCCESSFUL — lint, unit tests all passed</td>
+      </tr>
+    </table>
+
+    <div class="outcome outcome-passed">
+      Final Outcome: PASSED — Story renamed to <code>2.2-domain-model-refinements-DONE.md</code>. All 11 Definition of Done criteria met.
+    </div>
+  </section>
+  <section class="report-section" data-source="sdlc:sdlc_archive" data-timestamp="2026-06-03T08:00:00Z">
+    <header>
+      <h2>Archive</h2>
+      <time datetime="2026-06-03T08:00:00Z">3 Jun 2026</time>
+    </header>
+    <p class="section-source">Source: sdlc:sdlc_archive</p>
+
+    <table>
+      <thead>
+        <tr><th>Item</th><th>Detail</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Change name</td>
+          <td><code>domain-model-refinements</code></td>
+        </tr>
+        <tr>
+          <td>Schema</td>
+          <td><code>spec-driven</code></td>
+        </tr>
+        <tr>
+          <td>Archive location</td>
+          <td><code>openspec/changes/archive/2026-06-03-domain-model-refinements/</code></td>
+        </tr>
+        <tr>
+          <td>Spec sync</td>
+          <td><span class="badge badge-pass">Already synced</span> — delta content identical to main spec; sync confirmed no-op</td>
+        </tr>
+        <tr>
+          <td>README.md sync</td>
+          <td><span class="badge badge-warn">Updated</span> — fixed two inaccuracies: use case description changed from "chains repository and mapper" to "delegates to repository"; data flow corrected to show mapping happens in repository, not use case</td>
+        </tr>
+        <tr>
+          <td>AGENTS.md sync</td>
+          <td><span class="badge badge-pass">In sync</span> — no changes needed</td>
+        </tr>
+        <tr>
+          <td>Artifacts</td>
+          <td><span class="badge badge-pass">All complete</span> — proposal, design, specs, tasks all <code>done</code></td>
+        </tr>
+        <tr>
+          <td>Tasks</td>
+          <td><span class="badge badge-pass">All complete</span> — 14 / 14 tasks completed</td>
+        </tr>
+        <tr>
+          <td>Warnings</td>
+          <td>None</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="outcome outcome-passed">
+      Archive complete — change archived to <code>openspec/changes/archive/2026-06-03-domain-model-refinements/</code>. All artifacts and tasks complete. README.md updated to correctly attribute DTO-to-domain mapping to the repository layer.
+    </div>
+  </section>
+  </main>
+
+</body>
+</html>

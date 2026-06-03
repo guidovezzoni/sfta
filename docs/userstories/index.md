@@ -16,7 +16,7 @@
 - [2.1 Fix Repository Clean Architecture](2.1-fix-repository-clean-architecture-DONE.md) -- Move DTO out of domain layer, relocate mapper, simplify use case
 
 ### Feature 2.2: Domain Model Refinements
-- [2.2 Domain Model Refinements](2.2-domain-model-refinements.md) -- Parse timestamp to Instant, add faultCodes to DiagnosticsInfo
+- [2.2 Domain Model Refinements](2.2-domain-model-refinements-DONE.md) -- Parse timestamp to Instant, add faultCodes to DiagnosticsInfo
 
 ### Feature 2.3: Dependency Injection
 - [2.3 Introduce Hilt DI](2.3-introduce-hilt-di.md) -- Add Hilt, create AppModule, annotate existing classes for injection

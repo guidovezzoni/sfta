@@ -3,6 +3,7 @@ package com.guidovezzoni.sfta.data.repository
 import android.content.res.AssetManager
 import com.guidovezzoni.sfta.domain.model.PowerMap
 import io.mockk.every
+import kotlinx.datetime.Instant
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -86,6 +87,8 @@ class LocalBikeInfoRepositoryTest {
             assertEquals(47.3, bikeInfo.motor.currentSpeedKmh, 0.001)
             assertEquals(PowerMap.ENDURO, bikeInfo.rideSettings.powerMap)
             assertEquals(3742L, bikeInfo.session.durationSeconds)
+            val expectedTimestamp = Instant.parse("2025-05-19T10:32:45Z")
+            assertEquals(expectedTimestamp, bikeInfo.timestamp)
         }
 
     @Test
