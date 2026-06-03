@@ -1,3 +1,53 @@
 <resources>
     <string name="app_name">Stark Future Technical Assessment</string>
+
+    <!-- Global / common strings -->
+    <string name="global_retry">Retry</string>
+    <string name="global_placeholder">--</string>
+
+    <!-- Dashboard panel headers -->
+    <string name="dashboard_battery_header">BATTERY</string>
+    <string name="dashboard_power_header">POWER</string>
+    <string name="dashboard_session_header">SESSION</string>
+    <string name="dashboard_settings_header">SETTINGS</string>
+
+    <!-- Dashboard metric labels -->
+    <string name="dashboard_label_range">Range</string>
+    <string name="dashboard_label_temperature">Temp</string>
+    <string name="dashboard_label_charging_state">Charging</string>
+    <string name="dashboard_label_motor_temp">Motor Temp</string>
+    <string name="dashboard_label_duration">Duration</string>
+    <string name="dashboard_label_distance">Distance</string>
+    <string name="dashboard_label_max_speed">Max Speed</string>
+    <string name="dashboard_label_power_map">Power Map</string>
+    <string name="dashboard_label_max_power">Max Power</string>
+    <string name="dashboard_label_braking">Braking</string>
+    <string name="dashboard_label_regen">Regen</string>
+
+    <!-- Dashboard format strings -->
+    <string name="dashboard_format_battery_charge">%1$d%%</string>
+    <string name="dashboard_format_range">%1$d km</string>
+    <string name="dashboard_format_temperature">%1$.1f°C</string>
+    <string name="dashboard_format_motor_power">%1$.1f HP</string>
+    <string name="dashboard_format_duration">%1$dh %2$dm</string>
+    <string name="dashboard_format_distance">%1$.1f km</string>
+    <string name="dashboard_format_max_speed">%1$.1f km/h</string>
+    <string name="dashboard_format_max_power_hp">%1$d HP</string>
+    <string name="dashboard_format_braking">%1$d%%</string>
+    <string name="dashboard_format_regen">%1$d%%</string>
+
+    <!-- Dashboard power map display names -->
+    <string name="dashboard_power_map_enduro">ENDURO</string>
+    <string name="dashboard_power_map_unknown">Unknown</string>
+
+    <!-- Dashboard charging state display names -->
+    <string name="dashboard_charging_state_discharging">Discharging</string>
+    <string name="dashboard_charging_state_unknown">Unknown</string>
+
+    <!-- Dashboard error strings -->
+    <string name="dashboard_error_generic">Failed to load bike data</string>
+
+    <!-- Dashboard accessibility strings -->
+    <string name="dashboard_loading_content_description">Loading</string>
+    <string name="dashboard_warning_content_description">Warning</string>
 </resources>

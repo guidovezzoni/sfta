@@ -7,11 +7,19 @@ Defines the data infrastructure for loading and exposing bike telemetry data fro
 ## Requirements
 
 ### Requirement: Project compiles with serialization and testing dependencies
-The project SHALL include `kotlinx-serialization-json`, `lifecycle-viewmodel-compose`, `mockk`, and `kotlinx-coroutines-test` as dependencies, and the `kotlin-serialization` Gradle plugin SHALL be applied.
+The project SHALL include `kotlinx-serialization-json`, `lifecycle-viewmodel-compose`, `mockk`, `kotlinx-coroutines-test`, `hilt-navigation-compose`, and `lifecycle-runtime-compose` as dependencies, and the `kotlin-serialization` Gradle plugin SHALL be applied.
 
 #### Scenario: Project compiles with new dependencies
 - **WHEN** `./gradlew assembleDebug` is executed
 - **THEN** the project compiles without errors
+
+#### Scenario: hiltViewModel() is available in Compose
+- **WHEN** a composable calls `hiltViewModel<DashboardViewModel>()`
+- **THEN** it resolves the ViewModel via Hilt without compilation errors
+
+#### Scenario: collectAsStateWithLifecycle() is available in Compose
+- **WHEN** a composable calls `stateFlow.collectAsStateWithLifecycle()`
+- **THEN** it compiles without errors and collects state in a lifecycle-aware manner
 
 ### Requirement: Bike telemetry JSON asset is bundled and valid
 The app SHALL bundle `bike_info_snapshot.json` in `app/src/main/assets/`. The JSON SHALL be a copy of `docs/mocks/bike_info_snapshot.json`. The motor object SHALL NOT contain a `current_speed_kmh` field.

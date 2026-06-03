@@ -1,11 +1,8 @@
 # README
 
-As an agent please do NOT modify the below section [Human managed part of the README] and its subsections, this is only for manually added info.
-Any automatically added info can be added to the other specific section [## LLM managed part of the README].
+As an agent please do NOT modify this file, you can add any info to [AGENTS.md](AGENTS.md), this file is reserved for manual info.
 
-## Human managed part of the README
-
-### TL;DR
+## General Introduction
 In implementing this assessment I used an AI supported SDD methodology (Spec-Driven Development) in which, the specification are fully defined before starting coding, to force the agent to follow the established plan.
 On top of the SDD library (OpenSpec) I used a library I am developing, which, by using AI, allows to automate the full lifecycle, from user story refinement, to enforcing BDD, to final verification of the user story, including definition of done, unit tests, UI test, security assessment, on-device testing, etc.
 
@@ -21,72 +18,38 @@ Libraries used include:
 Some assumptions have been made during the implementation:
 - Although Android seems to be preventing in future to implement only landscape apps, it doesn't seem reasonable to have the dashboard of the bike switching orientation during the drive, so the app has been kept landscape only. This will have to be investigated depending on how Android will enforce the "any orientation" requirement.
 
-Things that should be tackled next:
-- Updating the library versions - after a failed attempt due to Hilt, I left this task behind as it doesn't affect the functionality of the app
+Things that I would have improved if I had more time:
+- Updating the library versions and targetSdk - after a failed attempt due to Hilt, I left this task behind as it doesn't affect the functionality of the app
+- Handling the empty state as a "--" placeholder in the composable is not ideal, perhaps this logic should be addressed in the ViewModel 
+- I would have re-worked teh UI:
+  - less information - less noise while driving
+  - some more visual elements, like a battery image for the SoC, a gauge for the power
+  - perhaps I would have used the bike image as a subtle alpha-background for the whole screen.
+
+Things that should be tackled next - if aiming for a proper MVP:
 - Implementation of release flavour
 - Implementation of proper CI/CD - depending on the repository and services used
-- Adding networking to get up-to-date real time status from the bike, it could be BLE but not necessarily. 
-- Some UI elements should be reviewed in terms of usability: using the phone as a bike dashboard doesn't meet the same UI criteria as for regular apps, f.i.: retry buttons should be replaced by a polling
-- Requirements clarification with product:
+- Adding networking to get up-to-date real time status from the bike, it could be BLE or another solution. 
+- Some UI elements should be reviewed in terms of usability: using the phone as a bike dashboard doesn't meet the same UI criteria as for regular apps, f.i.: retry buttons should be replaced by a polling. Also the whole UI should be prepared by a professional designer for maximum effectiveness.
+- Requirements needing clarifications with product:
   - Current speed has been added and removed from the requirements, still not present in the JSON, most likely that need to be addressed as the user is expecting the current speed. 
   - Define correctly the missing enums values - ChargingState, PowerMap, and WarningSeverity - current values are those in the JSON, but there will be more.
 
+## Additional info
+
+### Github / process
+The initial AI and project setup were committed directly on main, after that I created PR for each user story to simulate a way of working. PRs were merged and squashed on Github.
+Each PR contains the code for its user story but also the documentation: user story, SDD artifacts, LLM reports.
 
 ### AI Setup
 The AI setup in the project is layered across different levels, but all are included in git, so they can be shared across different members of the team.
 - AGENTS.md provides a general overview of the project. Also, the first part instructs the agent how to selectively find specific instructions for Android, git, user stories, etc. These parts are located in `docs/guidelines` and will be loaded by the agent when required. 
-- OpenSpec (https://github.com/Fission-AI/OpenSpec/) is used for handling the SDD processes, the commands used are:
-  - explore
-  - explore + propose
-  - apply
-  - verify
-  - archive
-- An additional library (SDLC), which I am currently working on, is handling the full lifecycle of user stories. More info at [SDLC-README.md](docs/sdlc/commands/SDLC-README.md). Commands are:
-  - **/sdlc_open_story** which analyse the next story to open, creates a branch, sets the story open and refines it adding a full and detailed analysis
-  - **/sdlc_propose** analyses the user story, asks for questions if something isn't clear, and finally generates the SDD artifacts: proposal, design, specs, and tasks. These are defined with a BDD approach, based on acceptance criteria and fail-first
-  - **/sdlc_apply_changes** implements the current OpenSpec change using BDD Red/Green cycle (test tasks verified RED before implementation, implementation tasks verified GREEN after). Then runs a security review and updates the documentation
+- OpenSpec (https://github.com/Fission-AI/OpenSpec/) is used for handling the SDD processes, the commands used are: explore, propose, apply, verify, archive
+- An additional library (SDLC), which I am currently developing, is handling the full lifecycle of user stories. More info at [SDLC-README.md](docs/sdlc/commands/SDLC-README.md). Commands are:
+  - **/sdlc_open_story** analyses the next story to open, creates a branch, sets the story open and refines it adding a full and detailed product analysis
+  - **/sdlc_propose** analyses the user story, asks for questions if something isn't clear, and finally generates the SDD artifacts: proposal, design, specs, and tasks. Tasks are defined with a BDD approach, based on acceptance criteria and test-first.
+  - **/sdlc_apply_changes** implements the current OpenSpec change using BDD Red/Green cycle (test tasks verified RED before implementation, implementation tasks verified GREEN after). Then runs a security review and updates the documentation.
   - **/sdlc_verify_story** this is an end-to-end verification gate. Runs OpenSpec's verify, scans for unresolved TODOs, runs a security review on pending changes, checks every acceptance criterion in the story against the codebase, and finally closes the story.
-  - **/sdlc_archive** runs OpenSpec's archive to finalise and archive the completed change, then verifies that he documentation is in sync with the codebase and specs.
+  - **/sdlc_archive** runs OpenSpec's archive to finalise and archive the completed change, then verifies that the documentation is in sync with the codebase and specs.
 
-The SDLC library is still work in progress, I'm working on multi-agent orchestration, LLM independence, self-improvement and other features.
-However ultimately it will have to be tailored for each project/company, although I'm trying to abstract this by defining how each interaction happens, for instance Jira user story should be handled via the atlassian mcp.
-
-### Process followed
-This section describes the process I followed to implement the project.
-* Added the AI tooling: OpenSpec (SDD process), SDLC (user story creation and full life cycle - this is  a work in progress tool I'm working on), AGENTS.md and guidelines for Android, git, processes etc.
-* Created a basic app
-* Brainstorming with Claude about what we have and what we are trying to achieve, result in  [Rider Dashboard Plan](docs/brainstorming/rider-dashboard-plan.md)
-* Two user stories created in docs/userstories
-
-### Notes
-* There seems to be a comma missing in the JSON snapshot, I have assumed it's a copy-paste issue in the test and added it.
-* As for the speed, the JSON only has `session.max_speed_kmh` and there isn't a `current_speed_kmh`, I'm assuming it's missing for whichever reason, and adding it to the JSON.
-
-
-## LLM managed part of the README
-
-### Architecture
-
-The app follows **Clean Architecture** with an **MVI** pattern (to be wired in UI story 1.2):
-
-| Layer | Package | Contents |
-|-------|---------|----------|
-| DI | `di/` | `AppModule` — Hilt module (SingletonComponent), provides `BikeInfoRepository` as `@Singleton` |
-| Data | `data/model/` | 8 `@Serializable` DTO classes mapping the JSON schema; all fields nullable with `= null` defaults |
-| Data | `data/repository/` | `LocalBikeInfoRepository` — reads and parses the bundled JSON asset |
-| Domain | `domain/model/` | 8 domain model data classes (all fields nullable) + 3 enums with `UNKNOWN` fallback; `null` = no sensor data, `UNKNOWN` = unrecognised non-null value |
-| Domain | `domain/repository/` | `BikeInfoRepository` interface |
-| Data | `data/mapper/` | `BikeInfoMapper` — `BikeInfoSnapshotDto.toDomain()` extension |
-| Domain | `domain/usecase/` | `GetBikeInfoUseCase` — delegates to repository, `@Inject constructor` |
-
-### Tech Stack
-
-- **Kotlin** 2.2.10, **Compose BOM** 2026.02.01, **AGP** 9.2.1
-- **Hilt** 2.56.2 + **KSP** 2.2.10-1.0.33 for dependency injection
-- **kotlinx-serialization-json** 1.8.1 for JSON parsing
-- **MockK** 1.14.4 + **kotlinx-coroutines-test** 1.10.2 for unit testing
-- App locked to **landscape orientation** (`sensorLandscape`)
-
-### Data Flow
-
-`JSON asset` → `LocalBikeInfoRepository` (parses on `Dispatchers.IO`, maps DTO → domain) → `GetBikeInfoUseCase` (delegates to repository) → `Result<BikeInfo>`
+The SDLC library is still work in progress, and I'm improving it while I use it, and adding additional features like  multi-agent orchestration, LLM independence, self-improvement by adding learnt lessons.

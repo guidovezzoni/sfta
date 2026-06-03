@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report: 1.3 — Dashboard UI</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background: #fafafa;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    .report-header {
+      border-bottom: 3px solid #2563eb;
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
+    }
+    .report-header h1 { font-size: 1.75rem; color: #1e293b; }
+    .report-meta {
+      display: flex; gap: 2rem; flex-wrap: wrap;
+      margin-top: 0.5rem; font-size: 0.875rem; color: #64748b;
+    }
+    .report-meta span { display: inline-flex; align-items: center; gap: 0.25rem; }
+
+    .report-section {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .report-section header {
+      display: flex; justify-content: space-between; align-items: baseline;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 0.75rem; margin-bottom: 1rem;
+    }
+    .report-section header h2 { font-size: 1.25rem; color: #1e293b; }
+    .report-section header time { font-size: 0.8rem; color: #94a3b8; white-space: nowrap; }
+    .section-source { font-size: 0.75rem; color: #94a3b8; font-style: italic; margin-bottom: 0.75rem; }
+
+    h3 { font-size: 1.05rem; color: #334155; margin: 1rem 0 0.5rem; }
+    p { margin-bottom: 0.75rem; }
+    ul, ol { margin: 0.5rem 0 0.75rem 1.5rem; }
+    li { margin-bottom: 0.25rem; }
+    code {
+      background: #f1f5f9; padding: 0.15rem 0.35rem; border-radius: 3px;
+      font-size: 0.875em;
+      font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+    }
+
+    table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 0.9rem; }
+    th, td { text-align: left; padding: 0.5rem 0.75rem; border: 1px solid #e2e8f0; }
+    th { background: #f8fafc; font-weight: 600; color: #475569; }
+
+    .badge {
+      display: inline-block; padding: 0.15rem 0.5rem;
+      border-radius: 4px; font-size: 0.8rem; font-weight: 600;
+    }
+    .badge-pass { background: #dcfce7; color: #166534; }
+    .badge-fail { background: #fee2e2; color: #991b1b; }
+    .badge-warn { background: #fef9c3; color: #854d0e; }
+    .badge-info { background: #dbeafe; color: #1e40af; }
+
+    .outcome { margin-top: 1rem; padding: 0.75rem 1rem; border-radius: 6px; font-weight: 600; }
+    .outcome-passed { background: #dcfce7; color: #166534; border-left: 4px solid #22c55e; }
+    .outcome-failed { background: #fee2e2; color: #991b1b; border-left: 4px solid #ef4444; }
+  </style>
+</head>
+<body>
+
+  <div class="report-header">
+    <h1>1.3 — Dashboard UI</h1>
+    <div class="report-meta">
+      <span><strong>Story:</strong> 1.3</span>
+      <span><strong>Branch:</strong> feature/1.3-dashboard-ui</span>
+      <span><strong>Created:</strong> 2026-06-03</span>
+    </div>
+  </div>
+
+  <main id="report-sections">
+  <section class="report-section" data-source="open_user_story" data-timestamp="2026-06-03T00:00:00Z">
+    <header>
+      <h2>Story Opened</h2>
+      <time datetime="2026-06-03T00:00:00Z">3 June 2026</time>
+    </header>
+    <p class="section-source">Source: open_user_story</p>
+
+    <h3>User Story</h3>
+    <p><strong>1.3 Dashboard UI</strong> — As a rider glancing at the motorcycle dashboard, I want a dark, high-contrast landscape display showing battery, power, ride settings, session stats, and warnings, so that I can read my bike's telemetry at a glance while riding.</p>
+
+    <h3>Branch</h3>
+    <p>Created branch <code>feature/1.3-dashboard-ui</code> from <code>main</code>.</p>
+
+    <h3>Refinement Summary</h3>
+    <p>The original user story was already well-structured with clear phases and BDD scenarios. The refinement added:</p>
+    <ul>
+      <li>Fully qualified file paths using the actual package <code>com.guidovezzoni.sfta</code></li>
+      <li>Exact colour hex values and typography specs in tabular format for the theme</li>
+      <li>Complete <code>DashboardUiState</code> data class definition with domain type references (<code>ChargingState</code>, <code>PowerMap</code>, <code>WarningInfo</code>)</li>
+      <li>Detailed domain-to-UiState mapping logic for the ViewModel</li>
+      <li>Composable parameter signatures for all components</li>
+      <li>Complete <code>strings.xml</code> key-value table</li>
+      <li>Expanded unit test and Compose UI test tables with specific test case names following GIVEN/WHEN/THEN pattern</li>
+      <li>Security, performance, GDPR, and non-functional requirements analysis (all low risk)</li>
+      <li>Definition of Done checklist (11 items)</li>
+    </ul>
+  </section>
+  <section class="report-section" data-source="opsx:propose" data-timestamp="2026-06-03T12:00:00Z">
+    <header>
+      <h2>Change Proposed</h2>
+      <time datetime="2026-06-03T12:00:00Z">3 June 2026</time>
+    </header>
+    <p class="section-source">Source: opsx:propose</p>
+
+    <h3>Exploration Findings</h3>
+    <ul>
+      <li>All prerequisites confirmed complete: Clean Architecture layers, Hilt DI, domain models with nullable fields, <code>GetBikeInfoUseCase</code></li>
+      <li>Identified two missing dependencies: <code>hilt-navigation-compose</code> (for <code>hiltViewModel()</code>) and <code>lifecycle-runtime-compose</code> (for <code>collectAsStateWithLifecycle()</code>)</li>
+      <li>App already locked to <code>sensorLandscape</code> in manifest</li>
+      <li>Current theme uses default Material purple/pink palette with dynamic colours and light/dark toggle — full replacement required</li>
+      <li>User story is highly detailed with exact field definitions, colour hex values, typography specs, composable signatures, strings.xml entries, and 15 BDD scenarios</li>
+    </ul>
+
+    <h3>Questions and Clarifications</h3>
+    <p>No ambiguities found — the user story serves as a complete technical specification. All design decisions were made during exploration:</p>
+    <ul>
+      <li>Theme function name <code>StarkFutureTechnicalAssessmentTheme</code> retained (internals changed to dark-only)</li>
+      <li>Flat <code>DashboardUiState</code> chosen over nested sub-states</li>
+      <li>UI-specific enums (<code>DashboardChargingState</code>, <code>DashboardPowerMap</code>, <code>DashboardWarningSeverity</code>) and <code>DashboardWarningInfo</code> data class used instead of domain types — clean layer separation</li>
+      <li>Battery colour thresholds as inline composable logic, not ViewModel mapping</li>
+    </ul>
+
+    <h3>Artefacts Created</h3>
+    <table>
+      <tr><th>Artefact</th><th>Path</th><th>Description</th></tr>
+      <tr><td>Proposal</td><td><code>openspec/changes/dashboard-ui/proposal.md</code></td><td>What &amp; why — 4 phases, 2 new dependencies, theme overhaul, MVI, composables, wiring</td></tr>
+      <tr><td>Design</td><td><code>openspec/changes/dashboard-ui/design.md</code></td><td>7 key decisions with rationale: flat UiState, UI-specific enums (no domain types in UI), theme name preserved, hiltViewModel(), collectAsStateWithLifecycle(), composable isolation, battery colour thresholds</td></tr>
+      <tr><td>Spec (new)</td><td><code>openspec/changes/dashboard-ui/specs/dashboard-ui/spec.md</code></td><td>16 requirements with 30+ scenarios covering theme, UI types, MVI contract, ViewModel with domain-to-UI mapping, all composables, wiring, strings, cleanup</td></tr>
+      <tr><td>Spec (delta)</td><td><code>openspec/changes/dashboard-ui/specs/bike-telemetry-data/spec.md</code></td><td>Modified dependency requirement to include hilt-navigation-compose and lifecycle-runtime-compose</td></tr>
+      <tr><td>Tasks</td><td><code>openspec/changes/dashboard-ui/tasks.md</code></td><td>30 tasks across 7 groups: prerequisites, theme, MVI contract, ViewModel BDD (5 tests + impl), composables BDD (9 tests + 7 impl), wiring, verification</td></tr>
+    </table>
+
+    <h3>Task Structure</h3>
+    <p>Tasks follow BDD (test-first) ordering:</p>
+    <ul>
+      <li><strong>Prerequisites</strong> (3 tasks): dependencies, cleanup, strings</li>
+      <li><strong>Theme</strong> (3 tasks): Color.kt, Type.kt, Theme.kt</li>
+      <li><strong>MVI Contract</strong> (7 tasks): 4 UI types (DashboardChargingState, DashboardPowerMap, DashboardWarningSeverity, DashboardWarningInfo), UiState, UiIntent, UiEffect</li>
+      <li><strong>ViewModel BDD</strong> (6 tasks): 5 unit tests first, then implementation</li>
+      <li><strong>Composables BDD</strong> (16 tasks): 9 Compose UI tests first, then 6 component implementations + previews</li>
+      <li><strong>Wiring</strong> (1 task): MainActivity</li>
+      <li><strong>Verification</strong> (4 tasks): build, unit tests, UI tests, on-device</li>
+    </ul>
+  </section>
+  <section class="report-section" data-source="sdlc:sdlc_apply_changes" data-timestamp="2026-06-03T19:36:00Z">
+    <header>
+      <h2>Changes Applied</h2>
+      <time datetime="2026-06-03T19:36:00Z">3 June 2026</time>
+    </header>
+    <p class="section-source">Source: sdlc:sdlc_apply_changes</p>
+
+    <h3>Summary</h3>
+    <p>All 40 tasks implemented following the BDD Red/Green cycle. The full dashboard UI is now live — dark-themed Jetpack Compose dashboard displaying real bike telemetry from the bundled JSON snapshot.</p>
+
+    <h3>Tasks Applied (40/40)</h3>
+    <table>
+      <tr><th>Group</th><th>Tasks</th><th>Status</th></tr>
+      <tr><td>1. Prerequisites</td><td>Dependencies, cleanup, strings</td><td><span class="badge badge-pass">✓ 3/3</span></td></tr>
+      <tr><td>2. Theme</td><td>Color.kt, Type.kt, Theme.kt</td><td><span class="badge badge-pass">✓ 3/3</span></td></tr>
+      <tr><td>3. MVI Contract</td><td>DashboardChargingState, DashboardPowerMap, DashboardWarningSeverity, DashboardWarningInfo, DashboardUiState, DashboardUiIntent, DashboardUiEffect</td><td><span class="badge badge-pass">✓ 7/7</span></td></tr>
+      <tr><td>4. ViewModel (BDD)</td><td>5 unit tests → RED confirmed; DashboardViewModel → GREEN (5/5 pass)</td><td><span class="badge badge-pass">✓ 6/6</span></td></tr>
+      <tr><td>5. Composables (BDD)</td><td>9 Compose UI tests → RED confirmed; BatteryPanel, PowerPanel, SessionPanel, RideSettingsBar, WarningBanner, DashboardScreen + Previews</td><td><span class="badge badge-pass">✓ 16/16</span></td></tr>
+      <tr><td>6. Wiring</td><td>MainActivity — hiltViewModel(), collectAsStateWithLifecycle(), LaunchedEffect</td><td><span class="badge badge-pass">✓ 1/1</span></td></tr>
+      <tr><td>7. Verification</td><td>Build, unit tests, Compose UI tests (device), on-device launch</td><td><span class="badge badge-pass">✓ 4/4</span></td></tr>
+    </table>
+
+    <h3>BDD Cycles</h3>
+    <ul>
+      <li><strong>ViewModel</strong>: 1 iteration. Tests failed with compilation errors (RED) → DashboardViewModel implemented → 5/5 tests pass (GREEN). One test fix required: test 4.1 used <code>backgroundScope</code> collection but loading state wasn't captured due to scheduler ordering; replaced with <code>coAnswers</code> to capture state at use-case invocation point.</li>
+      <li><strong>Composables</strong>: 1 iteration. Tests failed with compilation errors (RED, DashboardScreen absent) → all composables implemented → 9/9 Compose UI tests pass on device (GREEN). Fix required: import corrections in DashboardScreenTest — <code>assertDoesNotExist</code> is a member function (no import), <code>AndroidJUnit4</code> lives in <code>androidx.test.ext.junit.runners</code> not <code>junit4</code>. Also renamed test methods from backtick/space convention to camelCase (DEX &lt;040 constraint with <code>minSdk=24</code>).</li>
+    </ul>
+
+    <h3>TODOs</h3>
+    <p>No TODOs found in source files under <code>app/src/</code>.</p>
+
+    <h3>Security Review</h3>
+    <p><span class="badge badge-pass">PASS</span> — No findings. Changes are purely UI-layer: theme, MVI state/intent/effect, ViewModel reading from a local bundled JSON asset, Jetpack Compose composables. No network I/O, user-supplied input, cryptographic operations, or sensitive data handling.</p>
+
+    <h3>Documentation Updates</h3>
+    <ul>
+      <li><strong>README.md</strong>: Skipped — file contains explicit "do NOT modify" instruction for agents.</li>
+      <li><strong>AGENTS.md</strong>: Updated — package structure extended with new UI folders (<code>ui/state/</code>, <code>ui/intent/</code>, <code>ui/effect/</code>, <code>ui/viewmodel/</code>, <code>ui/screens/</code>, <code>ui/screens/components/</code>); MVI entry updated from "to be implemented" to implemented description.</li>
+    </ul>
+
+    <div class="outcome outcome-passed">All checks passed. Implementation complete.</div>
+  </section>
+  <section class="report-section" data-source="sdlc:sdlc_verify_story" data-timestamp="2026-06-03T20:24:00Z">
+    <header>
+      <h2>Verification</h2>
+      <time datetime="2026-06-03T20:24:00Z">3 June 2026</time>
+    </header>
+    <p class="section-source">Source: sdlc:sdlc_verify_story</p>
+
+    <h3>OpenSpec Verify</h3>
+    <p><span class="badge badge-pass">PASS</span> 40/40 tasks complete. All three verification dimensions checked: Completeness, Correctness, and Coherence. No CRITICAL or WARNING issues found. Design decisions correctly implemented (flat UiState, UI-layer enums, dark-only theme, hiltViewModel(), collectAsStateWithLifecycle()).</p>
+
+    <h3>TODO Scan</h3>
+    <p>One TODO found in <code>app/src/main/res/xml/data_extraction_rules.xml</code> — a pre-existing Android system comment about backup rules configuration. Classified as <strong>ACKNOWLEDGED</strong>: unrelated to story 1.3 and its precondition is not fulfilled by this story.</p>
+
+    <h3>Security Review</h3>
+    <p><span class="badge badge-pass">PASS</span> No security findings. The change is a pure presentation layer with read-only access to a bundled local JSON asset. No network calls, no user input collection, no authentication, no cryptography, no WebView, no sensitive data logging.</p>
+
+    <h3>On-Device Tests</h3>
+    <p><strong>Device:</strong> Pixel 6a (Android 16) — connected via adb</p>
+    <table>
+      <thead>
+        <tr><th>Method</th><th>Result</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Instrumented Compose UI tests (<code>./gradlew connectedDebugAndroidTest</code>)</td><td><span class="badge badge-pass">9/9 PASSED</span></td></tr>
+        <tr><td>App install and launch (<code>./gradlew installDebug</code> + <code>adb shell am start</code>)</td><td><span class="badge badge-pass">PASSED</span></td></tr>
+        <tr><td>Screenshot verification — dashboard with live telemetry from bundled JSON</td><td><span class="badge badge-pass">PASSED</span></td></tr>
+      </tbody>
+    </table>
+    <p>Screenshot confirmed: dark background, warning banner (amber — "Motor temperature elevated"), BATTERY panel (73% green, 38 km, 34.7°C, Discharging), POWER panel (52.4 HP blue, 61.2°C), SESSION (1h 2m, 24.7 km, 94.1 km/h), SETTINGS (ENDURO, 80 HP, 45%, 60%).</p>
+
+    <h3>Definition of Done</h3>
+    <table>
+      <thead>
+        <tr><th>#</th><th>Criterion</th><th>Status</th><th>Evidence</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>All theme files updated with dark dashboard palette</td><td><span class="badge badge-pass">PASS</span></td><td><code>Color.kt</code> has all 11 required colours; <code>Theme.kt</code> is dark-only <code>darkColorScheme</code>; <code>Type.kt</code> adds displayLarge/titleLarge/titleMedium/labelMedium</td></tr>
+        <tr><td>2</td><td>MVI contract files created</td><td><span class="badge badge-pass">PASS</span></td><td><code>DashboardUiState.kt</code>, <code>DashboardUiIntent.kt</code>, <code>DashboardUiEffect.kt</code> all present; no domain imports in UI state files</td></tr>
+        <tr><td>3</td><td>DashboardViewModel implemented with domain-to-UI mapping</td><td><span class="badge badge-pass">PASS</span></td><td><code>@HiltViewModel</code>, <code>StateFlow</code>, <code>SharedFlow</code>, <code>onIntent()</code>; all enum and model mappings verified</td></tr>
+        <tr><td>4</td><td>All composables implemented with @Preview coverage</td><td><span class="badge badge-pass">PASS</span></td><td>13 preview functions across components; DashboardScreen has 6 previews covering content/loading/error/warnings/low-battery/null-fields</td></tr>
+        <tr><td>5</td><td>MainActivity wired to DashboardViewModel and DashboardScreen</td><td><span class="badge badge-pass">PASS</span></td><td><code>hiltViewModel()</code>, <code>collectAsStateWithLifecycle()</code>, <code>LaunchedEffect(Unit)</code> verified</td></tr>
+        <tr><td>6</td><td>All user-facing strings extracted to strings.xml</td><td><span class="badge badge-pass">PASS</span></td><td>Comprehensive strings.xml with global_ prefix, dashboard_ prefix, format strings, accessibility strings</td></tr>
+        <tr><td>7</td><td>Example test files deleted</td><td><span class="badge badge-pass">PASS</span></td><td><code>ExampleUnitTest.kt</code> and <code>ExampleInstrumentedTest.kt</code> both confirmed absent</td></tr>
+        <tr><td>8</td><td>Unit tests pass: ./gradlew test</td><td><span class="badge badge-pass">PASS</span></td><td>All 5 ViewModel unit tests pass (verified during apply phase)</td></tr>
+        <tr><td>9</td><td>Compose UI tests pass: ./gradlew connectedDebugAndroidTest</td><td><span class="badge badge-pass">PASS</span></td><td>9/9 tests passed on Pixel 6a (Android 16)</td></tr>
+        <tr><td>10</td><td>Build succeeds: ./gradlew build</td><td><span class="badge badge-pass">PASS</span></td><td>Clean build succeeded during apply phase</td></tr>
+        <tr><td>11</td><td>On-device verification: dashboard displays with telemetry</td><td><span class="badge badge-pass">PASS</span></td><td>Screenshot confirms full dashboard rendering with all panels, warning banner, and correct values from bundled JSON</td></tr>
+      </tbody>
+    </table>
+
+    <div class="outcome outcome-passed">PASSED — Story closed: 1.3-dashboard-ui-DONE.md</div>
+  </section>
+
+  <section class="report-section" data-source="sdlc:sdlc_archive" data-timestamp="2026-06-03T21:00:00Z">
+    <header>
+      <h2>Archive</h2>
+      <time datetime="2026-06-03T21:00:00Z">3 June 2026</time>
+    </header>
+    <p class="section-source">Source: sdlc:sdlc_archive</p>
+
+    <table>
+      <thead>
+        <tr><th>Item</th><th>Detail</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Change name</td><td><code>dashboard-ui</code></td></tr>
+        <tr><td>Schema</td><td><code>spec-driven</code></td></tr>
+        <tr><td>Archive location</td><td><code>openspec/changes/archive/2026-06-03-dashboard-ui/</code></td></tr>
+        <tr><td>Spec sync</td><td><span class="badge badge-pass">Synced</span> — <code>dashboard-ui/spec.md</code> created (new capability); <code>bike-telemetry-data/spec.md</code> updated (added hilt-navigation-compose + lifecycle-runtime-compose with 2 new scenarios)</td></tr>
+        <tr><td>README.md sync</td><td><span class="badge badge-info">In sync</span> — README is agent-read-only; content accurately reflects project state</td></tr>
+        <tr><td>CLAUDE.md (AGENTS.md) sync</td><td><span class="badge badge-pass">In sync</span> — Package structure and MVI/Hilt/Clean Architecture patterns correctly documented</td></tr>
+        <tr><td>Artefacts</td><td>4/4 complete — proposal, design, specs, tasks</td></tr>
+        <tr><td>Tasks</td><td>40/40 complete</td></tr>
+        <tr><td>Warnings</td><td>None</td></tr>
+      </tbody>
+    </table>
+
+    <div class="outcome outcome-passed">Archive complete. All artefacts and tasks complete. Specs synced.</div>
+  </section>
+
+  </main>
+
+</body>
+</html>
